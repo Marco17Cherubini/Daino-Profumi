@@ -1,0 +1,70 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    <!-- ✅ Preload font critici -->
+    <link rel="preload" href="{{ 'PinyonScript-Regular.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ 'CormorantGaramond-Regular.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+
+    <!-- ✅ Critical CSS - caricato immediatamente -->
+    <style>
+    :root {
+        --daino-color-black: #000;
+        --daino-color-white: #fff;
+        --daino-color-gold: #d4af37;
+    }
+    body {
+        margin: 0;
+        background: #000;
+        color: #fff;
+    }
+    .hero-entrance-gate {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>
+
+    <!-- CORE CSS -->
+    {{ 'daino-global.css' | asset_url | stylesheet_tag }}
+
+    <!-- LIBRARY IMPORTS (GSAP, Lenis) -->
+    {% render 'daino-library-imports' %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    <!-- Main Content Wrapper - Gate covers everything with z-index -->
+    <main id="MainContent" class="main-content-wrapper" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    <!-- GLOBAL JS CONTROLLERS -->
+    <!-- 1. Animations (Scroll Reveal, Giant Visual) -->
+    <script src="{{ 'daino-animations.js' | asset_url }}" defer></script>
+    
+    <!-- 3. Wishlist Controller -->
+    <script src="{{ 'wishlist.js' | asset_url }}" defer></script>
+    
+    <!-- 4. Entrance Gate Controller (Must run last to manage initial state) -->
+    <script src="{{ 'daino-entrance-controller.js' | asset_url }}" defer></script>
+    
+  </body>
+</html>

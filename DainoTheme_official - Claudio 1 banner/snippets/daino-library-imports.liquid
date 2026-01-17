@@ -1,0 +1,26 @@
+{% comment %}
+  DAINO THEME - LIBRARY IMPORTS
+  Loads critical animation libraries: GSAP, ScrollTrigger, Draggable, Lenis.
+  IMPORTANT: GSAP loads SYNC (no defer) to prevent lag - same as exo_sk.html original
+{% endcomment %}
+
+<!-- GSAP Core - SYNC loading (critical for animations) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<!-- GSAP Plugins - SYNC loading -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Draggable.min.js"></script>
+
+<!-- Lenis Smooth Scroll -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+<script>
+  // Global Safety Check - Runs after all scripts loaded (including defer)
+  window.dainoLibsLoaded = false;
+  
+  window.addEventListener('load', function() {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      window.dainoLibsLoaded = true;
+    }
+  });
+</script>

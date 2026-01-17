@@ -1,0 +1,87 @@
+[
+    {
+        "name": "theme_info",
+        "theme_name": "Daino Dark Luxury",
+        "theme_author": "Antigravity",
+        "theme_version": "1.0.0",
+        "theme_documentation_url": "https://github.com/Marco17Cherubini/daino-profumi-theme"
+    },
+    {
+        "name": "Colors",
+        "settings": [
+            {
+                "type": "color",
+                "id": "daino_color_black",
+                "label": "Background Black",
+                "default": "#000000"
+            },
+            {
+                "type": "color",
+                "id": "daino_color_gold",
+                "label": "Luxury Gold",
+                "default": "#d4af37"
+            },
+            {
+                "type": "color",
+                "id": "daino_color_gray_dark",
+                "label": "Dark Gray (Panel)",
+                "default": "#0a0a0a"
+            },
+            {
+                "type": "color",
+                "id": "daino_color_white",
+                "label": "Text White",
+                "default": "#ffffff"
+            },
+            {
+                "type": "color",
+                "id": "daino_color_gray_light",
+                "label": "Text Light Gray",
+                "default": "#cccccc"
+            }
+        ]
+    },
+    {
+        "name": "Typography",
+        "settings": [
+            {
+                "type": "font_picker",
+                "id": "font_heading",
+                "label": "Heading Font",
+                "default": "cormorant_garamond_n4"
+            },
+            {
+                "type": "font_picker",
+                "id": "font_body",
+                "label": "Body Font",
+                "default": "helvetica_n4"
+            },
+            {
+                "type": "range",
+                "id": "font_size_scale",
+                "min": 80,
+                "max": 150,
+                "step": 5,
+                "unit": "%",
+                "label": "Font Size Scale",
+                "default": 100
+            }
+        ]
+    },
+    {
+        "name": "Entrance Gate",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "logo_main",
+                "label": "Main Logo"
+            },
+            {
+                "type": "text",
+                "id": "enter_message",
+                "label": "Enter Message",
+                "default": "Scorri per entrare"
+            }
+        ]
+    }
+]

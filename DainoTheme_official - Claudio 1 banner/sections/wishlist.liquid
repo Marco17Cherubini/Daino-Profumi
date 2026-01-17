@@ -1,0 +1,456 @@
+{% comment %}
+  WISHLIST PAGE - Pagina Preferiti
+  Stile identico a collection grid
+{% endcomment %}
+
+<section class="wishlist-section">
+  <div class="wishlist-container">
+    
+    <!-- Breadcrumb -->
+    <nav class="wishlist-breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="wishlist-breadcrumb__separator">/</span>
+      <a href="/collections/catalogo">Catalogo</a>
+      <span class="wishlist-breadcrumb__separator">/</span>
+      <span class="wishlist-breadcrumb__current">Preferiti</span>
+    </nav>
+
+    <header class="wishlist-header">
+      <h1 class="wishlist-title">Preferiti</h1>
+      <p class="wishlist-subtitle">
+        <span data-wishlist-count-text>0</span> prodotti salvati
+      </p>
+    </header>
+
+    <!-- Empty State -->
+    <div class="wishlist-empty" data-wishlist-empty>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <p>Non hai ancora aggiunto prodotti ai preferiti</p>
+      <a href="/collections/catalogo" class="wishlist-btn-gold">Scopri il Catalogo</a>
+    </div>
+
+    <!-- Products Grid (populated via JS) - Same structure as collection-grid -->
+    <div class="wishlist-grid" data-wishlist-grid></div>
+
+    <!-- Loading State -->
+    <div class="wishlist-loading" data-wishlist-loading style="display: none;">
+      <div class="wishlist-loading__spinner"></div>
+      <p>Caricamento preferiti...</p>
+    </div>
+  </div>
+</section>
+
+<style>
+.wishlist-section {
+  min-height: 80vh;
+  background-color: var(--daino-color-black);
+  padding: clamp(100px, 15vh, 140px) var(--container-padding) var(--space-3xl);
+}
+
+.wishlist-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Breadcrumb */
+.wishlist-breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: var(--space-lg);
+  color: var(--daino-color-gray-light);
+  text-align: left; /* Allineato a sinistra come richiesto o come carrello se ha container */
+}
+.wishlist-breadcrumb a {
+  color: var(--daino-color-gray-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.wishlist-breadcrumb a:hover {
+  color: var(--daino-color-gold);
+}
+.wishlist-breadcrumb__separator {
+  margin: 0 var(--space-xs);
+}
+.wishlist-breadcrumb__current {
+  color: var(--daino-color-white);
+}
+
+.wishlist-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.wishlist-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--daino-color-white);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+}
+
+.wishlist-subtitle {
+  color: var(--daino-color-gray-light);
+  font-size: 0.9rem;
+}
+
+/* Empty State */
+.wishlist-empty {
+  text-align: center;
+  padding: var(--space-3xl) 0;
+}
+
+.wishlist-empty svg {
+  width: 80px;
+  height: 80px;
+  color: var(--daino-color-gray-light);
+  opacity: 0.3;
+  margin-bottom: var(--space-lg);
+}
+
+.wishlist-empty p {
+  color: var(--daino-color-gray-light);
+  margin-bottom: var(--space-xl);
+  font-size: 1.1rem;
+}
+
+.wishlist-btn-gold {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-xl);
+  background-color: var(--daino-color-gold);
+  color: var(--daino-color-black);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn-gold:hover {
+  background-color: transparent;
+  color: var(--daino-color-gold);
+  box-shadow: inset 0 0 0 1px var(--daino-color-gold);
+}
+
+/* Products Grid - Identico a collection-grid */
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 3vw, 24px);
+}
+
+@media (max-width: 1024px) {
+  .wishlist-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .wishlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Product Card - Identico a product-card in collection */
+.wishlist-card {
+  position: relative;
+  background-color: var(--daino-color-gray-dark);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: border-color 0.3s ease;
+}
+
+.wishlist-card:hover {
+  border-color: var(--daino-color-gold);
+}
+
+.wishlist-card__link {
+  display: block;
+  text-decoration: none;
+}
+
+.wishlist-card__image-wrapper {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background-color: var(--daino-color-gray-dark);
+}
+
+.wishlist-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.wishlist-card:hover .wishlist-card__image {
+  transform: scale(1.05);
+}
+
+/* Hover Overlay */
+.wishlist-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wishlist-card:hover .wishlist-card__overlay {
+  opacity: 1;
+}
+
+.wishlist-card__view-btn {
+  padding: var(--space-sm) var(--space-lg);
+  background: transparent;
+  border: 1px solid var(--daino-color-gold);
+  color: var(--daino-color-gold);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wishlist-card__view-btn:hover {
+  background: var(--daino-color-gold);
+  color: var(--daino-color-black);
+}
+
+/* Product Info */
+.wishlist-card__info {
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.wishlist-card__vendor {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--daino-color-gray-light);
+  margin-bottom: 4px;
+}
+
+.wishlist-card__title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--daino-color-white);
+  margin: 0 0 var(--space-xs);
+  transition: color 0.3s ease;
+}
+
+.wishlist-card:hover .wishlist-card__title {
+  color: var(--daino-color-gold);
+}
+
+.wishlist-card__price {
+  font-size: 0.9rem;
+  color: var(--daino-color-white);
+}
+
+/* Remove Button */
+.wishlist-card__remove {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 50%;
+  color: var(--daino-color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.wishlist-card:hover .wishlist-card__remove {
+  opacity: 1;
+}
+
+.wishlist-card__remove:hover {
+  background: var(--daino-color-gold);
+  color: var(--daino-color-black);
+}
+
+.wishlist-card__remove svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Loading State */
+.wishlist-loading {
+  text-align: center;
+  padding: var(--space-2xl) 0;
+}
+
+.wishlist-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--daino-color-gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto var(--space-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.wishlist-loading p {
+  color: var(--daino-color-gray-light);
+  font-size: 0.9rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const grid = document.querySelector('[data-wishlist-grid]');
+  const emptyState = document.querySelector('[data-wishlist-empty]');
+  const loading = document.querySelector('[data-wishlist-loading]');
+  const countText = document.querySelector('[data-wishlist-count-text]');
+  
+  if (!grid) return;
+  
+  // Aspetta che DainoWishlist sia disponibile (max 2 secondi)
+  let attempts = 0;
+  while (!window.DainoWishlist && attempts < 20) {
+    await new Promise(r => setTimeout(r, 100));
+    attempts++;
+  }
+  
+  if (!window.DainoWishlist) {
+    console.error('DainoWishlist not loaded');
+    if (emptyState) emptyState.style.display = 'block';
+    return;
+  }
+  
+  const wishlist = DainoWishlist.getWishlist();
+  
+  // Update count
+  if (countText) countText.textContent = wishlist.length;
+  
+  if (wishlist.length === 0) {
+    if (emptyState) emptyState.style.display = 'block';
+    return;
+  }
+  
+  // Hide empty, show loading
+  if (emptyState) emptyState.style.display = 'none';
+  if (loading) loading.style.display = 'block';
+  
+  // Fetch all products and filter by wishlist IDs
+  try {
+    const response = await fetch('/products.json?limit=250');
+    const data = await response.json();
+    
+    grid.innerHTML = '';
+    
+    wishlist.forEach(productId => {
+      const product = data.products.find(p => String(p.id) === String(productId));
+      if (product) {
+        grid.innerHTML += createProductCard(product);
+      }
+    });
+    
+    // Update count after filtering
+    const actualCount = grid.children.length;
+    if (countText) countText.textContent = actualCount;
+    
+    if (actualCount === 0) {
+      if (emptyState) emptyState.style.display = 'block';
+    }
+    
+  } catch (e) {
+    console.error('Error fetching products:', e);
+    grid.innerHTML = '<p style="color: var(--daino-color-gray-light); text-align: center; grid-column: 1/-1;">Errore nel caricamento dei prodotti</p>';
+  }
+  
+  if (loading) loading.style.display = 'none';
+  
+  // Event delegation for remove buttons
+  grid.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.wishlist-card__remove');
+    if (removeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const productId = removeBtn.dataset.productId;
+      if (productId) {
+        DainoWishlist.remove(productId);
+        removeBtn.closest('.wishlist-card').remove();
+        
+        // Update count
+        const newCount = DainoWishlist.getCount();
+        if (countText) countText.textContent = newCount;
+        
+        // Show empty state if no products left
+        if (newCount === 0 && emptyState) {
+          emptyState.style.display = 'block';
+        }
+      }
+    }
+  });
+});
+
+function createProductCard(product) {
+  const imageUrl = product.images[0]?.src || '';
+  
+  // Price: use parseFloat without /100 (Shopify API returns full price)
+  let priceValue = 0;
+  if (product.variants && product.variants.length > 0) {
+    priceValue = parseFloat(product.variants[0].price) || 0;
+  }
+  const price = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(priceValue);
+  
+  // Brand: use metafields.custom.brand (fallback to vendor)
+  const brand = product.metafields?.custom?.brand || product.vendor || '';
+  
+  return `
+    <article class="wishlist-card">
+      <a href="/products/${product.handle}" class="wishlist-card__link">
+        <div class="wishlist-card__image-wrapper">
+          ${imageUrl ? `<img src="${imageUrl}" alt="${product.title}" class="wishlist-card__image" loading="lazy">` : ''}
+          <div class="wishlist-card__overlay">
+            <span class="wishlist-card__view-btn">Visualizza</span>
+          </div>
+        </div>
+        <div class="wishlist-card__info">
+          ${brand ? `<span class="wishlist-card__vendor">${brand}</span>` : ''}
+          <h3 class="wishlist-card__title">${product.title}</h3>
+          <span class="wishlist-card__price">${price}</span>
+        </div>
+      </a>
+      <button class="wishlist-card__remove" data-product-id="${product.id}" aria-label="Rimuovi dai preferiti">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </article>
+  `;
+}
+</script>
+
+{% schema %}
+{
+  "name": "Wishlist Page",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Wishlist Page"
+    }
+  ]
+}
+{% endschema %}

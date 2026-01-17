@@ -1,0 +1,1137 @@
+{% comment %}
+  DAINO PREDICTIVE SEARCH - Dropdown Overlay
+  Ricerca AJAX con Shopify Predictive Search API
+  Trigger: click su icona lente nell'header
+{% endcomment %}
+
+{% comment %} 
+  Recupera tutti i brand unici dal metafield custom.brand 
+  Itera su tutti i prodotti del catalogo
+{% endcomment %}
+{% assign all_brands = '' %}
+{% for product in collections.all.products %}
+  {% if product.metafields.custom.brand != blank %}
+    {% assign brand_value = product.metafields.custom.brand %}
+    {% unless all_brands contains brand_value %}
+      {% if all_brands == '' %}
+        {% assign all_brands = brand_value %}
+      {% else %}
+        {% assign all_brands = all_brands | append: '|||' | append: brand_value %}
+      {% endif %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+{% assign brand_array = all_brands | split: '|||' | sort %}
+
+<!-- Search Overlay Background -->
+<div class="predictive-search-overlay" id="predictiveSearchOverlay" aria-hidden="true">
+  
+  <!-- Search Container -->
+  <div class="predictive-search-container" role="dialog" aria-modal="true" aria-label="{{ 'general.search.title' | t | default: 'Ricerca' }}">
+    
+    <!-- Search Input Wrapper -->
+    <div class="predictive-search-input-wrapper">
+      <svg class="predictive-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      
+      <input 
+        type="search" 
+        id="predictiveSearchInput"
+        class="predictive-search-input"
+        placeholder="{{ 'general.search.placeholder' | t | default: 'Cerca prodotti...' }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="{{ 'general.search.placeholder' | t | default: 'Cerca prodotti...' }}"
+        aria-controls="predictiveSearchResults"
+        aria-expanded="false"
+      >
+      
+      <!-- Loading Spinner -->
+      <div class="predictive-search-spinner" id="predictiveSearchSpinner" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+          <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+        </svg>
+      </div>
+      
+      <!-- Close Button -->
+      <button 
+        type="button" 
+        class="predictive-search-close" 
+        id="predictiveSearchClose"
+        aria-label="{{ 'general.accessibility.close' | t | default: 'Chiudi ricerca' }}"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Results Container -->
+    <div class="predictive-search-results" id="predictiveSearchResults" role="listbox" aria-label="Risultati ricerca">
+      
+      <!-- Empty State (hidden by default) -->
+      <div class="predictive-search-empty" id="predictiveSearchEmpty" style="display: none;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+          <path d="M8 11h6"/>
+        </svg>
+        <p class="predictive-search-empty__text">Nessun risultato trovato per "<span id="predictiveSearchEmptyQuery"></span>"</p>
+      </div>
+      
+      <!-- Brand Section (Quick Filter) -->
+      <div class="predictive-search-section" id="predictiveSearchBrands" style="display: none;">
+        <h3 class="predictive-search-section__title">Brand</h3>
+        <ul class="predictive-search-section__list" role="group" aria-label="Brand"></ul>
+      </div>
+      
+      <!-- Products Section -->
+      <div class="predictive-search-section" id="predictiveSearchProducts" style="display: none;">
+        <h3 class="predictive-search-section__title">Prodotti</h3>
+        <ul class="predictive-search-section__list" role="group" aria-label="Prodotti"></ul>
+      </div>
+      
+      <!-- Collections Section -->
+      <div class="predictive-search-section" id="predictiveSearchCollections" style="display: none;">
+        <h3 class="predictive-search-section__title">Collezioni</h3>
+        <ul class="predictive-search-section__list" role="group" aria-label="Collezioni"></ul>
+      </div>
+      
+      <!-- Pages Section -->
+      <div class="predictive-search-section" id="predictiveSearchPages" style="display: none;">
+        <h3 class="predictive-search-section__title">Pagine</h3>
+        <ul class="predictive-search-section__list" role="group" aria-label="Pagine"></ul>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ============================================
+     PREDICTIVE SEARCH - CSS Variables & Base
+     ============================================ */
+  :root {
+    --ps-overlay-bg: rgba(0, 0, 0, 0.6);
+    --ps-container-bg: var(--daino-color-gray-dark, #0a0a0a);
+    --ps-border-color: rgba(255, 255, 255, 0.15);
+    --ps-text-color: var(--daino-color-white, #ffffff);
+    --ps-text-muted: var(--daino-color-gray-light, #cccccc);
+    --ps-accent-color: var(--daino-color-gold, #d4af37);
+    --ps-hover-bg: rgba(212, 175, 55, 0.1);
+    --ps-transition: 300ms ease-in-out;
+    --ps-max-width: 700px;
+    --ps-results-max-height: 500px;
+  }
+
+  /* ============================================
+     OVERLAY
+     ============================================ */
+  .predictive-search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--ps-overlay-bg);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--ps-transition), visibility var(--ps-transition);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    /* Allow scroll events to pass through to page */
+    pointer-events: none;
+  }
+
+  .predictive-search-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    /* Re-enable pointer events only when open */
+    pointer-events: auto;
+  }
+
+  /* ============================================
+     CONTAINER
+     ============================================ */
+  .predictive-search-container {
+    position: absolute;
+    top: clamp(70px, 12vw, 95px); /* Allineato sotto l'header */
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    width: 90%;
+    max-width: var(--ps-max-width);
+    max-height: calc(100vh - 120px);
+    background-color: var(--ps-container-bg);
+    border: 1px solid var(--ps-border-color);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: transform var(--ps-transition), opacity var(--ps-transition);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    pointer-events: auto;
+    /* Block touch scroll on container */
+    touch-action: none;
+  }
+
+  .predictive-search-overlay.is-open .predictive-search-container {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ============================================
+     INPUT WRAPPER
+     ============================================ */
+  .predictive-search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm, 12px);
+    padding: var(--space-md, 16px) var(--space-lg, 24px);
+    border-bottom: 1px solid var(--ps-border-color);
+    position: relative;
+  }
+
+  .predictive-search-icon {
+    color: var(--ps-text-muted);
+    flex-shrink: 0;
+  }
+
+  .predictive-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--ps-text-color);
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+  }
+
+  .predictive-search-input::placeholder {
+    color: var(--ps-text-muted);
+    opacity: 0.7;
+  }
+
+  .predictive-search-input::-webkit-search-cancel-button,
+  .predictive-search-input::-webkit-search-decoration {
+    display: none;
+  }
+
+  /* Loading Spinner */
+  .predictive-search-spinner {
+    display: none;
+    color: var(--ps-accent-color);
+    flex-shrink: 0;
+  }
+
+  .predictive-search-spinner.is-loading {
+    display: flex;
+  }
+
+  .predictive-search-spinner svg {
+    animation: ps-spin 1s linear infinite;
+  }
+
+  @keyframes ps-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Close Button */
+  .predictive-search-close {
+    background: transparent;
+    border: none;
+    color: var(--ps-text-muted);
+    cursor: pointer;
+    padding: 8px;
+    margin: -8px;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .predictive-search-close:hover {
+    color: var(--ps-accent-color);
+  }
+
+  /* ============================================
+     RESULTS CONTAINER
+     ============================================ */
+  .predictive-search-results {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    
+    /* Hide scrollbar but keep scroll functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    /* Ensure touch events are captured */
+    touch-action: pan-y;
+  }
+  
+  .predictive-search-results::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Ensure sections inside are scrollable content */
+  .predictive-search-section,
+  .predictive-search-section__list {
+    touch-action: pan-y;
+  }
+
+  /* ============================================
+     EMPTY STATE
+     ============================================ */
+  .predictive-search-empty {
+    padding: var(--space-2xl, 48px) var(--space-lg, 24px);
+    text-align: center;
+  }
+
+  .predictive-search-empty svg {
+    color: var(--ps-text-muted);
+    opacity: 0.4;
+    margin-bottom: var(--space-md, 16px);
+  }
+
+  .predictive-search-empty__text {
+    color: var(--ps-text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .predictive-search-empty__text span {
+    color: var(--ps-accent-color);
+    font-style: italic;
+  }
+
+  /* ============================================
+     SECTIONS
+     ============================================ */
+  .predictive-search-section {
+    padding: var(--space-md, 16px) 0;
+    border-bottom: 1px solid var(--ps-border-color);
+  }
+
+  .predictive-search-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .predictive-search-section__title {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ps-accent-color);
+    padding: 0 var(--space-lg, 24px);
+    margin: 0 0 var(--space-sm, 12px) 0;
+  }
+
+  .predictive-search-section__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ============================================
+     RESULT ITEMS
+     ============================================ */
+  .predictive-search-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md, 16px);
+    padding: var(--space-sm, 12px) var(--space-lg, 24px);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .predictive-search-item:hover,
+  .predictive-search-item.is-selected {
+    background-color: var(--ps-hover-bg);
+  }
+
+  .predictive-search-item.is-selected {
+    outline: none;
+  }
+
+  /* Product Image */
+  .predictive-search-item__image {
+    width: 50px;
+    height: 65px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: var(--daino-color-black, #000);
+  }
+
+  .predictive-search-item__image-placeholder {
+    width: 50px;
+    height: 65px;
+    background-color: var(--daino-color-black, #000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .predictive-search-item__image-placeholder svg {
+    width: 24px;
+    height: 24px;
+    color: var(--ps-text-muted);
+    opacity: 0.3;
+  }
+
+  /* Item Info */
+  .predictive-search-item__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .predictive-search-item__vendor {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ps-accent-color);
+    margin-bottom: 2px;
+  }
+
+  .predictive-search-item__title {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 0.9rem;
+    color: var(--ps-text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    transition: color 0.2s ease;
+  }
+
+  .predictive-search-item:hover .predictive-search-item__title {
+    color: var(--ps-accent-color);
+  }
+
+  .predictive-search-item__price {
+    font-size: 0.8rem;
+    color: var(--ps-text-muted);
+    margin-top: 2px;
+  }
+
+  .predictive-search-item__price--sale {
+    color: var(--ps-accent-color);
+  }
+
+  .predictive-search-item__price--compare {
+    text-decoration: line-through;
+    opacity: 0.6;
+    margin-left: 8px;
+  }
+
+  /* Collection/Page Items (no image) */
+  .predictive-search-item--simple {
+    padding: var(--space-xs, 8px) var(--space-lg, 24px);
+  }
+
+  .predictive-search-item--simple .predictive-search-item__title {
+    font-size: 0.85rem;
+  }
+
+  /* Brand Items (Quick Filter) */
+  .predictive-search-item--brand {
+    background: rgba(212, 175, 55, 0.05);
+    border-left: 2px solid var(--ps-accent-color);
+  }
+  
+  .predictive-search-item--brand .predictive-search-item__info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .predictive-search-item__brand-icon {
+    color: var(--ps-accent-color);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .predictive-search-item--brand .predictive-search-item__title {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  
+  .predictive-search-item__action {
+    font-size: 0.7rem;
+    color: var(--ps-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+  
+  .predictive-search-item--brand:hover .predictive-search-item__action {
+    color: var(--ps-accent-color);
+  }
+
+  /* ============================================
+     VIEW ALL LINK
+     ============================================ */
+  .predictive-search-view-all {
+    display: block;
+    padding: var(--space-md, 16px) var(--space-lg, 24px);
+    text-align: center;
+    color: var(--ps-accent-color);
+    font-family: var(--font-heading, sans-serif);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border-top: 1px solid var(--ps-border-color);
+    transition: background-color 0.2s ease;
+  }
+
+  .predictive-search-view-all:hover {
+    background-color: var(--ps-hover-bg);
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+    .predictive-search-container {
+      width: 95%;
+      top: clamp(60px, 12vw, 85px);
+    }
+
+    .predictive-search-input-wrapper {
+      padding: var(--space-sm, 12px) var(--space-md, 16px);
+    }
+
+    .predictive-search-section__title,
+    .predictive-search-item {
+      padding-left: var(--space-md, 16px);
+      padding-right: var(--space-md, 16px);
+    }
+
+    .predictive-search-view-all {
+      padding-left: var(--space-md, 16px);
+      padding-right: var(--space-md, 16px);
+    }
+
+    .predictive-search-item__image,
+    .predictive-search-item__image-placeholder {
+      width: 45px;
+      height: 58px;
+    }
+
+    :root {
+      --ps-results-max-height: 400px;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // PREDICTIVE SEARCH CONTROLLER
+  // ============================================
+  
+  const PredictiveSearch = {
+    // DOM Elements
+    overlay: null,
+    container: null,
+    input: null,
+    closeBtn: null,
+    spinner: null,
+    results: null,
+    emptyState: null,
+    emptyQuery: null,
+    productsSection: null,
+    collectionsSection: null,
+    pagesSection: null,
+    brandsSection: null,
+    viewAllLink: null,
+    
+    // Brand list for quick filter (retrieved from metafield custom.brand)
+    knownBrands: [
+      {%- for brand in brand_array -%}
+        '{{ brand | escape }}'{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ],
+    
+    // State
+    isOpen: false,
+    currentQuery: '',
+    debounceTimer: null,
+    selectedIndex: -1,
+    allItems: [],
+    
+    // Config
+    config: {
+      debounceMs: 200,
+      minChars: 1,
+      maxProducts: 20,
+      maxCollections: 5,
+      maxPages: 5
+    },
+
+    // Initialize
+    init() {
+      this.cacheElements();
+      if (!this.overlay) return;
+      
+      this.bindEvents();
+    },
+
+    cacheElements() {
+      this.overlay = document.getElementById('predictiveSearchOverlay');
+      this.input = document.getElementById('predictiveSearchInput');
+      this.closeBtn = document.getElementById('predictiveSearchClose');
+      this.spinner = document.getElementById('predictiveSearchSpinner');
+      this.results = document.getElementById('predictiveSearchResults');
+      this.emptyState = document.getElementById('predictiveSearchEmpty');
+      this.emptyQuery = document.getElementById('predictiveSearchEmptyQuery');
+      this.productsSection = document.getElementById('predictiveSearchProducts');
+      this.collectionsSection = document.getElementById('predictiveSearchCollections');
+      this.pagesSection = document.getElementById('predictiveSearchPages');
+      this.brandsSection = document.getElementById('predictiveSearchBrands');
+      this.container = this.overlay?.querySelector('.predictive-search-container');
+    },
+
+    bindEvents() {
+      // Open trigger - delegated to catch dynamically added triggers
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-predictive-search-trigger]');
+        if (trigger) {
+          e.preventDefault();
+          this.open();
+        }
+      });
+
+      // Close button
+      this.closeBtn?.addEventListener('click', () => this.close());
+
+      // Overlay click (close on background click)
+      this.overlay?.addEventListener('click', (e) => {
+        if (e.target === this.overlay) {
+          this.close();
+        }
+      });
+
+      // Input events
+      this.input?.addEventListener('input', (e) => {
+        this.handleInput(e.target.value);
+      });
+
+      // Keyboard navigation
+      this.input?.addEventListener('keydown', (e) => this.handleKeydown(e));
+
+      // Prevent form submission on enter when item is selected
+      this.container?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && this.selectedIndex >= 0) {
+          e.preventDefault();
+          this.selectCurrentItem();
+        }
+      });
+
+      // Scroll isolation - AGGRESSIVE
+      this.setupScrollIsolation();
+    },
+
+    // ============================================
+    // SCROLL ISOLATION - AGGRESSIVE APPROACH
+    // ============================================
+    
+    setupScrollIsolation() {
+      const self = this;
+      
+      // Block ALL wheel events on overlay except results
+      this.overlay?.addEventListener('wheel', function(e) {
+        if (!self.isOpen) return;
+        
+        // If target is inside results container, let it handle
+        if (e.target.closest('.predictive-search-results')) {
+          return; // Will be handled by results listener
+        }
+        
+        // If target is inside container (input area), block scroll
+        if (e.target.closest('.predictive-search-container')) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        
+        // Outside container = close search or let page scroll
+      }, { passive: false, capture: true });
+
+      // Results container wheel - ISOLATED SCROLL
+      this.results?.addEventListener('wheel', function(e) {
+        if (!self.isOpen) return;
+        
+        // ALWAYS prevent default first
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Then manually scroll results
+        const { scrollTop, scrollHeight, clientHeight } = self.results;
+        const maxScroll = scrollHeight - clientHeight;
+        
+        // Calculate new scroll position
+        let newScrollTop = scrollTop + e.deltaY;
+        
+        // Clamp to bounds
+        newScrollTop = Math.max(0, Math.min(newScrollTop, maxScroll));
+        
+        self.results.scrollTop = newScrollTop;
+      }, { passive: false, capture: true });
+
+      // TOUCH - Block on container, isolate on results
+      let touchStartY = 0;
+      let lastTouchY = 0;
+      let isInResults = false;
+      
+      // Container touch - block page scroll
+      this.container?.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
+        lastTouchY = touchStartY;
+        isInResults = !!e.target.closest('.predictive-search-results');
+      }, { passive: true });
+
+      this.container?.addEventListener('touchmove', function(e) {
+        if (!self.isOpen) return;
+        
+        const touchY = e.touches[0].clientY;
+        const deltaY = lastTouchY - touchY;
+        lastTouchY = touchY;
+        
+        if (isInResults) {
+          // Manually scroll results
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const { scrollTop, scrollHeight, clientHeight } = self.results;
+          const maxScroll = scrollHeight - clientHeight;
+          
+          let newScrollTop = scrollTop + deltaY;
+          newScrollTop = Math.max(0, Math.min(newScrollTop, maxScroll));
+          
+          self.results.scrollTop = newScrollTop;
+        } else {
+          // Block scroll on input area
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, { passive: false });
+
+      this.container?.addEventListener('touchend', function() {
+        isInResults = false;
+      }, { passive: true });
+    },
+
+    // ============================================
+    // OPEN / CLOSE
+    // ============================================
+    
+    open() {
+      if (this.isOpen) return;
+      
+      this.isOpen = true;
+      
+      // Show overlay
+      this.overlay.classList.add('is-open');
+      this.overlay.setAttribute('aria-hidden', 'false');
+      
+      // Focus input after animation
+      setTimeout(() => {
+        this.input?.focus();
+      }, 100);
+
+      // Add escape listener
+      document.addEventListener('keydown', this.handleEscape);
+    },
+
+    close() {
+      if (!this.isOpen) return;
+      
+      this.isOpen = false;
+      
+      // Hide overlay
+      this.overlay.classList.remove('is-open');
+      this.overlay.setAttribute('aria-hidden', 'true');
+      
+      // Reset state
+      this.resetResults();
+      this.input.value = '';
+      this.currentQuery = '';
+      this.selectedIndex = -1;
+      
+      // Remove escape listener
+      document.removeEventListener('keydown', this.handleEscape);
+    },
+
+    handleEscape: function(e) {
+      if (e.key === 'Escape') {
+        PredictiveSearch.close();
+      }
+    },
+
+    // ============================================
+    // SEARCH LOGIC
+    // ============================================
+    
+    handleInput(value) {
+      const query = value.trim();
+      
+      // Clear previous timer
+      clearTimeout(this.debounceTimer);
+      
+      if (query.length < this.config.minChars) {
+        this.resetResults();
+        this.currentQuery = '';
+        return;
+      }
+      
+      this.currentQuery = query;
+      
+      // Debounce
+      this.debounceTimer = setTimeout(() => {
+        this.performSearch(query);
+      }, this.config.debounceMs);
+    },
+
+    async performSearch(query) {
+      if (query !== this.currentQuery) return;
+      
+      this.showLoading();
+      
+      try {
+        const url = `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product,collection,page&resources[limit]=20&resources[options][unavailable_products]=last`;
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Search failed');
+        
+        const data = await response.json();
+        
+        // Verify query hasn't changed during fetch
+        if (query !== this.currentQuery) return;
+        
+        this.displayResults(data.resources.results, query);
+        
+      } catch (error) {
+        console.error('Predictive Search Error:', error);
+        this.showEmpty(query);
+      } finally {
+        this.hideLoading();
+      }
+    },
+
+    // ============================================
+    // DISPLAY RESULTS
+    // ============================================
+    
+    displayResults(results, query) {
+      this.resetResults();
+      
+      const products = results.products || [];
+      const collections = results.collections || [];
+      const pages = results.pages || [];
+      
+      // Match brands locally
+      const matchedBrands = this.matchBrands(query);
+      
+      const hasResults = products.length || collections.length || pages.length || matchedBrands.length;
+      
+      if (!hasResults) {
+        this.showEmpty(query);
+        return;
+      }
+      
+      // Render brands FIRST (quick filter)
+      if (matchedBrands.length) {
+        this.renderBrands(matchedBrands);
+      }
+      
+      // Render products
+      if (products.length) {
+        this.renderProducts(products.slice(0, this.config.maxProducts));
+      }
+      
+      // Render collections
+      if (collections.length) {
+        this.renderCollections(collections.slice(0, this.config.maxCollections));
+      }
+      
+      // Render pages
+      if (pages.length) {
+        this.renderPages(pages.slice(0, this.config.maxPages));
+      }
+      
+      // Update items list for keyboard nav
+      this.updateItemsList();
+      this.selectedIndex = -1;
+    },
+    
+    // Match query against known brands
+    matchBrands(query) {
+      const normalizedQuery = query.toLowerCase().trim();
+      if (normalizedQuery.length < 2) return [];
+      
+      return this.knownBrands.filter(brand => 
+        brand.toLowerCase().includes(normalizedQuery)
+      ).slice(0, 5); // Max 5 brand results
+    },
+    
+    // Render brand quick filter section
+    renderBrands(brands) {
+      const list = this.brandsSection.querySelector('.predictive-search-section__list');
+      list.innerHTML = '';
+      
+      brands.forEach(brand => {
+        const brandParam = encodeURIComponent(brand);
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="/collections/all?filter.p.m.custom.brand=${brandParam}" class="predictive-search-item predictive-search-item--brand" role="option">
+            <div class="predictive-search-item__info">
+              <span class="predictive-search-item__brand-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+              </span>
+              <h4 class="predictive-search-item__title">${this.escapeHtml(brand)}</h4>
+              <span class="predictive-search-item__action">Vedi tutti i prodotti →</span>
+            </div>
+          </a>
+        `;
+        list.appendChild(li);
+      });
+      
+      this.brandsSection.style.display = 'block';
+    },
+
+    renderProducts(products) {
+      const list = this.productsSection.querySelector('.predictive-search-section__list');
+      list.innerHTML = '';
+      
+      products.forEach((product, index) => {
+        const price = this.formatPrice(product.price);
+        const comparePrice = product.compare_at_price_max > product.price 
+          ? this.formatPrice(product.compare_at_price_max) 
+          : null;
+        
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="${product.url}" class="predictive-search-item" role="option" data-index="${index}">
+            ${product.featured_image?.url 
+              ? `<img src="${product.featured_image.url}&width=100" alt="${this.escapeHtml(product.title)}" class="predictive-search-item__image" loading="lazy">`
+              : `<div class="predictive-search-item__image-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="M21 15l-5-5L5 21"/>
+                  </svg>
+                </div>`
+            }
+            <div class="predictive-search-item__info">
+              ${product.vendor ? `<div class="predictive-search-item__vendor">${this.escapeHtml(product.vendor)}</div>` : ''}
+              <h4 class="predictive-search-item__title">${this.escapeHtml(product.title)}</h4>
+              <div class="predictive-search-item__price">
+                <span class="${comparePrice ? 'predictive-search-item__price--sale' : ''}">${price}</span>
+                ${comparePrice ? `<span class="predictive-search-item__price--compare">${comparePrice}</span>` : ''}
+              </div>
+            </div>
+          </a>
+        `;
+        list.appendChild(li);
+      });
+      
+      this.productsSection.style.display = 'block';
+    },
+
+    renderCollections(collections) {
+      const list = this.collectionsSection.querySelector('.predictive-search-section__list');
+      list.innerHTML = '';
+      
+      collections.forEach(collection => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="${collection.url}" class="predictive-search-item predictive-search-item--simple" role="option">
+            <div class="predictive-search-item__info">
+              <h4 class="predictive-search-item__title">${this.escapeHtml(collection.title)}</h4>
+            </div>
+          </a>
+        `;
+        list.appendChild(li);
+      });
+      
+      this.collectionsSection.style.display = 'block';
+    },
+
+    renderPages(pages) {
+      const list = this.pagesSection.querySelector('.predictive-search-section__list');
+      list.innerHTML = '';
+      
+      pages.forEach(page => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="${page.url}" class="predictive-search-item predictive-search-item--simple" role="option">
+            <div class="predictive-search-item__info">
+              <h4 class="predictive-search-item__title">${this.escapeHtml(page.title)}</h4>
+            </div>
+          </a>
+        `;
+        list.appendChild(li);
+      });
+      
+      this.pagesSection.style.display = 'block';
+    },
+
+    // ============================================
+    // KEYBOARD NAVIGATION
+    // ============================================
+    
+    handleKeydown(e) {
+      switch(e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          this.navigateResults(1);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          this.navigateResults(-1);
+          break;
+        case 'Enter':
+          if (this.selectedIndex >= 0) {
+            e.preventDefault();
+            this.selectCurrentItem();
+          }
+          // No redirect - user must select a product directly
+          break;
+        case 'Escape':
+          e.preventDefault();
+          this.close();
+          break;
+      }
+    },
+
+    updateItemsList() {
+      this.allItems = Array.from(this.results.querySelectorAll('.predictive-search-item'));
+    },
+
+    navigateResults(direction) {
+      if (!this.allItems.length) return;
+      
+      // Remove current selection
+      if (this.selectedIndex >= 0 && this.allItems[this.selectedIndex]) {
+        this.allItems[this.selectedIndex].classList.remove('is-selected');
+      }
+      
+      // Calculate new index
+      this.selectedIndex += direction;
+      
+      if (this.selectedIndex < 0) {
+        this.selectedIndex = this.allItems.length - 1;
+      } else if (this.selectedIndex >= this.allItems.length) {
+        this.selectedIndex = 0;
+      }
+      
+      // Apply new selection
+      const selectedItem = this.allItems[this.selectedIndex];
+      if (selectedItem) {
+        selectedItem.classList.add('is-selected');
+        selectedItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        this.input.setAttribute('aria-activedescendant', selectedItem.id || '');
+      }
+    },
+
+    selectCurrentItem() {
+      if (this.selectedIndex >= 0 && this.allItems[this.selectedIndex]) {
+        const href = this.allItems[this.selectedIndex].getAttribute('href');
+        if (href) {
+          window.location.href = href;
+        }
+      }
+    },
+
+    // ============================================
+    // UTILITIES
+    // ============================================
+    
+    showLoading() {
+      this.spinner?.classList.add('is-loading');
+    },
+
+    hideLoading() {
+      this.spinner?.classList.remove('is-loading');
+    },
+
+    showEmpty(query) {
+      this.emptyQuery.textContent = query;
+      this.emptyState.style.display = 'block';
+    },
+
+    resetResults() {
+      this.productsSection.style.display = 'none';
+      this.collectionsSection.style.display = 'none';
+      this.pagesSection.style.display = 'none';
+      this.brandsSection.style.display = 'none';
+      this.emptyState.style.display = 'none';
+      
+      // Clear lists
+      this.productsSection.querySelector('.predictive-search-section__list').innerHTML = '';
+      this.collectionsSection.querySelector('.predictive-search-section__list').innerHTML = '';
+      this.pagesSection.querySelector('.predictive-search-section__list').innerHTML = '';
+      this.brandsSection.querySelector('.predictive-search-section__list').innerHTML = '';
+      
+      this.allItems = [];
+    },
+
+    formatPrice(price) {
+      if (!price) return '';
+      // Return price as-is, no conversion
+      if (typeof price === 'string') {
+        // Already formatted
+        if (price.includes('€')) return price;
+        // Just a number string, add euro
+        return `€${price}`;
+      }
+      // Number - just format it directly
+      return `€${parseFloat(price).toFixed(2).replace('.', ',')}`;
+    },
+
+    escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  };
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => PredictiveSearch.init());
+  } else {
+    PredictiveSearch.init();
+  }
+
+  // Export for external access
+  window.DainoPredictiveSearch = PredictiveSearch;
+
+})();
+</script>

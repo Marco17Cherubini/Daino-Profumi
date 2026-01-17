@@ -1,0 +1,11 @@
+{
+    "sections": {
+        "legal-hub": {
+            "type": "legal-hub",
+            "settings": {}
+        }
+    },
+    "order": [
+        "legal-hub"
+    ]
+}

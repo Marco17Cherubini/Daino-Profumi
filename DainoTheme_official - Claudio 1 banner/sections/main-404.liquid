@@ -1,0 +1,39 @@
+{% comment %}
+  MAIN 404 - Pagina errore
+{% endcomment %}
+
+<div class="error-404-section">
+  <div class="error-404-content">
+    <h1>{{ 'general.404.title' | t }}</h1>
+    <p>{{ 'general.404.subtext' | t }}</p>
+    <a href="/" class="action-btn">{{ 'general.404.button' | t }}</a>
+  </div>
+</div>
+
+<style>
+  .error-404-section {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5vh 5vw;
+  }
+  .error-404-content h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+  }
+  .error-404-content p {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "settings": []
+}
+{% endschema %}

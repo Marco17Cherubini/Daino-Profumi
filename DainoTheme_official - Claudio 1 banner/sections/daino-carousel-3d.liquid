@@ -1,0 +1,74 @@
+{% schema %}
+{
+  "name": "Dark Luxury Carousel",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dark Luxury Carousel"
+    }
+  ]
+}
+{% endschema %}
+
+<!-- Load Carousel Logic specific to this section -->
+<script src="{{ 'daino-carousel.js' | asset_url }}" defer></script>
+
+<!-- ✅ FIX 5B: Carousel prime 3 immagini eager (above fold) -->
+<div class="carousel-view scroll-reveal">
+    <div class="track" id="track">
+        {% assign collection = collections[section.settings.collection] %}
+        
+        {% if collection != blank %}
+            <!-- Dynamic Collection Loop -->
+            {% for product in collection.products limit: section.settings.products_to_show %}
+                <div class="card">
+                    <div class="glow"></div>
+                     <a href="{{ product.url }}" class="card-link" style="display:block; width:100%; height:100%;">
+                        <img 
+                          src="{{ product.featured_image | image_url: width: 600 }}" 
+                          alt="{{ product.title }}"
+                          {% if forloop.index <= 3 %}
+                            loading="eager"
+                            fetchpriority="high"
+                          {% else %}
+                            loading="lazy"
+                          {% endif %}
+                        >
+                     </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <!-- Fallback Static Images (from exo_sk.html) -->
+            {% for i in (1..6) %}
+                <div class="card">
+                    <div class="glow"></div>
+                    <img 
+                      src="{{ 'daino-perfume-0' | append: i | append: '.png' | asset_url }}" 
+                      alt="Profumo {{ i }}"
+                      {% if forloop.index <= 3 %}
+                        loading="eager"
+                        fetchpriority="high"
+                      {% else %}
+                        loading="lazy"
+                      {% endif %}
+                    >
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,337 @@
+{% comment %}
+  Customer Registration Page - Daino Theme
+  Design luxury identico a login page
+{% endcomment %}
+
+{% comment %} Include Header {% endcomment %}
+{% section 'header' %}
+
+<div class="register-section">
+  <!-- Background Glow Effects -->
+  <div class="register-glow register-glow--top"></div>
+  <div class="register-glow register-glow--bottom"></div>
+  
+  <div class="register-container">
+    <!-- Header -->
+    <div class="register-header fade-in-up" style="animation-delay: 0.1s;">
+      <h1 class="register-title">{{ 'customer.register.title' | t }}</h1>
+      <p class="register-subtitle">Entra nel mondo dell'esclusività olfattiva.</p>
+    </div>
+
+    <!-- Registration Form -->
+    {% form 'create_customer', class: 'register-form fade-in-up', style: 'animation-delay: 0.2s;' %}
+      {% if form.errors %}
+        <div class="register-errors">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+      
+      <!-- Nome e Cognome (2 colonne) -->
+      <div class="register-row">
+        <div class="register-field">
+          <label for="customer-first-name" class="register-label">
+            {{ 'customer.register.first_name' | t }}
+          </label>
+          <input 
+            type="text" 
+            id="customer-first-name" 
+            name="customer[first_name]" 
+            autocomplete="given-name" 
+            required
+            class="register-input"
+            placeholder="Nome"
+          >
+        </div>
+        
+        <div class="register-field">
+          <label for="customer-last-name" class="register-label">
+            {{ 'customer.register.last_name' | t }}
+          </label>
+          <input 
+            type="text" 
+            id="customer-last-name" 
+            name="customer[last_name]" 
+            autocomplete="family-name" 
+            required
+            class="register-input"
+            placeholder="Cognome"
+          >
+        </div>
+      </div>
+      
+      <!-- Email -->
+      <div class="register-field">
+        <label for="customer-email" class="register-label">
+          {{ 'customer.register.email' | t }}
+        </label>
+        <input 
+          type="email" 
+          id="customer-email" 
+          name="customer[email]" 
+          autocomplete="email" 
+          required
+          class="register-input"
+          placeholder="nome@esempio.com"
+        >
+      </div>
+      
+      <!-- Telefono -->
+      <div class="register-field">
+        <label for="customer-phone" class="register-label">
+          Telefono
+        </label>
+        <input 
+          type="tel" 
+          id="customer-phone" 
+          name="customer[phone]" 
+          autocomplete="tel" 
+          class="register-input"
+          placeholder="+39 123 456 7890"
+        >
+      </div>
+      
+      <!-- Password -->
+      <div class="register-field">
+        <label for="customer-password" class="register-label">
+          {{ 'customer.register.password' | t }}
+        </label>
+        <input 
+          type="password" 
+          id="customer-password" 
+          name="customer[password]" 
+          autocomplete="new-password" 
+          required
+          class="register-input"
+          placeholder="••••••••"
+        >
+      </div>
+      
+      <!-- Conferma Password -->
+      <div class="register-field">
+        <label for="customer-password-confirm" class="register-label">
+          Conferma Password
+        </label>
+        <input 
+          type="password" 
+          id="customer-password-confirm" 
+          name="customer[password_confirmation]" 
+          autocomplete="new-password" 
+          required
+          class="register-input"
+          placeholder="••••••••"
+        >
+      </div>
+      
+      <div class="register-submit">
+        <button type="submit" class="register-btn">
+          {{ 'customer.register.submit' | t }}
+        </button>
+      </div>
+    {% endform %}
+
+    <!-- Login Link -->
+    <div class="register-login fade-in-up" style="animation-delay: 0.4s;">
+      <p class="register-login-text">Hai già un account?</p>
+      <a href="{{ routes.account_login_url }}" class="register-login-link">
+        Accedi
+      </a>
+    </div>
+  </div>
+</div>
+
+{% comment %} Include Footer {% endcomment %}
+{% section 'footer' %}
+
+<style>
+  /* ============================================
+     REGISTER PAGE - Identico a Login
+     ============================================ */
+  .register-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg);
+    padding-top: clamp(100px, 18vw, 140px);
+    padding-bottom: var(--space-2xl);
+    position: relative;
+    overflow: hidden;
+    background-color: var(--daino-color-black);
+  }
+
+  /* Glow Effects - clamp() responsive */
+  .register-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background-color: var(--daino-color-gold);
+    opacity: 0.05;
+  }
+  .register-glow--top {
+    top: -20%;
+    right: -10%;
+    width: clamp(300px, 50vw, 600px);
+    height: clamp(300px, 50vw, 600px);
+    filter: blur(120px);
+  }
+  .register-glow--bottom {
+    bottom: -20%;
+    left: -10%;
+    width: clamp(250px, 45vw, 500px);
+    height: clamp(250px, 45vw, 500px);
+    filter: blur(100px);
+  }
+
+  /* Container - leggermente più largo per i campi extra */
+  .register-container {
+    width: 100%;
+    max-width: clamp(340px, 90vw, 480px);
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Header */
+  .register-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+  .register-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
+    text-transform: uppercase;
+    letter-spacing: clamp(0.1em, 0.5vw, 0.15em);
+    color: var(--daino-color-white);
+    margin-bottom: var(--space-sm);
+  }
+  .register-subtitle {
+    color: var(--daino-color-gray-light);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+  }
+
+  /* Form */
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  /* Row per nome/cognome affiancati */
+  .register-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+  @media (max-width: 480px) {
+    .register-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Fields */
+  .register-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .register-label {
+    font-family: var(--font-heading);
+    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--daino-color-gray-light);
+  }
+  
+  /* Input */
+  .register-input {
+    width: 100%;
+    background-color: var(--daino-color-gray-dark);
+    border: 1px solid #333333;
+    color: var(--daino-color-white);
+    padding: clamp(12px, 2vw, 16px) var(--space-md);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .register-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .register-input:focus {
+    outline: none;
+    border-color: var(--daino-color-gold);
+    box-shadow: 0 0 0 1px var(--daino-color-gold);
+  }
+
+  /* Errors */
+  .register-errors {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: var(--space-sm);
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    margin-bottom: var(--space-sm);
+  }
+
+  /* Submit Button */
+  .register-submit {
+    padding-top: var(--space-md);
+  }
+  .register-btn {
+    width: 100%;
+    background-color: var(--daino-color-gold);
+    color: var(--daino-color-black);
+    border: none;
+    padding: clamp(14px, 2.5vw, 18px);
+    font-family: var(--font-heading);
+    font-size: clamp(0.65rem, 1.8vw, 0.85rem);
+    text-transform: uppercase;
+    letter-spacing: clamp(0.1em, 0.3vw, 0.2em);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.1);
+  }
+  .register-btn:hover {
+    background-color: #b5952f;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+  }
+
+  /* Login Link */
+  .register-login {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+  }
+  .register-login-text {
+    color: var(--daino-color-gray-light);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    margin-bottom: var(--space-sm);
+  }
+  .register-login-link {
+    font-family: var(--font-heading);
+    color: var(--daino-color-white);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    border-bottom: 1px solid var(--daino-color-gold);
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+  }
+  .register-login-link:hover {
+    color: var(--daino-color-gold);
+  }
+
+  /* Fade-in Animation */
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

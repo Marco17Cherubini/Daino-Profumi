@@ -1,0 +1,161 @@
+{% comment %}
+  DAINO HEADER - Navigazione Globale
+  Identico a hero-menu: Logo + Search/Account/Cart
+  SENZA hamburger e drawer
+{% endcomment %}
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <!-- Logo -->
+    <a href="{{ routes.root_url }}" class="header-logo">
+      {% if settings.logo_main %}
+        {{ settings.logo_main | image_url: height: 60 | image_tag: class: 'menu-logo', alt: shop.name }}
+      {% else %}
+        <img src="{{ 'logo_finito.png' | asset_url }}" alt="{{ shop.name }}" class="menu-logo">
+      {% endif %}
+    </a>
+
+    <!-- Icons (identico a hero-menu) -->
+    <div class="menu-icons">
+      <button type="button" class="menu-icon" title="Cerca" aria-label="Cerca prodotti" data-predictive-search-trigger>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+      </button>
+      <a href="/pages/collezioni?view=preferiti" class="menu-icon menu-icon--wishlist" title="Preferiti" id="wishlistIconHeader" aria-label="I tuoi preferiti" data-wishlist-trigger>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="wishlist-count" data-wishlist-count style="display: none;">0</span>
+      </a>
+      <a href="{{ routes.account_url }}" class="menu-icon" title="Account" aria-label="Il mio account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+      <a href="{{ routes.cart_url }}" class="menu-icon" title="Carrello" aria-label="Visualizza carrello">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        {% if cart.item_count > 0 %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% render 'predictive-search' %}
+
+<style>
+  /* ============================================
+     HEADER STYLES - Identico a hero-menu
+     ============================================ */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: clamp(60px, 12vw, 85px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    background-color: var(--daino-color-black);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .header-inner {
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo - identico a hero-menu */
+  .header-logo {
+    flex-shrink: 0;
+  }
+
+  .menu-logo {
+    height: clamp(40px, 8vw, 60px);
+    width: auto;
+  }
+
+  /* Icons - identico a hero-menu */
+  .menu-icons {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .menu-icon {
+    width: clamp(18px, 4vw, 24px);
+    height: clamp(18px, 4vw, 24px);
+    color: var(--daino-color-white);
+    cursor: pointer;
+    transition: color 0.3s ease;
+    position: relative;
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-icon:hover {
+    color: var(--daino-color-gold);
+  }
+
+  .menu-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Cart count badge */
+  .cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--daino-color-gold);
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Wishlist count badge */
+  .wishlist-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--daino-color-gold);
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}

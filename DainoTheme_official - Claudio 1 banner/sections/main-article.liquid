@@ -1,0 +1,86 @@
+{% comment %}
+  MAIN ARTICLE - Singolo articolo blog
+{% endcomment %}
+
+<article class="article-section">
+  <header class="article-header">
+    <h1 class="article-title">{{ article.title }}</h1>
+    <p class="article-meta">
+      <span>{{ article.published_at | date: '%d %B %Y' }}</span>
+      {% if article.author %}
+        <span> • {{ article.author }}</span>
+      {% endif %}
+    </p>
+  </header>
+  
+  {% if article.image %}
+    <div class="article-featured-image">
+      <img 
+        src="{{ article.image | image_url: width: 1200 }}" 
+        alt="{{ article.image.alt | default: article.title | escape }}"
+      >
+    </div>
+  {% endif %}
+  
+  <div class="article-content rte">
+    {{ article.content }}
+  </div>
+  
+  <footer class="article-footer">
+    <a href="{{ blog.url }}" class="action-btn">← Torna al blog</a>
+  </footer>
+</article>
+
+<style>
+  .article-section {
+    padding: 5vh 5vw;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .article-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .article-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+  .article-meta {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+  .article-featured-image {
+    margin-bottom: 3rem;
+  }
+  .article-featured-image img {
+    width: 100%;
+    height: auto;
+  }
+  .article-content.rte {
+    color: var(--color-text-muted);
+    line-height: 1.9;
+    font-size: 1.05rem;
+  }
+  .article-content.rte h2, .article-content.rte h3 {
+    color: var(--color-text);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .article-content.rte img {
+    margin: 2rem 0;
+  }
+  .article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Article Page",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{% schema %}
+{
+  "name": "Collections Gallery",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection_item",
+      "name": "Collection Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Collection Name"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Link to Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Gallery",
+      "blocks": [
+        { "type": "collection_item", "settings": { "label": "Catalogo" } },
+        { "type": "collection_item", "settings": { "label": "Bestseller" } },
+        { "type": "collection_item", "settings": { "label": "Fineserie" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<section class="collections-gallery scroll-reveal">
+    <div class="gallery-grid">
+        {% for block in section.blocks %}
+            <div class="gallery-item" {{ block.shopify_attributes }}>
+                {% if block.settings.image %}
+                    {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.label, style: 'width: 100%; height: 100%; object-fit: cover;' }}
+                {% else %}
+                    <!-- Fallback images based on block index -->
+                    {% case forloop.index %}
+                        {% when 1 %}
+                            <img src="{{ 'bestseller.jpeg' | asset_url }}" alt="{{ block.settings.label }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% when 2 %}
+                            <img src="{{ 'profumi arabi.jpeg' | asset_url }}" alt="{{ block.settings.label }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% when 3 %}
+                            <img src="{{ 'profumi italiani.jpeg' | asset_url }}" alt="{{ block.settings.label }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    {% endcase %}
+                {% endif %}
+                <div class="gallery-overlay">
+                    <span class="gallery-label">{{ block.settings.label }}</span>
+                    {% if block.settings.collection %}
+                        <a href="{{ block.settings.collection.url }}" class="gallery-btn">Scopri</a>
+                    {% else %}
+                        <a href="{{ routes.all_products_collection_url }}" class="gallery-btn">Scopri</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>

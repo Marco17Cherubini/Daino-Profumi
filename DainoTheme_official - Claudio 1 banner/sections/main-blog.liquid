@@ -1,0 +1,101 @@
+{% comment %}
+  MAIN BLOG - Lista articoli blog
+{% endcomment %}
+
+<div class="blog-section">
+  <div class="section-header">
+    <h1>{{ blog.title }}</h1>
+  </div>
+  
+  <div class="blog-grid">
+    {% for article in blog.articles %}
+      <article class="blog-card">
+        <a href="{{ article.url }}">
+          {% if article.image %}
+            <div class="blog-card-image">
+              <img 
+                src="{{ article.image | image_url: width: 600 }}" 
+                alt="{{ article.image.alt | default: article.title | escape }}"
+                loading="lazy"
+              >
+            </div>
+          {% endif %}
+          <div class="blog-card-content">
+            <h2 class="blog-card-title">{{ article.title }}</h2>
+            <p class="blog-card-date">{{ article.published_at | date: '%d/%m/%Y' }}</p>
+            {% if article.excerpt != blank %}
+              <p class="blog-card-excerpt">{{ article.excerpt | strip_html | truncate: 120 }}</p>
+            {% endif %}
+          </div>
+        </a>
+      </article>
+    {% else %}
+      <p>Nessun articolo pubblicato.</p>
+    {% endfor %}
+  </div>
+  
+  {% if paginate.pages > 1 %}
+    <div class="pagination">
+      {{ paginate | default_pagination }}
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .blog-section {
+    padding: 5vh 5vw;
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3vw;
+  }
+  @media (max-width: 1024px) {
+    .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+  .blog-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .blog-card-image {
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .blog-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-luxury);
+  }
+  .blog-card:hover .blog-card-image img {
+    transform: scale(1.05);
+  }
+  .blog-card-title {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .blog-card-date {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .blog-card-excerpt {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog Page",
+  "settings": []
+}
+{% endschema %}

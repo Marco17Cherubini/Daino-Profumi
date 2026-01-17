@@ -1,0 +1,12 @@
+{
+    "type": "footer",
+    "name": "Footer Group",
+    "sections": {
+        "footer": {
+            "type": "daino-footer"
+        }
+    },
+    "order": [
+        "footer"
+    ]
+}

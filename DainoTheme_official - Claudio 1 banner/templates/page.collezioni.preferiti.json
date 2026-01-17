@@ -1,0 +1,21 @@
+{
+    "sections": {
+        "header": {
+            "type": "header",
+            "settings": {}
+        },
+        "wishlist": {
+            "type": "wishlist",
+            "settings": {}
+        },
+        "footer": {
+            "type": "footer",
+            "settings": {}
+        }
+    },
+    "order": [
+        "header",
+        "wishlist",
+        "footer"
+    ]
+}
