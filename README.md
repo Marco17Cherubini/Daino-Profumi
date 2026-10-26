@@ -1,6 +1,6 @@
 # Daino Profumi
 
-**A custom Shopify store for a niche perfumery. It brings the boutique's luxury atmosphere, curated selection and the personal guidance of its staff online.**
+**A custom Shopify store for a niche perfumery in Alessandria and Novi Ligure. It brings the boutique's luxury atmosphere, curated selection and the personal guidance of its staff online.**
 
 [![CI](https://github.com/Marco17Cherubini/Daino-Profumi/actions/workflows/ci.yml/badge.svg)](https://github.com/Marco17Cherubini/Daino-Profumi/actions/workflows/ci.yml)
 ![Shopify](https://img.shields.io/badge/Shopify-Online%20Store%202.0-7AB55C)
@@ -16,7 +16,7 @@
 
 ### Context
 
-Daino Profumi is a recently opened niche perfumery. Its identity combines luxury fragrances with personal guidance from its staff. When the project started, the business sold only through its physical store and had no e-commerce presence.
+Daino Profumi is a recently opened niche perfumery, with shops in Alessandria and Novi Ligure. Its identity combines luxury fragrances with personal guidance from its staff. When the project started, the business sold only through its physical stores and had no e-commerce presence.
 
 ### The problem
 
@@ -26,71 +26,72 @@ Customers rely on the staff, so showing their role was essential to bringing the
 
 ### How we solved it
 
-I designed and developed a custom Shopify e-shop whose visual identity and shopping experience match the atmosphere of the physical boutique.
+I designed and developed a custom Shopify e-shop whose visual identity and shopping experience match the atmosphere of the physical boutique: black backgrounds, gold accents, classic serif typography and the products always at the centre.
 
 The work focused on two things: presenting the fragrances through a distinctive luxury aesthetic, and creating a dedicated staff section that keeps the personal character of the business.
 
 The agreed scope was the visual shopping experience. At the client's request, paid advertising, performance marketing campaigns and customer acquisition funnels were outside the engagement.
 
-A visitor's journey: enter the boutique, meet the people behind the selection, choose a fragrance.
+A customer's journey takes four steps: enter the boutique, browse the catalogue, choose a fragrance, then go to checkout.
 
-| 1. Enter the boutique                                                                                                                             | 2. Meet the staff                                                                                                    | 3. Choose a fragrance                                                                                           |
-| ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| ![Homepage hero: "Le fragranze più esclusive al mondo", Alessandria & Novi Ligure, with a link to the full catalogue](docs/images/home-hero.webp) | ![Staff section: Davide and Daniele with their personality and favourite brands](docs/images/staff-consultation.png) | ![Product page: bottle on a dark stage, price, availability, format and quantity](docs/images/product-page.png) |
-
-> **Screenshot to add** (`docs/images/`): cart.
+| 1. Enter the boutique                                                                                                                                      | 2. Browse the catalogue                                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Homepage: "Le fragranze più esclusive al mondo", Alessandria & Novi Ligure, with a "Catalogo completo" button](docs/images/home-hero.webp)               | ![Catalogue: filters, sorting, 224 products with brand, name and "Esaurito" badges on sold-out items](docs/images/catalogue.webp)                                            |
+| **3. Choose a fragrance**                                                                                                                                  | **4. Go to checkout**                                                                                                                                                        |
+| ![Product page: the bottle on a dark stage, price, "Disponibile" badge, gender, format and quantity, "Aggiungi al carrello"](docs/images/product-page.png) | ![Cart: two fragrances with format and quantity, order summary with subtotal, shipping calculated at checkout, VAT included and "Procedi al checkout"](docs/images/cart.png) |
 
 ### Results
 
-The e-shop launched with its own month of sales. That launch month is the only one in which I managed the e-shop directly:
+In **February 2026**, the month in which I managed the e-shop directly, the Shopify report shows:
 
-- the online channel generated **€1,581 in sales**;
-- this created an **additional revenue stream** alongside the physical store;
-- the result came **without paid advertising or performance marketing campaigns** as part of my work.
+- **€1,531.50** in total sales;
+- **10 orders**;
+- **1,162 sessions**.
 
-> **Screenshot to add** (`docs/images/`): Shopify sales report for the launch month.
+That is an additional revenue stream alongside the physical stores. It came without paid advertising or performance marketing campaigns as part of my work.
+
+![Shopify admin, 1–28 February 2026, all channels: 1,162 sessions, €1,531.50 total sales, 10 orders, with the daily sales chart](docs/images/sales-report-february-2026.png)
 
 ---
 
 ## What makes it different
 
-Daino Profumi is not a stock theme with a new logo. Each custom feature answers a need of this specific boutique.
+Daino Profumi is not a stock theme with a new logo. Each custom section answers a need of this specific boutique.
 
-### An entrance like stepping into the shop
+### A first impression worthy of the shop
 
-The site opens on a full-screen logo: the visitor scrolls, swipes, clicks or presses a key to "enter". The hero video and the brand marquees then appear in sequence, so the first moment online feels like crossing the boutique's threshold. The entrance is skipped for visitors who prefer reduced motion and inside Shopify's theme editor.
+The homepage opens on a full-width image of the boutique's bottles, with the promise "Le fragranze più esclusive al mondo" ("The most exclusive fragrances in the world"). Below it, an asymmetric gallery leads into the catalogue and the collections, with gold-cornered frames that light up on hover.
 
-> **Screenshot to add:** entrance gate → hero video.
+![Collections gallery: a large "Catalogo" tile with a "Scopri" button next to two product photos](docs/images/collections-gallery.webp)
+
+### The products on stage
+
+A draggable 3D carousel shows the fragrances one at a time. The bottle in the centre is sharp and lit by a soft gold glow; the others fade, shrink and blur with their distance. The carousel scrolls on its own and can be dragged.
+
+![3D carousel: Spirit of Kings "Affinity" and "Arabian Leather" in focus, with the bottles at the sides blurred](docs/images/carousel-3d.webp)
 
 ### The staff, front and centre
 
-The consultation section introduces each member of the staff with a photo, their personality and the brands they love. A "Discover the selection" link opens the catalogue already filtered by those brands. This brings the in-store advice ("ask Davide, he loves intense scents") online. Texts, photos and links are editable from the theme editor.
+The consultation section introduces each member of the staff with a black-and-white portrait, their personality and the brands they love. A "Scopri la selezione" button opens the catalogue already filtered by those brands. In the shop, customers ask Davide or Daniele for advice; online, they find the same people and the same tastes. Texts, photos and links are editable from the theme editor.
 
-![Staff section: each member with a black-and-white portrait, a short description, favourite brands and a "Scopri la selezione" link](docs/images/staff-consultation.png)
+![Staff section: Davide (Oman Luxury, Jeroboam, Orto Parisi) and Daniele (Spirit of Kings, Spirit of Dubai, Kajal), each with a portrait and a "Scopri la selezione" button](docs/images/staff-consultation.png)
 
-### A curated selection, not a catalogue dump
+### Discovery that keeps going
 
-- Two scrolling brand marquees show the houses the shop carries. Each brand links to its own filtered catalogue.
-- A draggable 3D carousel puts the products on stage, with depth, blur and a soft gold glow.
-- On the product page, a "more from this brand" strip and a set of recommendations keep the discovery going.
+- **Predictive search:** typing even a couple of letters shows matching fragrances with image, name and price.
+- **Recommendations:** every product page ends with a "Potrebbe piacerti anche" strip, with brand, name and price and a gold "Scopri" overlay on hover.
 
-![Product recommendations: a horizontal strip of fragrances with brand, name and price, and a gold "Scopri" overlay on hover](docs/images/product-recommendations.png)
-
-> **Screenshot to add:** 3D carousel and brand marquees.
+| Predictive search                                                                                           | Recommendations                                                                                                                                                |
+| ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Search overlay: typing "Me" lists products with image, name and price](docs/images/predictive-search.png) | ![Recommendations strip: Freeshape Milano, Electimuss, Giardini di Toscana, Jeroboam and Bois fragrances with prices](docs/images/product-recommendations.png) |
 
 ### Shopping that stays simple
 
-- **Collections** filter by brand, price and format, with live results.
-- **Predictive search** suggests products, collections and brand shortcuts as you type.
-- **Product page:** clear variants and prices. "Acquista ora" goes straight to checkout, keeping anything already in the cart.
-- **Wishlist:** customers save fragrances without creating an account.
-- **Checkout** is Shopify's native one: secure and familiar.
-
-| Predictive search                                                                                                                        | Product page                                                                                                                                |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![Predictive search overlay listing matching products with image, brand, name and price while typing](docs/images/predictive-search.png) | ![Product page with description, price, availability badge, format selector, quantity and add-to-cart button](docs/images/product-page.png) |
-
-> **Screenshots to add:** collection with filters · wishlist.
+- **Catalogue:** 224 fragrances, with filters, sorting and clear "Esaurito" badges on items that are out of stock.
+- **Product page:** essentials only: name, description, price, availability, gender, format and quantity.
+- **Cart:** a readable order summary, with VAT included, shipping calculated at checkout, an optional order note and the accepted payment methods.
+- **Wishlist:** the heart icon saves fragrances without an account.
+- **Checkout:** Shopify's native one, secure and familiar.
 
 ---
 
@@ -98,14 +99,14 @@ The consultation section introduces each member of the staff with a photo, their
 
 ### Tech stack
 
-| Layer     | Choice                                             | Why                                                                                                              |
-| --------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Platform  | Shopify, Online Store 2.0                          | Hosted checkout, payments and orders. The merchant edits content from the theme editor.                          |
-| Templates | Liquid, JSON templates and sections                | Every visual block is a configurable section that the merchant can reorder and edit.                             |
-| Front end | Vanilla JavaScript, custom elements, no build step | The deployed files are the source files. Each component manages its own lifecycle in the theme editor.           |
-| Styling   | CSS custom properties, one stylesheet per section  | The black-and-gold palette is driven by tokens and theme settings. Each page loads only the CSS it uses.         |
-| Motion    | GSAP 3.12 (ScrollTrigger, Draggable), Lenis        | Smooth entrance, carousel and scroll effects. Self-hosted at pinned versions, loaded without blocking rendering. |
-| Fonts     | Cormorant Garamond, Pinyon Script (WOFF2)          | The boutique's typography, served from the theme.                                                                |
+| Layer     | Choice                                             | Why                                                                                                      |
+| --------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Platform  | Shopify, Online Store 2.0                          | Hosted checkout, payments and orders. The merchant edits content from the theme editor.                  |
+| Templates | Liquid, JSON templates and sections                | Every visual block is a configurable section that the merchant can reorder and edit.                     |
+| Front end | Vanilla JavaScript, custom elements, no build step | The deployed files are the source files. Each component manages its own lifecycle in the theme editor.   |
+| Styling   | CSS custom properties, one stylesheet per section  | The black-and-gold palette is driven by tokens and theme settings. Each page loads only the CSS it uses. |
+| Motion    | GSAP 3.12 (ScrollTrigger, Draggable), Lenis        | Carousel, reveal and scroll effects. Self-hosted at pinned versions, loaded without blocking rendering.  |
+| Fonts     | Cormorant Garamond, Pinyon Script (WOFF2)          | The boutique's typography, served from the theme.                                                        |
 
 ### Architecture
 
@@ -127,7 +128,7 @@ More detail is in [`docs/architecture.md`](docs/architecture.md). Every design d
 
 ### Code quality
 
-After launch, the theme went through a structured refactor, planned and tracked in [`docs/refactoring-plan.md`](docs/refactoring-plan.md).
+After going live, the theme went through a structured refactor, planned and tracked in [`docs/refactoring-plan.md`](docs/refactoring-plan.md).
 
 |                         | Before                 | After                                              |
 | ----------------------- | ---------------------- | -------------------------------------------------- |
@@ -153,7 +154,7 @@ The refactor also fixed real purchase-path defects:
 
 ### Accessibility
 
-- The entrance can be opened with the keyboard.
+- The optional animated entrance screen can be opened with the keyboard.
 - The filter drawer and the search are real dialogs: the background is inert, focus stays inside and returns to the trigger, and Escape closes them.
 - Variant options can be reached with the keyboard, and a skip link leads to the content.
 - Animations are turned off under `prefers-reduced-motion`.
@@ -249,7 +250,7 @@ scripts/     theme-check.js
 
 ## Author
 
-Designed and built by **Marco Cherubini**: visual identity, shopping experience, theme development, launch, and management of the e-shop during the launch month. [github.com/Marco17Cherubini](https://github.com/Marco17Cherubini)
+Designed and built by **Marco Cherubini**: visual identity, shopping experience, theme development, launch, and management of the e-shop in February 2026. [github.com/Marco17Cherubini](https://github.com/Marco17Cherubini)
 
 ## License
 
