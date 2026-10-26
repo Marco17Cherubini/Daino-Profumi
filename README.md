@@ -32,9 +32,13 @@ The work focused on two things: presenting the fragrances through a distinctive 
 
 The agreed scope was the visual shopping experience. At the client's request, paid advertising, performance marketing campaigns and customer acquisition funnels were outside the engagement.
 
-A visitor's journey: enter the boutique, discover the selection, choose a fragrance, then check out.
+A visitor's journey: enter the boutique, meet the people behind the selection, choose a fragrance.
 
-> **Screenshots to add** (`docs/images/`): entrance gate and hero · collections and staff section · product page · cart.
+| 1. Enter the boutique                                                                                                                             | 2. Meet the staff                                                                                                    | 3. Choose a fragrance                                                                                           |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| ![Homepage hero: "Le fragranze più esclusive al mondo", Alessandria & Novi Ligure, with a link to the full catalogue](docs/images/home-hero.webp) | ![Staff section: Davide and Daniele with their personality and favourite brands](docs/images/staff-consultation.png) | ![Product page: bottle on a dark stage, price, availability, format and quantity](docs/images/product-page.png) |
+
+> **Screenshot to add** (`docs/images/`): cart.
 
 ### Results
 
@@ -62,13 +66,15 @@ The site opens on a full-screen logo: the visitor scrolls, swipes, clicks or pre
 
 The consultation section introduces each member of the staff with a photo, their personality and the brands they love. A "Discover the selection" link opens the catalogue already filtered by those brands. This brings the in-store advice ("ask Davide, he loves intense scents") online. Texts, photos and links are editable from the theme editor.
 
-> **Screenshot to add:** consultation section.
+![Staff section: each member with a black-and-white portrait, a short description, favourite brands and a "Scopri la selezione" link](docs/images/staff-consultation.png)
 
 ### A curated selection, not a catalogue dump
 
 - Two scrolling brand marquees show the houses the shop carries. Each brand links to its own filtered catalogue.
 - A draggable 3D carousel puts the products on stage, with depth, blur and a soft gold glow.
 - On the product page, a "more from this brand" strip and a set of recommendations keep the discovery going.
+
+![Product recommendations: a horizontal strip of fragrances with brand, name and price, and a gold "Scopri" overlay on hover](docs/images/product-recommendations.png)
 
 > **Screenshot to add:** 3D carousel and brand marquees.
 
@@ -80,7 +86,11 @@ The consultation section introduces each member of the staff with a photo, their
 - **Wishlist:** customers save fragrances without creating an account.
 - **Checkout** is Shopify's native one: secure and familiar.
 
-> **Screenshot to add:** collection with filters · product page · wishlist.
+| Predictive search                                                                                                                        | Product page                                                                                                                                |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Predictive search overlay listing matching products with image, brand, name and price while typing](docs/images/predictive-search.png) | ![Product page with description, price, availability badge, format selector, quantity and add-to-cart button](docs/images/product-page.png) |
+
+> **Screenshots to add:** collection with filters · wishlist.
 
 ---
 
