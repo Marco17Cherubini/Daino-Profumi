@@ -1,0 +1,88 @@
+{{ 'section-wishlist.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'wishlist-page.js' | asset_url }}" defer></script>
+
+{% comment %}
+  WISHLIST PAGE — products saved in this browser (assets/wishlist.js), rendered
+  client-side from the shared product-card template (assets/wishlist-page.js).
+{% endcomment %}
+
+{%- liquid
+  assign catalog = section.settings.catalog_collection
+  if catalog == blank
+    assign catalog = collections.catalogo
+  endif
+  if catalog != blank
+    assign catalog_url = catalog.url
+    assign catalog_title = catalog.title
+  else
+    assign catalog_url = routes.all_products_collection_url
+    assign catalog_title = 'collections.general.all_products' | t
+  endif
+-%}
+
+<daino-wishlist-page class="wishlist-section">
+  <script type="application/json" data-wishlist-strings>
+    {
+      "count": {{ 'wishlist.count' | t: quantity: '__QUANTITY__' | json }},
+      "removedMissing": {{ 'wishlist.removed_missing' | t: quantity: '__QUANTITY__' | json }},
+      "error": {{ 'wishlist.error' | t | json }}
+    }
+  </script>
+
+  <div class="wishlist-container">
+    <nav class="wishlist-breadcrumb" aria-label="{{ 'general.breadcrumb.label' | t }}">
+      <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+      <span class="wishlist-breadcrumb__separator" aria-hidden="true">/</span>
+      <a href="{{ catalog_url }}">{{ catalog_title }}</a>
+      <span class="wishlist-breadcrumb__separator" aria-hidden="true">/</span>
+      <span class="wishlist-breadcrumb__current" aria-current="page">{{ 'wishlist.title' | t }}</span>
+    </nav>
+
+    <header class="wishlist-header">
+      <h1 class="wishlist-title">{{ 'wishlist.title' | t }}</h1>
+      <p class="wishlist-subtitle" data-wishlist-count-text aria-live="polite"></p>
+    </header>
+
+    <p class="wishlist-notice" data-wishlist-notice role="status" hidden></p>
+
+    <div class="wishlist-empty" data-wishlist-empty hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" focusable="false">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <p>{{ 'wishlist.empty' | t }}</p>
+      <a href="{{ catalog_url }}" class="wishlist-btn-gold">{{ 'wishlist.discover_catalog' | t }}</a>
+    </div>
+
+    <p class="wishlist-error" data-wishlist-error role="alert" hidden></p>
+
+    <div class="wishlist-grid" data-wishlist-grid></div>
+
+    <div class="wishlist-loading" data-wishlist-loading hidden>
+      <div class="wishlist-loading__spinner"></div>
+      <p>{{ 'wishlist.loading' | t }}</p>
+    </div>
+
+    <template data-wishlist-card-template>
+      {%- render 'product-card', layout: 'wishlist', template: true -%}
+    </template>
+  </div>
+
+  <noscript>
+    <p class="wishlist-error">{{ 'wishlist.requires_js' | t }}</p>
+  </noscript>
+</daino-wishlist-page>
+
+{% schema %}
+{
+  "name": "Wishlist",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "catalog_collection",
+      "label": "Catalogue collection",
+      "info": "Used by the breadcrumb and the empty-state button. Defaults to the \"catalogo\" collection."
+    }
+  ]
+}
+{% endschema %}

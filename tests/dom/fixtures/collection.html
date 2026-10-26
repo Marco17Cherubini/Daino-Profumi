@@ -1,0 +1,81 @@
+<!doctype html>
+<!--
+  Fixture: markup produced by sections/main-collection.liquid (drawer, toolbar,
+  [data-results]). Section Rendering responses are mocked in collection.spec.js.
+-->
+<html lang="it" class="js">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/assets/daino-base.css" />
+    <link rel="stylesheet" href="/assets/collection-filters.css" />
+    <script type="application/json" id="DainoConfig">
+      { "routes": {}, "moneyFormat": "€{{amount_with_comma_separator}}", "strings": {} }
+    </script>
+    <script src="/assets/daino-core.js" defer></script>
+    <script src="/assets/collection-filters.js" defer></script>
+  </head>
+  <body>
+    <header><a href="/" id="outside-link">Home</a></header>
+    <main id="MainContent">
+      <daino-collection-filters class="collection-section" data-section-id="main">
+        <div class="filters-overlay" data-filters-overlay></div>
+        <aside
+          class="filters-drawer filters-drawer--right"
+          id="FiltersDrawer-main"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="FiltersTitle"
+          data-filters-drawer
+          inert
+        >
+          <header class="filters-drawer__header">
+            <h2 id="FiltersTitle">Filtri</h2>
+            <button type="button" class="filters-drawer__close" data-filters-close aria-label="Chiudi">&times;</button>
+          </header>
+          <div class="filters-drawer__body">
+            <form data-filters-form>
+              <label><input type="checkbox" name="filter.p.m.custom.brand" value="Kajal" /> Kajal</label>
+              <label><input type="checkbox" name="filter.p.m.custom.brand" value="Bois 1920" /> Bois 1920</label>
+              <label
+                ><input type="checkbox" name="filter.p.m.custom.brand" value='L&apos;Artisan "P"' /> L'Artisan
+                "P"</label
+              >
+              <input type="number" name="filter.v.price.gte" data-price-input aria-label="Prezzo minimo" />
+              <input type="number" name="filter.v.price.lte" data-price-input aria-label="Prezzo massimo" />
+            </form>
+          </div>
+          <footer class="filters-drawer__footer">
+            <a href="/tests/dom/fixtures/collection.html?sort_by=manual" class="filters-reset-btn" data-filters-reset
+              >Azzera</a
+            >
+            <button type="button" class="filters-confirm-btn" data-filters-close>Applica</button>
+          </footer>
+        </aside>
+
+        <div class="collection-toolbar">
+          <button
+            type="button"
+            class="filters-open-btn"
+            data-filters-open
+            aria-expanded="false"
+            aria-controls="FiltersDrawer-main"
+          >
+            Filtri
+          </button>
+          <select class="sort-select" name="sort_by" data-sort-select aria-label="Ordina">
+            <option value="manual" selected>In evidenza</option>
+            <option value="price-ascending">Prezzo crescente</option>
+          </select>
+          <span class="collection-count" data-product-count>12 risultati</span>
+        </div>
+        <p class="visually-hidden" role="status" aria-live="polite" data-filters-status></p>
+        <div data-results>
+          <div class="collection-grid-wrapper">
+            <div class="collection-loading" data-loading-overlay></div>
+            <div class="collection-grid" data-product-grid><p data-marker>initial</p></div>
+          </div>
+        </div>
+      </daino-collection-filters>
+    </main>
+  </body>
+</html>

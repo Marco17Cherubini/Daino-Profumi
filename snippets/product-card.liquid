@@ -1,0 +1,114 @@
+{% comment %}
+  Product card — the single markup for every product tile (docs/decisions.md ADR-005).
+
+  Parameters:
+  - product {product} the product to render. Omit when `template` is true.
+  - layout {string} 'grid' (default: collection, search) | 'compact' (product page) | 'cart' | 'wishlist'
+  - eager {boolean} load the image eagerly with high priority (above-the-fold tiles). Default: false
+  - template {boolean} render an empty card for client-side filling (wishlist). Fields carry
+    `data-card-*` attributes; scripts set them with textContent/setAttribute only.
+
+  Usage:
+    {% render 'product-card', product: product, eager: true %}
+    {% render 'product-card', product: product, layout: 'compact' %}
+    <template>{% render 'product-card', layout: 'wishlist', template: true %}</template>
+{% endcomment %}
+
+{%- liquid
+  assign layout = layout | default: 'grid'
+  case layout
+    when 'compact'
+      assign image_width = 300
+      assign cta_key = 'products.product.discover'
+    when 'cart'
+      assign image_width = 400
+      assign cta_key = 'products.product.discover'
+    else
+      assign image_width = 600
+      assign cta_key = 'collections.product_card.view'
+  endcase
+-%}
+
+{%- if template -%}
+  <article class="product-card product-card--{{ layout }}" data-card>
+    <a href="#" class="product-card__link" data-card-link>
+      <div class="product-card__media">
+        <img class="product-card__image" alt="" width="600" height="750" loading="lazy" data-card-image hidden>
+        <span class="product-card__overlay" aria-hidden="true">
+          <span class="product-card__cta">{{ cta_key | t }}</span>
+        </span>
+        <span class="product-card__badge product-card__badge--soldout" data-card-soldout hidden>
+          {{- 'collections.product_card.sold_out' | t -}}
+        </span>
+      </div>
+      <div class="product-card__info">
+        <span class="product-card__vendor" data-card-vendor></span>
+        <h3 class="product-card__title" data-card-title></h3>
+        <span class="product-card__price" data-card-price></span>
+      </div>
+    </a>
+    {%- if layout == 'wishlist' -%}
+      <button type="button" class="product-card__remove" data-card-remove aria-label="{{ 'wishlist.remove' | t }}">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    {%- endif -%}
+  </article>
+{%- else -%}
+  {%- assign brand_name = product.metafields.custom.brand | default: product.vendor -%}
+  <article class="product-card product-card--{{ layout }}">
+    <a href="{{ product.url }}" class="product-card__link">
+      <div class="product-card__media">
+        {%- if product.featured_image -%}
+          {%- if eager -%}
+            {{
+              product.featured_image
+              | image_url: width: image_width
+              | image_tag:
+                class: 'product-card__image',
+                alt: product.featured_image.alt,
+                loading: 'eager',
+                fetchpriority: 'high'
+            }}
+          {%- else -%}
+            {{
+              product.featured_image
+              | image_url: width: image_width
+              | image_tag: class: 'product-card__image', alt: product.featured_image.alt, loading: 'lazy'
+            }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+        {%- endif -%}
+        <span class="product-card__overlay" aria-hidden="true">
+          <span class="product-card__cta">{{ cta_key | t }}</span>
+        </span>
+        {%- unless product.available -%}
+          <span class="product-card__badge product-card__badge--soldout">
+            {{- 'collections.product_card.sold_out' | t -}}
+          </span>
+        {%- endunless -%}
+      </div>
+      <div class="product-card__info">
+        {%- if brand_name != blank -%}
+          <span class="product-card__vendor">{{ brand_name }}</span>
+        {%- endif -%}
+        <h3 class="product-card__title">{{ product.title }}</h3>
+        <span class="product-card__price">
+          {%- if product.compare_at_price > product.price -%}
+            <span class="product-card__price--compare">{{ product.compare_at_price | money }}</span>
+          {%- endif -%}
+          {{ product.price | money }}
+        </span>
+      </div>
+    </a>
+  </article>
+{%- endif -%}

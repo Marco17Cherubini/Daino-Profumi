@@ -1,0 +1,449 @@
+{{ 'collection-filters.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'collection-filters.js' | asset_url }}" defer></script>
+
+{% comment %}
+  MAIN COLLECTION — product grid with the Storefront Filtering drawer and sorting.
+  Behaviour: assets/collection-filters.js (<daino-collection-filters>).
+
+  The URL is the single source of truth. Filtering re-renders [data-results] (active
+  tags, grid, pagination) through the Section Rendering API (ADR-006). Active-filter
+  tags, "clear all" and pagination are plain links (url_to_remove, paginate URLs), so
+  they also work without JavaScript.
+{% endcomment %}
+
+{%- liquid
+  # Price inputs expect major units with a "." decimal separator. Shops whose money
+  # format uses a comma decimal separator need the conversion below (same approach as
+  # Shopify's Dawn theme).
+  assign uses_comma_decimals = false
+  if shop.money_format contains 'with_comma_separator'
+    assign uses_comma_decimals = true
+  endif
+-%}
+
+<daino-collection-filters class="collection-section" data-section-id="{{ section.id }}">
+  {%- if section.settings.enable_filtering -%}
+    <div class="filters-overlay" data-filters-overlay></div>
+
+    <aside
+      class="filters-drawer filters-drawer--{{ section.settings.drawer_position }}"
+      id="FiltersDrawer-{{ section.id }}"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="FiltersTitle-{{ section.id }}"
+      data-filters-drawer
+      inert
+    >
+      <header class="filters-drawer__header">
+        <h2 class="filters-drawer__title" id="FiltersTitle-{{ section.id }}">{{ 'collections.filters.title' | t }}</h2>
+        <button
+          type="button"
+          class="filters-drawer__close"
+          data-filters-close
+          aria-label="{{ 'collections.filters.close' | t }}"
+        >
+          &times;
+        </button>
+      </header>
+
+      <div class="filters-drawer__body" data-lenis-prevent>
+        <form data-filters-form>
+          {%- for filter in collection.filters -%}
+            {%- liquid
+              assign is_brand_filter = false
+              if filter.param_name contains 'brand' or filter.label == 'Brand'
+                assign is_brand_filter = true
+              endif
+              assign filter_id = 'Filter-' | append: section.id | append: '-' | append: forloop.index
+            -%}
+            <div
+              class="filter-section is-open{% if is_brand_filter %} filter-section--brand{% endif %}"
+              data-filter-section
+            >
+              <button
+                type="button"
+                class="filter-header"
+                data-filter-header
+                aria-expanded="true"
+                aria-controls="{{ filter_id }}"
+              >
+                <h3 class="filter-header__title">{{ filter.label }}</h3>
+                <svg
+                  class="filter-header__icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+
+              <div class="filter-content" data-filter-content id="{{ filter_id }}">
+                <div class="filter-content__inner">
+                  {%- case filter.type -%}
+                    {%- when 'price_range' -%}
+                      {%- liquid
+                        if uses_comma_decimals
+                          assign min_value = filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+                          assign max_value = filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+                          assign range_max = filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.'
+                        else
+                          assign min_value = filter.min_value.value | money_without_currency | replace: ',', ''
+                          assign max_value = filter.max_value.value | money_without_currency | replace: ',', ''
+                          assign range_max = filter.range_max | money_without_currency | replace: ',', ''
+                        endif
+                      -%}
+                      <div class="price-range">
+                        <input
+                          type="number"
+                          class="price-input"
+                          name="{{ filter.min_value.param_name }}"
+                          data-price-input
+                          placeholder="0"
+                          value="{% if filter.min_value.value %}{{ min_value }}{% endif %}"
+                          min="0"
+                          step="0.01"
+                          inputmode="decimal"
+                          aria-label="{{ 'collections.filters.price_min' | t }}"
+                        >
+                        <span class="price-separator" aria-hidden="true">–</span>
+                        <input
+                          type="number"
+                          class="price-input"
+                          name="{{ filter.max_value.param_name }}"
+                          data-price-input
+                          placeholder="{{ range_max }}"
+                          value="{% if filter.max_value.value %}{{ max_value }}{% endif %}"
+                          min="0"
+                          step="0.01"
+                          inputmode="decimal"
+                          aria-label="{{ 'collections.filters.price_max' | t }}"
+                        >
+                      </div>
+
+                    {%- else -%}
+                      {%- comment -%}
+                        Lists are multi-select (checkbox), except "Formato" and variant options,
+                        which are single-select (radio) as before.
+                      {%- endcomment -%}
+                      {%- liquid
+                        assign input_type = 'checkbox'
+                        if filter.type == 'list'
+                          if filter.param_name contains 'formato' or filter.param_name contains 'option'
+                            assign input_type = 'radio'
+                          endif
+                        endif
+                      -%}
+                      {%- if is_brand_filter -%}<div class="filter-options-scroll">{%- endif -%}
+                      {%- for value in filter.values -%}
+                        <label class="filter-option">
+                          <input
+                            type="{{ input_type }}"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value | escape }}"
+                            {% if value.active %}
+                              checked
+                            {% endif %}
+                          >
+                          <span class="filter-option__label">{{ value.label }}</span>
+                          {%- if section.settings.show_counts -%}
+                            <span class="filter-option__count">({{ value.count }})</span>
+                          {%- endif -%}
+                        </label>
+                      {%- endfor -%}
+                      {%- if is_brand_filter -%}</div>{%- endif -%}
+                  {%- endcase -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </form>
+      </div>
+
+      <footer class="filters-drawer__footer">
+        <a
+          href="{{ collection.url }}{% if collection.sort_by != blank %}?sort_by={{ collection.sort_by }}{% endif %}"
+          class="filters-reset-btn"
+          data-filters-reset
+        >
+          {{- 'collections.filters.reset' | t -}}
+        </a>
+        <button type="button" class="filters-confirm-btn" data-filters-close>
+          {{- 'collections.filters.apply' | t -}}
+        </button>
+      </footer>
+    </aside>
+  {%- endif -%}
+
+  <div class="collection-header scroll-reveal">
+    <h1 class="collection-title">{{ collection.title }}</h1>
+    <div class="collection-title-bar"></div>
+    {%- if collection.description != blank -%}
+      <div class="collection-description">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+
+  {% paginate collection.products by section.settings.products_per_page %}
+    {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      <div class="collection-toolbar scroll-reveal">
+        <div class="collection-toolbar__left">
+          {%- if section.settings.enable_filtering -%}
+            <button
+              type="button"
+              class="filters-open-btn"
+              data-filters-open
+              aria-expanded="false"
+              aria-controls="FiltersDrawer-{{ section.id }}"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>
+              </svg>
+              {{ 'collections.filters.open_filters' | t }}
+            </button>
+          {%- endif -%}
+
+          {%- if section.settings.enable_sorting -%}
+            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+            <div class="sort-select-wrapper">
+              <select
+                class="sort-select"
+                name="sort_by"
+                data-sort-select
+                aria-label="{{ 'collections.sorting.title' | t }}"
+              >
+                <option
+                  value="manual"
+                  {% if sort_by == 'manual' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.featured' | t }}
+                </option>
+                <option
+                  value="best-selling"
+                  {% if sort_by == 'best-selling' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.best_selling' | t }}
+                </option>
+                <option
+                  value="price-ascending"
+                  {% if sort_by == 'price-ascending' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.price_ascending' | t }}
+                </option>
+                <option
+                  value="price-descending"
+                  {% if sort_by == 'price-descending' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.price_descending' | t }}
+                </option>
+                <option
+                  value="title-ascending"
+                  {% if sort_by == 'title-ascending' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.title_ascending' | t }}
+                </option>
+                <option
+                  value="title-descending"
+                  {% if sort_by == 'title-descending' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.title_descending' | t }}
+                </option>
+                <option
+                  value="created-descending"
+                  {% if sort_by == 'created-descending' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.date_descending' | t }}
+                </option>
+                <option
+                  value="created-ascending"
+                  {% if sort_by == 'created-ascending' %}
+                    selected
+                  {% endif %}
+                >
+                  {{ 'collections.sorting.date_ascending' | t }}
+                </option>
+              </select>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="collection-toolbar__right">
+          {%- liquid
+            assign result_from = paginate.current_offset | plus: 1
+            assign result_to = paginate.current_offset | plus: paginate.page_size
+            if result_to > paginate.items
+              assign result_to = paginate.items
+            endif
+            if paginate.items == 0
+              assign result_from = 0
+            endif
+          -%}
+          <span class="collection-count" data-product-count>
+            {{- 'collections.filters.showing_results' | t: from: result_from, to: result_to, total: paginate.items -}}
+          </span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <p class="visually-hidden" role="status" aria-live="polite" data-filters-status></p>
+
+    <div data-results>
+      {%- if section.settings.show_active_filters -%}
+        {%- capture active_tags -%}
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                <a class="filter-tag" href="{{ filter.url_to_remove }}" data-filter-link>
+                  {{ filter.min_value.value | default: 0 | money }} – {{ filter.max_value.value | default: filter.range_max | money }}
+                  <span class="filter-tag__remove" aria-hidden="true">&times;</span>
+                  <span class="visually-hidden">{{ 'collections.filters.remove' | t }}</span>
+                </a>
+              {%- endif -%}
+            {%- else -%}
+              {%- for value in filter.active_values -%}
+                <a class="filter-tag" href="{{ value.url_to_remove }}" data-filter-link>
+                  {{ filter.label }}: {{ value.label }}
+                  <span class="filter-tag__remove" aria-hidden="true">&times;</span>
+                  <span class="visually-hidden">{{ 'collections.filters.remove' | t }}</span>
+                </a>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+
+        <div class="active-filters" data-active-filters>
+          {%- if active_tags != blank -%}
+            <span class="active-filters__label">{{ 'collections.filters.active_filters' | t }}:</span>
+            {{ active_tags }}
+            <a
+              class="active-filters__clear"
+              href="{{ collection.url }}{% if collection.sort_by != blank %}?sort_by={{ collection.sort_by }}{% endif %}"
+              data-filter-link
+            >
+              {{- 'collections.filters.clear_all' | t -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="collection-grid-wrapper">
+        <div class="collection-loading" data-loading-overlay>
+          <div class="collection-loading__spinner"></div>
+        </div>
+
+        <div class="collection-grid" data-product-grid>
+          {%- for product in collection.products -%}
+            <div class="scroll-reveal-card" data-delay="{{ forloop.index0 | modulo: 4 | times: 0.1 }}">
+              {%- liquid
+                assign eager = false
+                if forloop.index <= 9
+                  assign eager = true
+                endif
+              -%}
+              {% render 'product-card', product: product, eager: eager %}
+            </div>
+          {%- else -%}
+            <div class="collection-empty">
+              <p>{{ 'collections.filters.no_results' | t }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="btn-gold">
+                {{- 'general.continue_shopping' | t -}}
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endif -%}
+    </div>
+  {% endpaginate %}
+</daino-collection-filters>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Filtering"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "drawer_position",
+      "label": "Filter drawer position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_counts",
+      "label": "Show product counts",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_active_filters",
+      "label": "Show active filter tags",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

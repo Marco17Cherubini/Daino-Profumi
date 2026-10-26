@@ -1,0 +1,67 @@
+{% comment %}
+  Customer addresses — add, edit, delete. The add/edit forms are native <details>
+  disclosures (no JavaScript needed); assets/customer-addresses.js only wires
+  Shopify's country → province selector.
+{% endcomment %}
+
+{% section 'header' %}
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+<script src="{{ 'customer-addresses.js' | asset_url }}" defer></script>
+
+<daino-addresses class="customer-section customer-section--wide">
+  <div class="fade-in-up">
+    <h1 class="customer-title">{{ 'customer.account.addresses' | t }}</h1>
+
+    <details class="customer-disclosure">
+      <summary class="customer-btn customer-btn--inline">{{ 'customer.addresses.add' | t }}</summary>
+      <div class="customer-panel">
+        {%- form 'customer_address', customer.new_address, class: 'customer-form' -%}
+          {%- if form.errors -%}
+            <div class="customer-errors" role="alert">{{ form.errors | default_errors }}</div>
+          {%- endif -%}
+          <h2 class="customer-panel__title">{{ 'customer.addresses.new' | t }}</h2>
+          {% render 'address-form', form: form %}
+          <button type="submit" class="customer-btn">{{ 'customer.addresses.save' | t }}</button>
+        {%- endform -%}
+      </div>
+    </details>
+
+    <div class="customer-account-grid">
+      {%- for address in customer.addresses -%}
+        <section class="customer-panel" aria-label="{{ address.address1 | escape }}">
+          <address class="customer-address">{{ address | format_address }}</address>
+          {%- if address == customer.default_address -%}
+            <p class="customer-badge">{{ 'customer.addresses.default' | t }}</p>
+          {%- endif -%}
+
+          <details class="customer-disclosure">
+            <summary class="customer-btn customer-btn--secondary customer-btn--inline">
+              {{- 'customer.addresses.edit' | t -}}
+            </summary>
+            {%- form 'customer_address', address, class: 'customer-form' -%}
+              {% render 'address-form', form: form, address: address %}
+              <button type="submit" class="customer-btn">{{ 'customer.addresses.update' | t }}</button>
+            {%- endform -%}
+          </details>
+
+          {%- form 'customer_address', address -%}
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="customer-btn customer-btn--secondary customer-btn--inline" data-confirm-delete>
+              {{- 'customer.addresses.delete' | t -}}
+            </button>
+          {%- endform -%}
+        </section>
+      {%- endfor -%}
+    </div>
+
+    <p class="customer-link">
+      <a href="{{ routes.account_url }}">← {{ 'customer.account.return' | t }}</a>
+    </p>
+  </div>
+  <script type="application/json" data-addresses-strings>
+    { "confirmDelete": {{ 'customer.addresses.delete_confirm' | t | json }} }
+  </script>
+</daino-addresses>
+
+{% section 'footer' %}
+{% render 'customer-styles' %}

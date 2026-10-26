@@ -1,0 +1,88 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Daino Dark Luxury",
+    "theme_author": "Antigravity",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://github.com/Marco17Cherubini/Daino-Profumi",
+    "theme_support_url": "https://github.com/Marco17Cherubini/Daino-Profumi/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "daino_color_black",
+        "label": "Background Black",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "daino_color_gold",
+        "label": "Luxury Gold",
+        "default": "#d4af37"
+      },
+      {
+        "type": "color",
+        "id": "daino_color_gray_dark",
+        "label": "Dark Gray (Panel)",
+        "default": "#0a0a0a"
+      },
+      {
+        "type": "color",
+        "id": "daino_color_white",
+        "label": "Text White",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "daino_color_gray_light",
+        "label": "Text Light Gray",
+        "default": "#cccccc"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "range",
+        "id": "font_size_scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "label": "Font Size Scale",
+        "default": 100,
+        "info": "Scales all text sizes. 100% keeps the original design."
+      }
+    ]
+  },
+  {
+    "name": "Entrance Gate",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo_main",
+        "label": "Main Logo"
+      },
+      {
+        "type": "text",
+        "id": "enter_message",
+        "label": "Enter Message",
+        "default": "Scorri per entrare"
+      }
+    ]
+  },
+  {
+    "name": "Wishlist",
+    "settings": [
+      {
+        "type": "page",
+        "id": "wishlist_page",
+        "label": "Wishlist page",
+        "info": "Page that shows the saved products (rendered with the \"preferiti\" template). Defaults to the page with handle \"collezioni\"."
+      }
+    ]
+  }
+]

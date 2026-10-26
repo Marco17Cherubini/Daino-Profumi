@@ -1,0 +1,144 @@
+{{ 'section-customer-register.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Customer Registration Page - Daino Theme
+  Design luxury identico a login page
+{% endcomment %}
+
+{% comment %} Include Header {% endcomment %}
+{% section 'header' %}
+
+<div class="register-section">
+  <!-- Background Glow Effects -->
+  <div class="register-glow register-glow--top"></div>
+  <div class="register-glow register-glow--bottom"></div>
+
+  <div class="register-container">
+    <!-- Header -->
+    <div class="register-header fade-in-up" style="animation-delay: 0.1s;">
+      <h1 class="register-title">{{ 'customer.register.title' | t }}</h1>
+      <p class="register-subtitle">{{ 'customer.register.subtitle' | t }}</p>
+    </div>
+
+    <!-- Registration Form -->
+    {% form 'create_customer', class: 'register-form fade-in-up', style: 'animation-delay: 0.2s;' %}
+      {% if form.errors %}
+        <div class="register-errors" role="alert">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
+      <!-- Nome e Cognome (2 colonne) -->
+      <div class="register-row">
+        <div class="register-field">
+          <label for="customer-first-name" class="register-label">
+            {{ 'customer.register.first_name' | t }}
+          </label>
+          <input
+            type="text"
+            id="customer-first-name"
+            name="customer[first_name]"
+            autocomplete="given-name"
+            required
+            class="register-input"
+            placeholder="{{ 'customer.register.first_name' | t }}"
+          >
+        </div>
+
+        <div class="register-field">
+          <label for="customer-last-name" class="register-label">
+            {{ 'customer.register.last_name' | t }}
+          </label>
+          <input
+            type="text"
+            id="customer-last-name"
+            name="customer[last_name]"
+            autocomplete="family-name"
+            required
+            class="register-input"
+            placeholder="{{ 'customer.register.last_name' | t }}"
+          >
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="register-field">
+        <label for="customer-email" class="register-label">
+          {{ 'customer.register.email' | t }}
+        </label>
+        <input
+          type="email"
+          id="customer-email"
+          name="customer[email]"
+          autocomplete="email"
+          required
+          class="register-input"
+          placeholder="{{ 'customer.login.email_placeholder' | t }}"
+        >
+      </div>
+
+      <!-- Telefono -->
+      <div class="register-field">
+        <label for="customer-phone" class="register-label">
+          {{ 'customer.addresses.phone' | t }}
+        </label>
+        <input
+          type="tel"
+          id="customer-phone"
+          name="customer[phone]"
+          autocomplete="tel"
+          class="register-input"
+          placeholder="{{ 'customer.register.phone_placeholder' | t }}"
+        >
+      </div>
+
+      <!-- Password -->
+      <div class="register-field">
+        <label for="customer-password" class="register-label">
+          {{ 'customer.register.password' | t }}
+        </label>
+        <input
+          type="password"
+          id="customer-password"
+          name="customer[password]"
+          autocomplete="new-password"
+          required
+          class="register-input"
+          placeholder="••••••••"
+        >
+      </div>
+
+      <!-- Conferma Password -->
+      <div class="register-field">
+        <label for="customer-password-confirm" class="register-label">
+          {{ 'customer.activate.password_confirm' | t }}
+        </label>
+        <input
+          type="password"
+          id="customer-password-confirm"
+          name="customer[password_confirmation]"
+          autocomplete="new-password"
+          required
+          class="register-input"
+          placeholder="••••••••"
+        >
+      </div>
+
+      <div class="register-submit">
+        <button type="submit" class="register-btn">
+          {{ 'customer.register.submit' | t }}
+        </button>
+      </div>
+    {% endform %}
+
+    <!-- Login Link -->
+    <div class="register-login fade-in-up" style="animation-delay: 0.4s;">
+      <p class="register-login-text">{{ 'customer.register.have_account' | t }}</p>
+      <a href="{{ routes.account_login_url }}" class="register-login-link">
+        {{ 'customer.login.submit' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% comment %} Include Footer {% endcomment %}
+{% section 'footer' %}

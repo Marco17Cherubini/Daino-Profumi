@@ -1,0 +1,466 @@
+/* ============================================
+   PREDICTIVE SEARCH - CSS Variables & Base
+   ============================================ */
+:root {
+  --ps-overlay-bg: rgba(0, 0, 0, 0.6);
+  --ps-container-bg: var(--daino-color-gray-dark, #0a0a0a);
+  --ps-border-color: rgba(255, 255, 255, 0.15);
+  --ps-text-color: var(--daino-color-white, #fff);
+  --ps-text-muted: var(--daino-color-gray-light, #ccc);
+  --ps-accent-color: var(--daino-color-gold, #d4af37);
+  --ps-hover-bg: rgba(212, 175, 55, 0.1);
+  --ps-transition: 300ms ease-in-out;
+  --ps-max-width: 700px;
+  --ps-results-max-height: 500px;
+}
+
+/* ============================================
+   OVERLAY
+   ============================================ */
+.predictive-search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--ps-overlay-bg);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  /* Hide only after the fade-out, but become visible immediately on open so the
+     search input can receive focus (a transitioning visibility stays "hidden"). */
+  transition:
+    opacity var(--ps-transition),
+    visibility 0s linear var(--ps-transition);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  /* Allow scroll events to pass through to page */
+  pointer-events: none;
+}
+
+.predictive-search-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--ps-transition),
+    visibility 0s;
+  /* Re-enable pointer events only when open */
+  pointer-events: auto;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.predictive-search-container {
+  position: absolute;
+  top: clamp(70px, 12vw, 95px); /* Allineato sotto l'header */
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  width: 90%;
+  max-width: var(--ps-max-width);
+  max-height: calc(100vh - 120px);
+  background-color: var(--ps-container-bg);
+  border: 1px solid var(--ps-border-color);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition:
+    transform var(--ps-transition),
+    opacity var(--ps-transition);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.predictive-search-overlay.is-open .predictive-search-container {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ============================================
+   INPUT WRAPPER
+   ============================================ */
+.predictive-search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 12px);
+  padding: var(--space-md, 16px) var(--space-lg, 24px);
+  border-bottom: 1px solid var(--ps-border-color);
+  position: relative;
+}
+
+.predictive-search-icon {
+  color: var(--ps-text-muted);
+  flex-shrink: 0;
+}
+
+.predictive-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--ps-text-color);
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+}
+
+.predictive-search-input::placeholder {
+  color: var(--ps-text-muted);
+  opacity: 0.7;
+}
+
+.predictive-search-input::-webkit-search-cancel-button,
+.predictive-search-input::-webkit-search-decoration {
+  display: none;
+}
+
+/* Loading Spinner */
+.predictive-search-spinner {
+  display: none;
+  color: var(--ps-accent-color);
+  flex-shrink: 0;
+}
+
+.predictive-search-spinner.is-loading {
+  display: flex;
+}
+
+.predictive-search-spinner svg {
+  animation: ps-spin 1s linear infinite;
+}
+
+@keyframes ps-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Close Button */
+.predictive-search-close {
+  background: transparent;
+  border: none;
+  color: var(--ps-text-muted);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.predictive-search-close:hover {
+  color: var(--ps-accent-color);
+}
+
+/* ============================================
+   RESULTS CONTAINER
+   ============================================ */
+.predictive-search-results {
+  max-height: 500px;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+
+  /* Hide scrollbar but keep scroll functionality */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  /* Ensure touch events are captured */
+  touch-action: pan-y;
+}
+
+.predictive-search-results::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Ensure sections inside are scrollable content */
+.predictive-search-section,
+.predictive-search-section__list {
+  touch-action: pan-y;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.predictive-search-empty {
+  padding: var(--space-2xl, 48px) var(--space-lg, 24px);
+  text-align: center;
+}
+
+.predictive-search-empty svg {
+  color: var(--ps-text-muted);
+  opacity: 0.4;
+  margin-bottom: var(--space-md, 16px);
+}
+
+.predictive-search-empty__text {
+  color: var(--ps-text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.predictive-search-empty__text span {
+  color: var(--ps-accent-color);
+  font-style: italic;
+}
+
+/* ============================================
+   SECTIONS
+   ============================================ */
+.predictive-search-section {
+  padding: var(--space-md, 16px) 0;
+  border-bottom: 1px solid var(--ps-border-color);
+}
+
+.predictive-search-section:last-of-type {
+  border-bottom: none;
+}
+
+.predictive-search-section__title {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ps-accent-color);
+  padding: 0 var(--space-lg, 24px);
+  margin: 0 0 var(--space-sm, 12px) 0;
+}
+
+.predictive-search-section__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   RESULT ITEMS
+   ============================================ */
+.predictive-search-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 16px);
+  padding: var(--space-sm, 12px) var(--space-lg, 24px);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.predictive-search-item:hover,
+.predictive-search-item.is-selected {
+  background-color: var(--ps-hover-bg);
+}
+
+.predictive-search-item.is-selected {
+  outline: none;
+}
+
+/* Product Image */
+.predictive-search-item__image {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--daino-color-black, #000);
+}
+
+.predictive-search-item__image-placeholder {
+  width: 50px;
+  height: 65px;
+  background-color: var(--daino-color-black, #000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.predictive-search-item__image-placeholder svg {
+  width: 24px;
+  height: 24px;
+  color: var(--ps-text-muted);
+  opacity: 0.3;
+}
+
+/* Item Info */
+.predictive-search-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.predictive-search-item__vendor {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ps-accent-color);
+  margin-bottom: 2px;
+}
+
+.predictive-search-item__title {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 0.9rem;
+  color: var(--ps-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.predictive-search-item:hover .predictive-search-item__title {
+  color: var(--ps-accent-color);
+}
+
+.predictive-search-item__price {
+  font-size: 0.8rem;
+  color: var(--ps-text-muted);
+  margin-top: 2px;
+}
+
+.predictive-search-item__price--sale {
+  color: var(--ps-accent-color);
+}
+
+.predictive-search-item__price--compare {
+  text-decoration: line-through;
+  opacity: 0.6;
+  margin-left: 8px;
+}
+
+/* Collection/Page Items (no image) */
+.predictive-search-item--simple {
+  padding: var(--space-xs, 8px) var(--space-lg, 24px);
+}
+
+.predictive-search-item--simple .predictive-search-item__title {
+  font-size: 0.85rem;
+}
+
+/* Brand Items (Quick Filter) */
+.predictive-search-item--brand {
+  background: rgba(212, 175, 55, 0.05);
+  border-left: 2px solid var(--ps-accent-color);
+}
+
+.predictive-search-item--brand .predictive-search-item__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.predictive-search-item__brand-icon {
+  color: var(--ps-accent-color);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.predictive-search-item--brand .predictive-search-item__title {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.predictive-search-item__action {
+  font-size: 0.7rem;
+  color: var(--ps-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.predictive-search-item--brand:hover .predictive-search-item__action {
+  color: var(--ps-accent-color);
+}
+
+/* ============================================
+   VIEW ALL LINK
+   ============================================ */
+.predictive-search-view-all {
+  display: block;
+  padding: var(--space-md, 16px) var(--space-lg, 24px);
+  text-align: center;
+  color: var(--ps-accent-color);
+  font-family: var(--font-heading, sans-serif);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border-top: 1px solid var(--ps-border-color);
+  transition: background-color 0.2s ease;
+}
+
+.predictive-search-view-all:hover {
+  background-color: var(--ps-hover-bg);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .predictive-search-container {
+    width: 95%;
+    top: clamp(60px, 12vw, 85px);
+  }
+
+  .predictive-search-input-wrapper {
+    padding: var(--space-sm, 12px) var(--space-md, 16px);
+  }
+
+  .predictive-search-section__title,
+  .predictive-search-item {
+    padding-left: var(--space-md, 16px);
+    padding-right: var(--space-md, 16px);
+  }
+
+  .predictive-search-view-all {
+    padding-left: var(--space-md, 16px);
+    padding-right: var(--space-md, 16px);
+  }
+
+  .predictive-search-item__image,
+  .predictive-search-item__image-placeholder {
+    width: 45px;
+    height: 58px;
+  }
+
+  :root {
+    --ps-results-max-height: 400px;
+  }
+}
+
+/* ============================================
+   FORM, STATES AND KEYBOARD SELECTION
+   ============================================ */
+.predictive-search-form {
+  display: contents;
+}
+
+.predictive-search-item[aria-selected='true'] {
+  background-color: var(--ps-hover-bg);
+}
+
+.predictive-search-item:focus-visible {
+  outline: 2px solid var(--ps-accent-color);
+  outline-offset: -2px;
+}
+
+.predictive-search-error {
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+  text-align: center;
+  color: var(--ps-text-muted);
+}
+
+.predictive-search-error a,
+.predictive-search-empty a {
+  color: var(--ps-accent-color);
+}

@@ -1,0 +1,31 @@
+.legal-hub__nav {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.legal-hub__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--daino-color-gold);
+  margin-bottom: var(--space-md);
+}
+
+.legal-hub__list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.legal-hub__link {
+  color: var(--daino-color-gray-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.legal-hub__link:hover,
+.legal-hub__link:focus-visible {
+  color: var(--daino-color-gold);
+}

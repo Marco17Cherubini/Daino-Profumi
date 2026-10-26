@@ -1,0 +1,65 @@
+error	ValidJSON	config/settings_schema.json:2	Missing property "theme_support_email".
+error	MissingAsset	layout/theme.liquid:18	'assets/PinyonScript-Regular.woff2' does not exist
+error	MissingAsset	layout/theme.liquid:19	'assets/CormorantGaramond-Regular.woff2' does not exist
+error	ImgWidthAndHeight	sections/daino-carousel-3d.liquid:42	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-carousel-3d.liquid:60	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-collections.liquid:52	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-collections.liquid:54	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-collections.liquid:56	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-consulenza.liquid:62	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-consulenza.liquid:64	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-consulenza.liquid:66	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-entrance-gate.liquid:33	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/daino-hero-video.liquid:112	Missing width and height attributes on img tag
+error	JSONMissingSection	sections/footer-group.json:6	Section type 'daino-footer' does not refer to an existing section file
+error	ImgWidthAndHeight	sections/footer.liquid:40	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/header.liquid:14	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-article.liquid:18	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-blog.liquid:16	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-cart.liquid:35	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-cart.liquid:214	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-product.liquid:27	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-product.liquid:69	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	sections/main-product.liquid:249	Missing width and height attributes on img tag
+error	UnknownFilter	sections/main-product.liquid:231	Unknown filter 'push' used.
+error	ImgWidthAndHeight	sections/search-header.liquid:13	Missing width and height attributes on img tag
+error	TranslationKeyExists	snippets/address-form.liquid:9	'customer.addresses.first_name' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:20	'customer.addresses.last_name' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:33	'customer.addresses.company' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:45	'customer.addresses.address1' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:57	'customer.addresses.address2' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:70	'customer.addresses.city' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:81	'customer.addresses.zip' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:94	'customer.addresses.country' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:107	'customer.addresses.province' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:119	'customer.addresses.phone' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	snippets/address-form.liquid:139	'customer.addresses.set_default' does not have a matching entry in 'locales/en.default.json'
+error	ParserBlockingScript	snippets/daino-library-imports.liquid:8	Avoid parser blocking scripts by adding `defer` or `async` on this tag
+error	ParserBlockingScript	snippets/daino-library-imports.liquid:11	Avoid parser blocking scripts by adding `defer` or `async` on this tag
+error	ParserBlockingScript	snippets/daino-library-imports.liquid:12	Avoid parser blocking scripts by adding `defer` or `async` on this tag
+error	ParserBlockingScript	snippets/daino-library-imports.liquid:15	Avoid parser blocking scripts by adding `defer` or `async` on this tag
+error	TranslationKeyExists	snippets/predictive-search.liquid:66	'general.accessibility.close' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	templates/customers/account.liquid:10	'customer.account.logout' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	templates/customers/account.liquid:15	'customer.account.orders' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	templates/customers/account.liquid:43	'customer.account.addresses' does not have a matching entry in 'locales/en.default.json'
+error	TranslationKeyExists	templates/customers/addresses.liquid:7	'customer.account.addresses' does not have a matching entry in 'locales/en.default.json'
+error	ImgWidthAndHeight	templates/gift_card.liquid:302	Missing width and height attributes on img tag
+error	ImgWidthAndHeight	templates/gift_card.liquid:316	Missing width and height attributes on img tag
+error	JSONMissingSection	templates/page.legal-hub.json:4	Section type 'legal-hub' does not refer to an existing section file
+error	ImgWidthAndHeight	templates/password.liquid:103	Missing width and height attributes on img tag
+warning	DeprecatedFontsOnSettingsSchema	config/settings_schema.json:57	The font "helvetica_n4" is deprecated
+warning	AssetPreload	layout/theme.liquid:18	For better performance, prefer using the preload_tag filter
+warning	AssetPreload	layout/theme.liquid:19	For better performance, prefer using the preload_tag filter
+warning	UndefinedObject	sections/footer.liquid:64	Unknown object 'policies' used.
+warning	UndefinedObject	sections/footer.liquid:65	Unknown object 'policies' used.
+warning	UndefinedObject	sections/footer.liquid:66	Unknown object 'policies' used.
+warning	UndefinedObject	sections/footer.liquid:67	Unknown object 'policies' used.
+warning	HardcodedRoutes	sections/main-404.liquid:9	Use routes object {{ routes.root_url }} instead of hardcoding /
+warning	UndefinedObject	sections/main-blog.liquid:39	Unknown object 'paginate' used.
+warning	UndefinedObject	sections/main-blog.liquid:37	Unknown object 'paginate' used.
+warning	HardcodedRoutes	sections/wishlist.liquid:13	Use routes object {{ routes.collections_url }} instead of hardcoding /collections
+warning	HardcodedRoutes	sections/wishlist.liquid:31	Use routes object {{ routes.collections_url }} instead of hardcoding /collections
+warning	RemoteAsset	snippets/daino-library-imports.liquid:8	Asset should be served by the Shopify CDN for better performance.
+warning	RemoteAsset	snippets/daino-library-imports.liquid:11	Asset should be served by the Shopify CDN for better performance.
+warning	RemoteAsset	snippets/daino-library-imports.liquid:12	Asset should be served by the Shopify CDN for better performance.
+warning	RemoteAsset	snippets/daino-library-imports.liquid:15	Asset should be served by the Shopify CDN for better performance.

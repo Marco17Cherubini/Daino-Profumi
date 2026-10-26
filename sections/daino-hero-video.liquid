@@ -1,0 +1,173 @@
+{% schema %}
+{
+  "name": "Hero Video & Menu",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL (MP4)",
+      "info": "Upload video to Files and paste URL here. Default: Video Project 2.mp4"
+    },
+    {
+      "type": "header",
+      "content": "Hero Content"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Title",
+      "default": "L'Eccellenza della Profumeria d'Autore"
+    },
+    {
+      "type": "text",
+      "id": "hero_subtitle",
+      "label": "Subtitle",
+      "default": "Oltre il profumo: l'espressione della tua anima."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_text",
+      "label": "Button Text",
+      "default": "Scopri le Fragranze"
+    },
+    {
+      "type": "url",
+      "id": "hero_cta_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand (Banner Superiore)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "default": "Brand Name"
+        }
+      ]
+    },
+    {
+      "type": "brand_bottom",
+      "name": "Brand (Banner Inferiore)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "default": "Brand Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Video & Menu",
+      "blocks": [
+        { "type": "brand", "settings": { "brand_name": "Spirit of Kings" } },
+        { "type": "brand", "settings": { "brand_name": "Spirit of Dubai" } },
+        { "type": "brand", "settings": { "brand_name": "Oman Luxury" } },
+        { "type": "brand", "settings": { "brand_name": "Marrakech Imperial" } },
+        { "type": "brand", "settings": { "brand_name": "Electimuss" } },
+        { "type": "brand", "settings": { "brand_name": "Kajal" } },
+        { "type": "brand", "settings": { "brand_name": "Bois 1920" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "Ghawali" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "Giardini di Toscana" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "Orto Parisi" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "Nasomatto" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "Jeroboam" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "Ojar" } },
+        { "type": "brand_bottom", "settings": { "brand_name": "New Notes" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'section-hero-video.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Elements marked [data-gate-reveal] start hidden and are revealed, in order, by the
+  entrance gate (assets/entrance-gate.js). Without the gate (or without JavaScript,
+  or with reduced motion) they are shown immediately.
+{%- endcomment -%}
+<div class="hero-video-container" data-hero-container>
+  <div class="cinematic-frame">
+    <video muted loop playsinline class="hero-video" data-hero-video>
+      {% if section.settings.video_url != blank %}
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      {% else %}
+        <source src="{{ 'Video Project 2.mp4' | asset_url }}" type="video/mp4">
+      {% endif %}
+    </video>
+  </div>
+
+  <nav class="hero-menu" data-gate-reveal aria-label="{{ 'general.header.label' | t }}">
+    <a href="{{ routes.root_url }}">
+      {%- if settings.logo_main -%}
+        {{ settings.logo_main | image_url: height: 60 | image_tag: class: 'menu-logo', alt: shop.name }}
+      {%- else -%}
+        <img
+          src="{{ 'logo_finito.png' | asset_url }}"
+          alt="{{ shop.name | escape }}"
+          class="menu-logo"
+          width="888"
+          height="281"
+        >
+      {%- endif -%}
+    </a>
+
+    {% render 'header-icons', show_cart_count: false %}
+  </nav>
+
+  <div class="hero-content-banner" data-gate-reveal>
+    <h1 class="hero-title">{{ section.settings.hero_title }}</h1>
+    <p class="hero-subtitle">{{ section.settings.hero_subtitle }}</p>
+    <a href="{{ section.settings.hero_cta_link | default: routes.all_products_collection_url }}" class="hero-cta">
+      {{- section.settings.hero_cta_text -}}
+    </a>
+  </div>
+
+  {%- for banner in (1..2) -%}
+    {%- if banner == 1 -%}
+      {%- assign block_type = 'brand' -%}
+      {%- assign banner_class = 'hero-brands-banner--top' -%}
+      {%- assign track_class = '' -%}
+    {%- else -%}
+      {%- assign block_type = 'brand_bottom' -%}
+      {%- assign banner_class = 'hero-brands-banner--bottom' -%}
+      {%- assign track_class = ' brands-track--reverse' -%}
+    {%- endif -%}
+    <div class="hero-brands-banner {{ banner_class }}" data-gate-reveal data-brands-banner>
+      <div class="brands-track{{ track_class }}">
+        {%- comment -%} The list is rendered twice for a seamless loop; the copy is hidden from assistive tech and the tab order. {%- endcomment -%}
+        {%- for copy in (1..2) -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == block_type -%}
+              <a
+                href="{{ routes.all_products_collection_url }}?filter.p.m.custom.brand={{ block.settings.brand_name | url_param_escape }}"
+                class="brand-item"
+                {% if copy == 1 %}
+                  {{ block.shopify_attributes }}
+                {% else %}
+                  aria-hidden="true" tabindex="-1"
+                {% endif %}
+              >
+                {{- block.settings.brand_name | escape -}}
+              </a>
+              <span class="brand-separator" aria-hidden="true"></span>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endfor -%}
+</div>
+
+{% render 'predictive-search' %}

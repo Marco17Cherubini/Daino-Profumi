@@ -1,0 +1,510 @@
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer></script>
+
+{% comment %}
+  MAIN PRODUCT — gallery, purchase form, same-brand carousel, recommendations.
+  Behaviour lives in assets/product-form.js (<daino-product>); the initial
+  variant is resolved here so the page is correct before and without JavaScript.
+{% endcomment %}
+
+{%- liquid
+  # Initial variant: the one in ?variant= when valid, otherwise the cheapest available
+  # variant (the theme's long-standing default), otherwise the first variant.
+  assign current_variant = product.selected_variant
+  if current_variant == blank
+    assign available_variants = product.variants | where: 'available'
+    if available_variants.size > 0
+      assign current_variant = available_variants | sort: 'price' | first
+    else
+      assign current_variant = product.selected_or_first_available_variant
+    endif
+  endif
+
+  assign gallery_image = current_variant.featured_image | default: product.featured_image
+-%}
+
+<div class="product-section">
+  <nav class="product-breadcrumb" aria-label="{{ 'general.breadcrumb.label' | t }}">
+    <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+    <span class="product-breadcrumb__sep" aria-hidden="true">/</span>
+    {% if product.collections.first %}
+      <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+      <span class="product-breadcrumb__sep" aria-hidden="true">/</span>
+    {% endif %}
+    <span class="product-breadcrumb__current" aria-current="page">{{ product.title }}</span>
+  </nav>
+
+  <daino-product class="product-main" data-section-id="{{ section.id }}">
+    <script type="application/json" data-product-variants>
+      {{ product.variants | json }}
+    </script>
+    <script type="application/json" data-product-strings>
+      {
+        "available": {{ 'products.product.available' | t | json }},
+        "soldOut": {{ 'products.product.sold_out' | t | json }},
+        "unavailable": {{ 'products.product.unavailable' | t | json }},
+        "cartError": {{ 'products.product.cart_error' | t | json }}
+      }
+    </script>
+
+    <!-- Gallery Column -->
+    <div class="product-gallery fade-in-up">
+      <div class="product-gallery__glow"></div>
+
+      <div class="product-gallery__main">
+        {% if gallery_image %}
+          <img
+            src="{{ gallery_image | image_url: width: 1000 }}"
+            alt="{{ gallery_image.alt | default: product.title | escape }}"
+            class="product-gallery__image"
+            width="{{ gallery_image.width }}"
+            height="{{ gallery_image.height }}"
+            data-gallery-main
+          >
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'product-gallery__placeholder' }}
+        {% endif %}
+
+        <button
+          type="button"
+          class="product-gallery__wishlist"
+          aria-label="{{ 'wishlist.add' | t }}"
+          aria-pressed="false"
+          data-wishlist-btn
+          data-product-id="{{ product.id }}"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+
+        {% if gallery_image %}
+          <a
+            class="product-gallery__zoom"
+            href="{{ gallery_image | image_url: width: 2400 }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="{{ 'products.product.zoom' | t }}"
+            data-gallery-zoom
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+              <path d="M11 8v6M8 11h6"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+
+      {% if product.images.size > 1 %}
+        <div class="product-gallery__thumbs">
+          {% for image in product.images limit: 4 %}
+            <button
+              type="button"
+              class="product-gallery__thumb{% if image.src == gallery_image.src %} product-gallery__thumb--active{% endif %}"
+              data-gallery-thumb
+              data-image-url="{{ image | image_url: width: 1000 }}"
+              data-zoom-url="{{ image | image_url: width: 2400 }}"
+              data-image-alt="{{ image.alt | default: product.title | escape }}"
+              aria-label="{{ 'products.product.show_image' | t: number: forloop.index }}"
+              aria-pressed="{% if image.src == gallery_image.src %}true{% else %}false{% endif %}"
+            >
+              <img src="{{ image | image_url: width: 150 }}" alt="" loading="lazy" width="80" height="80">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Info Column -->
+    <div class="product-info fade-in-up" style="animation-delay: 0.15s;">
+      <div class="product-header">
+        <h1 class="product-title">{{ product.title }}</h1>
+
+        <div class="product-accordions-inline">
+          {% if product.description != blank %}
+            <details class="product-accordion">
+              <summary class="product-accordion__header">
+                <span class="product-accordion__title">{{ 'products.product.description' | t }}</span>
+                <svg
+                  class="product-accordion__icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="product-accordion__content">
+                {{ product.description }}
+              </div>
+            </details>
+          {% endif %}
+        </div>
+
+        <div class="product-price-row">
+          <span class="product-price" data-product-price>
+            {%- if current_variant.compare_at_price > current_variant.price -%}
+              <span class="product-price__compare" data-product-compare>
+                {{- current_variant.compare_at_price | money -}}
+              </span>
+            {%- endif -%}
+            <span data-product-amount>{{ current_variant.price | money }}</span>
+          </span>
+
+          <span
+            class="product-badge {% if current_variant.available %}product-badge--available{% else %}product-badge--soldout{% endif %}"
+            data-product-badge
+          >
+            {%- if current_variant.available -%}
+              {{ 'products.product.available' | t }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+          </span>
+        </div>
+      </div>
+
+      <div class="product-details">
+        {% if product.metafields.custom.famiglia_olfattiva %}
+          <div class="product-detail">
+            <span class="product-detail__label">{{ 'products.details.olfactory_family' | t }}</span>
+            <span class="product-detail__value">{{ product.metafields.custom.famiglia_olfattiva }}</span>
+          </div>
+        {% endif %}
+        {% if product.metafields.custom.concentrazione %}
+          <div class="product-detail">
+            <span class="product-detail__label">{{ 'products.details.concentration' | t }}</span>
+            <span class="product-detail__value">{{ product.metafields.custom.concentrazione }}</span>
+          </div>
+        {% endif %}
+        <div class="product-detail">
+          <span class="product-detail__label">{{ 'products.details.gender' | t }}</span>
+          <span class="product-detail__value">
+            {%- if product.metafields.custom.genere != blank -%}
+              {{ product.metafields.custom.genere }}
+            {%- else -%}
+              {{ 'products.details.gender_default' | t }}
+            {%- endif -%}
+          </span>
+        </div>
+      </div>
+
+      {% form 'product', product, class: 'product-form', novalidate: 'novalidate', data-product-form: '' %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+        {% unless product.has_only_default_variant %}
+          <div class="product-variants">
+            {% for option in product.options_with_values %}
+              {%- assign option_index = forloop.index0 -%}
+              <fieldset class="product-variant-group" data-option-group>
+                <legend class="product-variant-label">{{ option.name }}</legend>
+                <div class="product-variant-options">
+                  {% for value in option.values %}
+                    {%- capture input_id -%}Option-{{ section.id }}-{{ option_index }}-{{ forloop.index0 }}{%- endcapture -%}
+                    <div class="product-variant-option">
+                      <input
+                        type="radio"
+                        id="{{ input_id }}"
+                        name="option-{{ section.id }}-{{ option_index }}"
+                        value="{{ value | escape }}"
+                        class="product-variant-input visually-hidden"
+                        {% if current_variant.options[option_index] == value %}
+                          checked
+                        {% endif %}
+                      >
+                      <label for="{{ input_id }}" class="product-variant-pill">{{ value }}</label>
+                    </div>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            {% endfor %}
+          </div>
+        {% endunless %}
+
+        <div class="product-actions">
+          <div class="product-quantity">
+            <label class="product-quantity__label" for="Quantity-{{ section.id }}">
+              {{- 'products.product.quantity' | t -}}
+            </label>
+            <div class="product-quantity__controls">
+              <button
+                type="button"
+                class="product-quantity__btn"
+                data-quantity-step="-1"
+                aria-label="{{ 'products.product.quantity_decrease' | t }}"
+              >
+                −
+              </button>
+              <input
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                step="1"
+                inputmode="numeric"
+                class="product-quantity__input"
+                id="Quantity-{{ section.id }}"
+                data-quantity-input
+              >
+              <button
+                type="button"
+                class="product-quantity__btn"
+                data-quantity-step="1"
+                aria-label="{{ 'products.product.quantity_increase' | t }}"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            name="add"
+            class="product-btn product-btn--secondary"
+            data-add-to-cart
+            {% unless current_variant.available %}
+              disabled
+            {% endunless %}
+          >
+            <span>{{ 'products.product.add_to_cart' | t }}</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            class="product-btn product-btn--primary"
+            data-buy-now
+            hidden
+            {% unless current_variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {{ 'products.product.buy_now' | t }}
+          </button>
+
+          <p class="product-form__error" role="alert" data-form-error hidden></p>
+          <p class="visually-hidden" aria-live="polite" data-variant-status></p>
+        </div>
+      {% endform %}
+
+      {%- comment -%} Target of "Acquista ora": a native POST to /cart with `checkout` redirects to checkout. {%- endcomment -%}
+      <form action="{{ routes.cart_url }}" method="post" data-checkout-form hidden>
+        <input type="hidden" name="checkout" value="">
+      </form>
+
+      <div class="product-trust">
+        <span class="product-trust__item">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect x="1" y="3" width="15" height="13" rx="2"/>
+            <path d="M16 8h4l3 3v5a2 2 0 0 1-2 2h-5"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          {{ 'products.trust.free_shipping' | t }}
+        </span>
+        <span class="product-trust__item">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          {{ 'products.trust.authenticity' | t }}
+        </span>
+        <span class="product-trust__item">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          {{ 'products.trust.secure_payments' | t }}
+        </span>
+      </div>
+
+      {%- comment -%}
+        Same-brand products. Liquid exposes at most 50 products of a collection without
+        pagination, so the scan covers the first 50 of `all` (known limitation, see README).
+        Shopify Liquid has no `push` filter: the previous implementation used it, so this
+        carousel never rendered. Items are now captured while scanning.
+      {%- endcomment -%}
+      {%- liquid
+        assign current_brand = product.metafields.custom.brand
+        assign brand_count = 0
+      -%}
+      {%- capture brand_items -%}
+        {%- if current_brand != blank -%}
+          {%- for rec_product in collections.all.products limit: 50 -%}
+            {%- if rec_product.metafields.custom.brand == current_brand and rec_product.id != product.id -%}
+              {%- assign brand_count = brand_count | plus: 1 -%}
+              <div class="brand-carousel__item">
+                <a href="{{ rec_product.url }}" class="brand-carousel__link">
+                  <div class="brand-carousel__image">
+                    {% if rec_product.featured_image %}
+                      {{
+                        rec_product.featured_image
+                        | image_url: width: 200
+                        | image_tag: alt: rec_product.featured_image.alt, loading: 'lazy'
+                      }}
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag }}
+                    {% endif %}
+                  </div>
+                  <div class="brand-carousel__info">
+                    <span class="brand-carousel__name">{{ rec_product.title | truncatewords: 4 }}</span>
+                    <span class="brand-carousel__price">{{ rec_product.price | money }}</span>
+                  </div>
+                </a>
+                <a href="{{ rec_product.url }}" class="brand-carousel__btn" tabindex="-1" aria-hidden="true">
+                  {{- 'collections.product_card.view' | t -}}
+                </a>
+              </div>
+              {%- if brand_count >= 8 -%}{%- break -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {% if brand_count > 0 %}
+        <div class="brand-carousel">
+          <h3 class="brand-carousel__title">{{ 'products.product.more_from_brand' | t: brand: current_brand }}</h3>
+          <div class="brand-carousel__container" data-drag-scroll>
+            <div class="brand-carousel__track">
+              {{ brand_items }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </daino-product>
+
+  {%- if section.settings.show_related -%}
+    {%- liquid
+      assign related_collection = section.settings.related_collection
+      if related_collection == blank
+        assign related_collection = collections.catalogo
+      endif
+    -%}
+    {%- if related_collection != blank and related_collection.products_count > 0 -%}
+      <daino-related-products
+        class="product-related fade-in-up"
+        data-limit="{{ section.settings.related_count }}"
+      >
+        <h2 class="product-related__title">{{ 'products.product.related_title' | t }}</h2>
+        <div class="product-related__grid" data-recommended-slider>
+          {%- assign rendered = 0 -%}
+          {%- for related_product in related_collection.products limit: 21 -%}
+            {%- if related_product.id != product.id and rendered < 20 -%}
+              {%- assign rendered = rendered | plus: 1 -%}
+              {% render 'product-card', product: related_product, layout: 'compact' %}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div class="related-cta-card">
+            <a href="{{ related_collection.url }}" class="related-cta-card__btn">
+              <span>{{ 'products.product.discover_collection_html' | t }}</span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </daino-related-products>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_related",
+      "label": "Show recommended products",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "related_collection",
+      "label": "Recommendations collection",
+      "info": "Products are picked at random from the first 20 of this collection. Defaults to the \"catalogo\" collection."
+    },
+    {
+      "type": "range",
+      "id": "related_count",
+      "label": "Recommended products shown",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,271 @@
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+
+{% comment %}
+  FOOTER — addresses, newsletter, map, contacts, social and legal links.
+  Every text comes from the section settings (previously hard-coded while the
+  settings were ignored); defaults reproduce the previous content.
+{% endcomment %}
+
+<footer class="footer-section scroll-reveal">
+  <div class="footer-content">
+    <div class="footer-three-cols">
+      <div class="footer-left">
+        <h4>{{ 'footer.visit_us' | t }}</h4>
+        {%- if section.settings.address_line1 != blank -%}
+          <p>{{ section.settings.address_line1 }}</p>
+        {%- endif -%}
+        {%- if section.settings.address_line2 != blank -%}
+          <p>{{ section.settings.address_line2 }}</p>
+        {%- endif -%}
+        {%- if section.settings.address_country != blank -%}
+          <p>{{ section.settings.address_country }}</p>
+        {%- endif -%}
+
+        <div class="footer-newsletter">
+          <h4 id="NewsletterHeading-{{ section.id }}">{{ 'footer.newsletter.title' | t }}</h4>
+          {%- form 'customer', id: 'NewsletterForm', class: 'newsletter-form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="newsletter-input-wrapper">
+              <input
+                type="email"
+                name="contact[email]"
+                class="newsletter-input"
+                placeholder="{{ 'footer.newsletter.placeholder' | t }}"
+                autocomplete="email"
+                required
+                aria-labelledby="NewsletterHeading-{{ section.id }}"
+                {% if form.errors %}
+                  aria-invalid="true" aria-describedby="NewsletterMessage-{{ section.id }}"
+                {% endif %}
+              >
+              <button type="submit" class="newsletter-btn">{{ 'footer.newsletter.submit' | t }}</button>
+            </div>
+            {%- if form.posted_successfully? -%}
+              <p class="newsletter-message" id="NewsletterMessage-{{ section.id }}" role="status">
+                {{- 'footer.newsletter.success' | t -}}
+              </p>
+            {%- elsif form.errors -%}
+              <div
+                class="newsletter-message newsletter-message--error"
+                id="NewsletterMessage-{{ section.id }}"
+                role="alert"
+              >
+                {{- form.errors | default_errors -}}
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+          <p class="newsletter-terms">
+            {%- if shop.privacy_policy -%}
+              {{ 'footer.newsletter.terms_html' | t: url: shop.privacy_policy.url }}
+            {%- else -%}
+              {{ 'footer.newsletter.terms' | t }}
+            {%- endif -%}
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-map-container">
+        {%- if section.settings.map_embed != blank -%}
+          {{ section.settings.map_embed }}
+        {%- else -%}
+          <a
+            href="{{ section.settings.map_link | default: 'https://maps.app.goo.gl/vUJTH4UGxSvaMhVK6' }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="{{ 'footer.map_link' | t }}"
+          >
+            {%- if section.settings.map_image -%}
+              {{
+                section.settings.map_image
+                | image_url: width: 700
+                | image_tag: class: 'footer-map-image', alt: '', loading: 'lazy'
+              }}
+            {%- else -%}
+              <img
+                src="{{ 'footer-map.jpg' | asset_url }}"
+                alt=""
+                class="footer-map-image"
+                width="923"
+                height="923"
+                loading="lazy"
+              >
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-contacts">
+          <h4>
+            {%- if section.settings.contacts_title != blank -%}
+              {{ section.settings.contacts_title }}
+            {%- else -%}
+              {{ 'footer.contacts' | t }}
+            {%- endif -%}
+          </h4>
+          {%- if section.settings.email != blank -%}
+            <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+          {%- endif -%}
+          {%- if section.settings.phone != blank -%}
+            <a href="tel:{{ section.settings.phone | remove: ' ' }}">{{ section.settings.phone }}</a>
+          {%- endif -%}
+        </div>
+
+        <div class="footer-social">
+          {%- if section.settings.instagram_url != blank -%}
+            <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener">
+              {{- 'general.social.links.instagram' | t -}}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.facebook_url != blank -%}
+            <a href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener">
+              {{- 'general.social.links.facebook' | t -}}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.tiktok_url != blank -%}
+            <a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener">
+              {{- 'general.social.links.tiktok' | t -}}
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Policies come from Settings › Policies; a policy that is not set is not linked. {%- endcomment -%}
+        <div class="footer-legal">
+          <h4>{{ 'footer.legal_title' | t }}</h4>
+          {%- if shop.privacy_policy -%}
+            <a href="{{ shop.privacy_policy.url }}">{{ 'footer.privacy' | t }}</a>
+          {%- endif -%}
+          {%- if shop.terms_of_service -%}
+            <a href="{{ shop.terms_of_service.url }}">{{ 'footer.terms' | t }}</a>
+          {%- endif -%}
+          {%- if shop.shipping_policy -%}
+            <a href="{{ shop.shipping_policy.url }}">{{ 'footer.shipping' | t }}</a>
+          {%- endif -%}
+          {%- if shop.refund_policy -%}
+            <a href="{{ shop.refund_policy.url }}">{{ 'footer.refunds' | t }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>
+        © {{ 'now' | date: '%Y' }}
+        {{ section.settings.company_name | default: shop.name | upcase }}
+      </div>
+      {%- if section.settings.vat_number != blank -%}
+        <div>{{ section.settings.vat_number }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mappa"
+    },
+    {
+      "type": "html",
+      "id": "map_embed",
+      "label": "Google Maps Embed Code",
+      "info": "Incolla il codice iframe da Google Maps"
+    },
+    {
+      "type": "url",
+      "id": "map_link",
+      "label": "Map image link",
+      "info": "Used when no embed code is set. Defaults to the shop location on Google Maps."
+    },
+    {
+      "type": "image_picker",
+      "id": "map_image",
+      "label": "Map image",
+      "info": "Defaults to the image shipped with the theme."
+    },
+    {
+      "type": "header",
+      "content": "Indirizzo"
+    },
+    {
+      "type": "text",
+      "id": "address_line1",
+      "label": "Negozio 1 - Via, civico, CAP, città, provincia",
+      "default": "Via Vochieri 19, 15121, Alessandria"
+    },
+    {
+      "type": "text",
+      "id": "address_line2",
+      "label": "Negozio 2 - Via, civico, CAP, città, provincia",
+      "default": "Via Roma 63, 15067 Novi Ligure"
+    },
+    {
+      "type": "text",
+      "id": "address_country",
+      "label": "Country line",
+      "default": "Italia"
+    },
+    {
+      "type": "header",
+      "content": "Contatti"
+    },
+    {
+      "type": "text",
+      "id": "contacts_title",
+      "label": "Titolo sezione contatti",
+      "default": "Contatti"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "info@dainogioielli.it"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Telefono",
+      "default": "3275354547"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Link Instagram"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Link Facebook"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "Link TikTok"
+    },
+    {
+      "type": "header",
+      "content": "Legale"
+    },
+    {
+      "type": "text",
+      "id": "company_name",
+      "label": "Nome azienda",
+      "default": "Daino Profumi",
+      "info": "Shown in capitals in the footer copyright line."
+    },
+    {
+      "type": "text",
+      "id": "vat_number",
+      "label": "P.IVA",
+      "default": "P.IVA 02493280065"
+    }
+  ]
+}
+{% endschema %}

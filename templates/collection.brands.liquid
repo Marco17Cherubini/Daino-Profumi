@@ -1,0 +1,22 @@
+{%- layout none -%}
+{%- comment -%}
+  Brand list for the predictive search brand shortcuts, requested as
+  /collections/all?view=brands by assets/predictive-search.js.
+
+  Uses the storefront filter on the `custom.brand` product metafield (the same filter
+  the hero brand links and the collection drawer use), so the list covers the whole
+  catalogue — Liquid's product loops stop at 50 items. Returns a JSON array of
+  { "label": "...", "value": "..." } sorted as configured in Search & Discovery.
+{%- endcomment -%}
+[
+{%- assign first = true -%}
+{%- for filter in collection.filters -%}
+  {%- if filter.param_name == 'filter.p.m.custom.brand' -%}
+    {%- for value in filter.values -%}
+      {%- unless first %},{% endunless -%}
+      {%- assign first = false -%}
+      {"label":{{ value.label | json }},"value":{{ value.value | json }}}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+]

@@ -1,0 +1,7 @@
+# Theme Check configuration — https://shopify.dev/docs/storefronts/themes/tools/theme-check
+# Exceptions must be specific and justified (see docs/decisions.md).
+extends: theme-check:recommended
+ignore:
+  - node_modules/**
+  - docs/**
+  - tests/**

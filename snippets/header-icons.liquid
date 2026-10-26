@@ -1,0 +1,66 @@
+{%- comment -%}
+  Header icon bar (search, wishlist, account, cart), shared by sections/header.liquid
+  and the homepage hero menu (sections/daino-hero-video.liquid).
+
+  Parameters:
+  - show_cart_count {boolean} show the cart quantity bubble. Default: true
+{%- endcomment -%}
+{%- liquid
+  if show_cart_count == false
+    assign cart_bubble = false
+  else
+    assign cart_bubble = true
+  endif
+-%}
+<div class="menu-icons">
+  <button
+    type="button"
+    class="menu-icon"
+    title="{{ 'general.header.search' | t }}"
+    aria-label="{{ 'general.header.search' | t }}"
+    aria-haspopup="dialog"
+    data-predictive-search-trigger
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="M21 21l-4.35-4.35"/>
+    </svg>
+  </button>
+  <a
+    href="{% render 'wishlist-url' %}"
+    class="menu-icon menu-icon--wishlist"
+    title="{{ 'general.header.wishlist' | t }}"
+    data-wishlist-link
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    <span class="visually-hidden">{{ 'general.header.wishlist' | t }}</span>
+    <span class="wishlist-count" data-wishlist-count hidden aria-hidden="true">0</span>
+  </a>
+  <a
+    href="{{ routes.account_url }}"
+    class="menu-icon"
+    title="{{ 'general.header.account' | t }}"
+    aria-label="{{ 'general.header.account' | t }}"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  </a>
+  <a href="{{ routes.cart_url }}" class="menu-icon" title="{{ 'general.header.cart' | t }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+    <span class="visually-hidden">
+      {{- 'general.header.cart' | t -}}
+      {%- if cart.item_count > 0 %}, {{ 'general.header.cart_count' | t: count: cart.item_count }}{% endif -%}
+    </span>
+    {%- if cart_bubble and cart.item_count > 0 -%}
+      <span class="cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+    {%- endif -%}
+  </a>
+</div>

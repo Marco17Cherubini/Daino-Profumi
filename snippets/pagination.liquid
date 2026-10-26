@@ -1,0 +1,76 @@
+{%- comment -%}
+  Pagination links for paginated collections and search results.
+
+  Parameters:
+  - paginate {paginate} the paginate object
+{%- endcomment -%}
+<nav
+  class="collection-pagination fade-in-up"
+  style="animation-delay: 0.5s;"
+  aria-label="{{ 'general.pagination.label' | t }}"
+  data-pagination
+>
+  {%- if paginate.previous -%}
+    <a
+      href="{{ paginate.previous.url }}"
+      class="collection-pagination__btn"
+      aria-label="{{ 'general.pagination.previous' | t }}"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </a>
+  {%- endif -%}
+
+  {%- for part in paginate.parts -%}
+    {%- if part.is_link -%}
+      <a
+        href="{{ part.url }}"
+        class="collection-pagination__page"
+        aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+      >
+        {{- part.title -}}
+      </a>
+    {%- elsif part.title == paginate.current_page -%}
+      <span
+        class="collection-pagination__page collection-pagination__page--current"
+        aria-current="page"
+        aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+      >
+        {{- part.title -}}
+      </span>
+    {%- else -%}
+      <span class="collection-pagination__ellipsis" aria-hidden="true">…</span>
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if paginate.next -%}
+    <a
+      href="{{ paginate.next.url }}"
+      class="collection-pagination__btn"
+      aria-label="{{ 'general.pagination.next' | t }}"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </a>
+  {%- endif -%}
+</nav>

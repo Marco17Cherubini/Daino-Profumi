@@ -1,0 +1,57 @@
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-collection.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  MAIN BLOG — paginated list of articles.
+{% endcomment %}
+
+<div class="blog-section">
+  <div class="section-header">
+    <h1>{{ blog.title }}</h1>
+  </div>
+
+  {%- paginate blog.articles by section.settings.articles_per_page -%}
+    <div class="blog-grid">
+      {%- for article in blog.articles -%}
+        <article class="blog-card">
+          <a href="{{ article.url }}">
+            {%- if article.image -%}
+              <div class="blog-card-image">
+                {{ article.image | image_url: width: 600 | image_tag: alt: article.title, loading: 'lazy' }}
+              </div>
+            {%- endif -%}
+            <div class="blog-card-content">
+              <h2 class="blog-card-title">{{ article.title }}</h2>
+              <p class="blog-card-date">{{ article.published_at | date: format: 'date' }}</p>
+              {%- if article.excerpt != blank -%}
+                <p class="blog-card-excerpt">{{ article.excerpt | strip_html | truncate: 120 }}</p>
+              {%- endif -%}
+            </div>
+          </a>
+        </article>
+      {%- else -%}
+        <p>{{ 'blogs.general.empty' | t }}</p>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Blog Page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "Articles per page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

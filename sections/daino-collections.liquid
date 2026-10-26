@@ -1,0 +1,92 @@
+{% schema %}
+{
+  "name": "Collections Gallery",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection_item",
+      "name": "Collection Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Collection Name"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Link to Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections Gallery",
+      "blocks": [
+        { "type": "collection_item", "settings": { "label": "Catalogo" } },
+        { "type": "collection_item", "settings": { "label": "Bestseller" } },
+        { "type": "collection_item", "settings": { "label": "Fineserie" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'section-collections-gallery.css' | asset_url | stylesheet_tag }}
+
+<section class="collections-gallery scroll-reveal">
+  <div class="gallery-grid">
+    {% for block in section.blocks %}
+      <div class="gallery-item" {{ block.shopify_attributes }}>
+        {%- if block.settings.image -%}
+          {{
+            block.settings.image
+            | image_url: width: 800
+            | image_tag: alt: block.settings.label, class: 'gallery-image', loading: 'lazy'
+          }}
+        {%- else -%}
+          {%- comment -%} Fallback images shipped with the theme, by position. {%- endcomment -%}
+          {%- case forloop.index -%}
+            {%- when 1 -%}
+              {%- assign fallback = 'bestseller.jpeg' -%}
+            {%- when 2 -%}
+              {%- assign fallback = 'profumi arabi.jpeg' -%}
+            {%- when 3 -%}
+              {%- assign fallback = 'profumi italiani.jpeg' -%}
+            {%- else -%}
+              {%- assign fallback = blank -%}
+          {%- endcase -%}
+          {%- if fallback != blank -%}
+            <img
+              src="{{ fallback | asset_url }}"
+              alt="{{ block.settings.label | escape }}"
+              class="gallery-image"
+              width="1280"
+              height="1600"
+              loading="lazy"
+            >
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        {%- endif -%}
+        <div class="gallery-overlay">
+          <span class="gallery-label">{{ block.settings.label }}</span>
+          <a
+            href="{{ block.settings.collection.url | default: routes.all_products_collection_url }}"
+            class="gallery-btn"
+          >
+            {{- 'products.product.discover' | t -}}
+            <span class="visually-hidden">: {{ block.settings.label }}</span>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>

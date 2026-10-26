@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, Theme Check and tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (ESLint + Stylelint)
+        run: npm run lint
+
+      - name: Formatting (Prettier + Liquid plugin)
+        run: npm run format:check
+
+      - name: Theme Check
+        run: npm run theme-check
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Install Chromium for DOM tests
+        run: npx playwright install --with-deps chromium
+
+      - name: DOM tests (Playwright fixtures)
+        run: npm run test:dom

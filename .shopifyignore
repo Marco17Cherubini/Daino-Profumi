@@ -1,0 +1,19 @@
+# Repository tooling — never uploaded to Shopify
+docs/
+tests/
+node_modules/
+.github/
+package.json
+package-lock.json
+*.config.js
+.prettierrc
+.prettierignore
+.editorconfig
+.stylelintrc.json
+.theme-check.yml
+.git-blame-ignore-revs
+README.md
+CLAUDE.md
+scripts/
+eslint.config.js
+.gitignore

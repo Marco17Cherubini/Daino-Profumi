@@ -1,0 +1,127 @@
+/* CONSULENZA OLFATTIVA */
+.consulenza-section {
+  padding: var(--space-2xl) var(--container-padding);
+  background-color: #0a0a0a;
+}
+
+.consulenza-title {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-h3);
+  color: var(--daino-color-gold);
+  text-transform: uppercase;
+  letter-spacing: clamp(0.1em, 0.5vw, 0.15em);
+  margin-bottom: var(--space-2xl);
+}
+
+.staff-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.staff-row.reverse {
+  flex-direction: row-reverse;
+}
+
+.staff-photo {
+  flex: 0 0 auto;
+  width: clamp(150px, 30vw, 250px);
+  height: clamp(195px, 39vw, 320px);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.staff-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition:
+    filter 0.6s ease,
+    transform 0.6s ease;
+}
+
+.staff-photo:hover img {
+  filter: grayscale(50%);
+  transform: scale(1.03);
+}
+
+.staff-info {
+  flex: 1;
+  min-width: clamp(200px, 40vw, 400px);
+  padding: var(--space-md);
+}
+
+.staff-name {
+  font-family: var(--font-script);
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  color: var(--daino-color-gold);
+  text-transform: none;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+/* ✅ FIX: Descrizione staff - font leggibile */
+.staff-description {
+  font-family: var(--font-heading);
+  /* Cormorant Garamond */
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+  font-weight: 300;
+  /* Light weight per eleganza */
+  margin-bottom: var(--space-md);
+}
+
+.staff-fragrances {
+  font-family: var(--font-heading);
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  color: rgba(212, 175, 55, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+.staff-btn {
+  display: inline-block;
+  padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 30px);
+  border: 1px solid var(--daino-color-gold);
+  color: var(--daino-color-gold);
+  font-family: var(--font-heading);
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.staff-btn:hover {
+  background: var(--daino-color-gold);
+  color: #000;
+}
+
+.staff-row.reverse .staff-info {
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .staff-row,
+  .staff-row.reverse {
+    flex-direction: column;
+  }
+
+  .staff-row.reverse .staff-info {
+    text-align: center;
+  }
+
+  .staff-info {
+    text-align: center;
+  }
+}

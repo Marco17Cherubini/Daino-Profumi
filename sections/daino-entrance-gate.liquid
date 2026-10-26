@@ -1,0 +1,61 @@
+{% schema %}
+{
+  "name": "Entrance Gate",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "text",
+      "id": "scroll_text",
+      "label": "Scroll Indicator Text",
+      "default": "Scorri per entrare"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Entrance Gate"
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'section-entrance-gate.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'entrance-gate.js' | asset_url }}" defer></script>
+
+{%- comment -%}
+  ENTRANCE GATE — full-screen logo shown on arrival; scroll, swipe, click or press
+  Enter / Space / ↓ / Page Down to enter (assets/entrance-gate.js).
+  Never shown without JavaScript (critical CSS in layout/theme.liquid), in the Theme
+  Editor, or when the visitor prefers reduced motion.
+{%- endcomment -%}
+<daino-entrance-gate
+  class="hero-entrance-gate"
+  {% if request.design_mode %}
+    data-design-mode
+  {% endif %}
+>
+  {%- liquid
+    assign gate_logo = section.settings.logo | default: settings.logo_main
+  -%}
+  {%- if gate_logo -%}
+    {{ gate_logo | image_url: width: 600 | image_tag: class: 'logo-entrance', alt: shop.name }}
+  {%- else -%}
+    <img
+      src="{{ 'logo_finito.png' | asset_url }}"
+      alt="{{ shop.name | escape }}"
+      class="logo-entrance"
+      width="888"
+      height="281"
+    >
+  {%- endif -%}
+
+  <button type="button" class="entrance-scroll-indicator" data-gate-enter>
+    {{- section.settings.scroll_text | default: settings.enter_message -}}
+  </button>
+</daino-entrance-gate>
+
+{%- comment -%} Removed by the gate script once the visitor has entered. {%- endcomment -%}
+<div class="gate-scroll-spacer" data-gate-spacer aria-hidden="true"></div>

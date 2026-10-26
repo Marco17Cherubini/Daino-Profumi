@@ -1,0 +1,117 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <script>
+      document.documentElement.classList.replace('no-js', 'js');
+    </script>
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags -%}
+        {%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tagged' | t: tags: meta_tags -}}
+      {%- endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- comment -%} Pinyon Script is only used by homepage sections; Cormorant Garamond is the heading font everywhere. {%- endcomment -%}
+    {{
+      'CormorantGaramond-Regular.woff2'
+      | asset_url
+      | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous'
+    }}
+    {%- if template.name == 'index' -%}
+      {{
+        'PinyonScript-Regular.woff2'
+        | asset_url
+        | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous'
+      }}
+    {%- endif %}
+
+    {%- comment -%}
+      Critical CSS: theme colour settings (ADR-009) and the entrance gate, which must cover
+      the page before the stylesheets load. Without JavaScript the gate is never shown.
+    {%- endcomment -%}
+    <style>
+      :root {
+        --daino-color-black: {{ settings.daino_color_black | default: '#000000' }};
+        --daino-color-gold: {{ settings.daino_color_gold | default: '#d4af37' }};
+        --daino-color-gray-dark: {{ settings.daino_color_gray_dark | default: '#0a0a0a' }};
+        --daino-color-white: {{ settings.daino_color_white | default: '#ffffff' }};
+        --daino-color-gray-light: {{ settings.daino_color_gray_light | default: '#cccccc' }};
+      }
+      {%- if settings.font_size_scale and settings.font_size_scale != 100 %}
+        html {
+          font-size: {{ settings.font_size_scale }}%;
+        }
+      {%- endif %}
+      body {
+        margin: 0;
+        background: var(--daino-color-black);
+        color: var(--daino-color-white);
+      }
+      .hero-entrance-gate {
+        position: fixed;
+        inset: 0;
+        background: var(--daino-color-black);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .no-js .hero-entrance-gate,
+      .no-js .gate-scroll-spacer {
+        display: none;
+      }
+    </style>
+
+    {{ 'daino-base.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%} Global data for scripts (ADR-003). {%- endcomment -%}
+    <script type="application/json" id="DainoConfig">
+      {
+        "routes": {
+          "root": {{ routes.root_url | json }},
+          "cart": {{ routes.cart_url | json }},
+          "cartAdd": {{ routes.cart_add_url | json }},
+          "predictiveSearch": {{ routes.predictive_search_url | json }},
+          "search": {{ routes.search_url | json }},
+          "allProducts": {{ routes.all_products_collection_url | json }}
+        },
+        "moneyFormat": {{ shop.money_format | json }},
+        "strings": {
+          "wishlistAdd": {{ 'wishlist.add' | t | json }},
+          "wishlistRemove": {{ 'wishlist.remove' | t | json }}
+        }
+      }
+    </script>
+
+    {%- comment -%}
+      Scripts are deferred and execute in this order (ADR-001, ADR-007): vendor libraries,
+      then the shared core, then global components. Section scripts load after these.
+    {%- endcomment -%}
+    <script src="{{ 'vendor-gsap.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'vendor-scrolltrigger.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'vendor-lenis.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'daino-core.js' | asset_url }}" defer></script>
+    <script src="{{ 'daino-animations.js' | asset_url }}" defer></script>
+    <script src="{{ 'wishlist.js' | asset_url }}" defer></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    <a class="skip-link visually-hidden-focusable" href="#MainContent">
+      {{- 'general.accessibility.skip_to_content' | t -}}
+    </a>
+
+    <main id="MainContent" class="main-content-wrapper" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+  </body>
+</html>

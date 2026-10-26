@@ -1,0 +1,115 @@
+{
+  "sections": {
+    "entrance_gate": {
+      "type": "daino-entrance-gate",
+      "settings": {}
+    },
+    "hero_video": {
+      "type": "daino-hero-video",
+      "blocks": {
+        "brand_1": { "type": "brand", "settings": { "brand_name": "Spirit of Kings" } },
+        "brand_2": { "type": "brand", "settings": { "brand_name": "Spirit of Dubai" } },
+        "brand_3": { "type": "brand", "settings": { "brand_name": "Oman Luxury" } },
+        "brand_4": { "type": "brand", "settings": { "brand_name": "Marrakech Imperial" } },
+        "brand_5": { "type": "brand", "settings": { "brand_name": "Electimuss" } },
+        "brand_6": { "type": "brand", "settings": { "brand_name": "Kajal" } },
+        "brand_7": { "type": "brand", "settings": { "brand_name": "Bois 1920" } },
+        "brand_bottom_1": { "type": "brand_bottom", "settings": { "brand_name": "Ghawali" } },
+        "brand_bottom_2": { "type": "brand_bottom", "settings": { "brand_name": "Giardini di Toscana" } },
+        "brand_bottom_3": { "type": "brand_bottom", "settings": { "brand_name": "Orto Parisi" } },
+        "brand_bottom_4": { "type": "brand_bottom", "settings": { "brand_name": "Nasomatto" } },
+        "brand_bottom_5": { "type": "brand_bottom", "settings": { "brand_name": "Jeroboam" } },
+        "brand_bottom_6": { "type": "brand_bottom", "settings": { "brand_name": "Ojar" } },
+        "brand_bottom_7": { "type": "brand_bottom", "settings": { "brand_name": "New Notes" } }
+      },
+      "block_order": [
+        "brand_1",
+        "brand_2",
+        "brand_3",
+        "brand_4",
+        "brand_5",
+        "brand_6",
+        "brand_7",
+        "brand_bottom_1",
+        "brand_bottom_2",
+        "brand_bottom_3",
+        "brand_bottom_4",
+        "brand_bottom_5",
+        "brand_bottom_6",
+        "brand_bottom_7"
+      ],
+      "settings": {}
+    },
+    "collections": {
+      "type": "daino-collections",
+      "blocks": {
+        "item_1": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Catalogo"
+          }
+        },
+        "item_2": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Bestseller"
+          }
+        },
+        "item_3": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Fineserie"
+          }
+        }
+      },
+      "block_order": ["item_1", "item_2", "item_3"],
+      "settings": {}
+    },
+    "carousel_3d": {
+      "type": "daino-carousel-3d",
+      "settings": {
+        "products_to_show": 6
+      }
+    },
+    "consulenza": {
+      "type": "daino-consulenza",
+      "blocks": {
+        "staff_1": {
+          "type": "staff",
+          "settings": {
+            "name": "Davide",
+            "description": "Carattere deciso e carismatico. Amante delle note intense e avvolgenti, Davide seleziona fragranze che lasciano il segno.",
+            "brands": "Oman Luxury · Jeroboam · Orto Parisi"
+          }
+        },
+        "staff_2": {
+          "type": "staff",
+          "settings": {
+            "name": "Daniele",
+            "description": "Eleganza senza tempo. Daniele ricerca l'equilibrio perfetto tra tradizione e modernità in ogni essenza.",
+            "brands": "Spirit of Kings · Spirit of Dubai · Kajal"
+          }
+        },
+        "staff_3": {
+          "type": "staff",
+          "settings": {
+            "name": "Robert",
+            "description": "Spirito giovane e audace. Robert esplora le frontiere della profumeria contemporanea con creatività.",
+            "brands": "Nasomatto · Bois · New Notes"
+          }
+        }
+      },
+      "block_order": ["staff_1", "staff_2", "staff_3"],
+      "settings": {}
+    },
+    "narrative": {
+      "type": "daino-narrative",
+      "settings": {}
+    },
+    "footer_custom": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["entrance_gate", "hero_video", "collections", "carousel_3d", "consulenza", "narrative", "footer_custom"]
+}

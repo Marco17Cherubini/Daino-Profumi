@@ -1,0 +1,68 @@
+{% schema %}
+{
+  "name": "Narrative Quote",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "script_lines",
+      "label": "Script lines (gold, Pinyon Script)",
+      "info": "One line per row. Rows are grouped in paragraphs by empty rows.",
+      "default": "Personalità e profumo viaggiano di pari passo,\nquesto è il nostro segreto per la consulenza olfattiva...\n\nLe personalità di Davide, Daniele e Robert\nrispecchiano perfettamente i brand che preferiscono."
+    },
+    {
+      "type": "textarea",
+      "id": "serif_lines",
+      "label": "Serif lines",
+      "info": "One line per row.",
+      "default": "Volete qualcosa di estremamente personale\ne che possa davvero valorizzare ogni tratto della vostra persona?"
+    },
+    {
+      "type": "text",
+      "id": "closing_line",
+      "label": "Closing line (gold)",
+      "default": "Raggiungeteci nelle nostre sedi"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Narrative Quote"
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'section-narrative.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Copy used to be hard-coded; it is now editable. The defaults reproduce the previous
+  text exactly, so existing templates (which store no settings) render unchanged.
+{%- endcomment -%}
+<section class="consulenza-quote-section">
+  <div class="quote-container scroll-reveal">
+    {%- assign script_lines = section.settings.script_lines | newline_to_br | split: '<br />' -%}
+    {%- for line in script_lines -%}
+      {%- assign text = line | strip -%}
+      {%- if text == blank -%}
+        <br>
+      {%- else -%}
+        <p class="reveal-text gold-pynion">{{ text | escape }}</p>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if section.settings.serif_lines != blank -%}
+      <br>
+      {%- assign serif_lines = section.settings.serif_lines | newline_to_br | split: '<br />' -%}
+      {%- for line in serif_lines -%}
+        {%- assign text = line | strip -%}
+        {%- if text != blank -%}
+          <p class="reveal-text bodoni-sc">{{ text | escape }}</p>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if section.settings.closing_line != blank -%}
+      <br>
+      <p class="reveal-text bodoni-sc-gold">{{ section.settings.closing_line | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>

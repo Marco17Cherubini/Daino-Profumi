@@ -1,0 +1,349 @@
+{
+  "general": {
+    "password_page": {
+      "login_form_heading": "Entra nel negozio",
+      "login_password_button": "Entra con la password",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "La tua password",
+      "login_form_error": "Password errata",
+      "login_form_submit": "Entra",
+      "modal": "Modale",
+      "close": "Chiudi",
+      "admin_link_html": "Sei il proprietario del negozio? <a href=\"/admin\" class=\"text-link\">Accedi qui</a>"
+    },
+    "social": {
+      "alt_text": {
+        "share_on_facebook": "Condividi su Facebook",
+        "share_on_twitter": "Condividi su Twitter",
+        "share_on_pinterest": "Condividi su Pinterest"
+      },
+      "links": {
+        "twitter": "Twitter",
+        "facebook": "Facebook",
+        "pinterest": "Pinterest",
+        "instagram": "Instagram",
+        "tumblr": "Tumblr",
+        "snapchat": "Snapchat",
+        "youtube": "YouTube",
+        "vimeo": "Vimeo",
+        "tiktok": "TikTok"
+      }
+    },
+    "continue_shopping": "Continua lo shopping",
+    "pagination": {
+      "label": "Paginazione",
+      "page": "Pagina {{ number }}",
+      "next": "Prossima pagina",
+      "previous": "Pagina precedente"
+    },
+    "search": {
+      "title": "Risultati di ricerca",
+      "search": "Cerca",
+      "placeholder": "Cerca prodotti...",
+      "submit": "Cerca",
+      "no_results": "Nessun risultato trovato per \"{{ terms }}\"",
+      "error": "La ricerca non è disponibile in questo momento. Riprova o premi Invio per la ricerca completa.",
+      "view_all": "Vedi tutti i risultati per \"{{ terms }}\"",
+      "brand_action": "Vedi tutti i prodotti →",
+      "results_count": "{{ quantity }} suggerimenti disponibili",
+      "results_label": "Risultati ricerca",
+      "group_brands": "Brand",
+      "group_products": "Prodotti",
+      "group_collections": "Collezioni",
+      "group_pages": "Pagine",
+      "results_for": "{{ count }} risultati per \"{{ terms }}\"",
+      "type_page": "Pagina",
+      "type_article": "Articolo"
+    },
+    "404": {
+      "title": "Pagina non trovata",
+      "subtext": "La pagina che stai cercando non esiste.",
+      "link": "Torna alla home",
+      "button": "Torna alla home"
+    },
+    "accessibility": {
+      "close": "Chiudi",
+      "skip_to_content": "Vai al contenuto"
+    },
+    "meta": {
+      "tagged": "tag \"{{ tags }}\"",
+      "page": "Pagina {{ page }}"
+    },
+    "breadcrumb": {
+      "label": "Percorso di navigazione",
+      "home": "Home"
+    },
+    "header": {
+      "search": "Cerca prodotti",
+      "wishlist": "I tuoi preferiti",
+      "account": "Il mio account",
+      "cart": "Carrello",
+      "cart_count": "{{ count }} articoli",
+      "wishlist_count": "{{ count }} salvati",
+      "label": "Navigazione principale"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Account",
+      "details": "Dettagli account",
+      "view_addresses": "Visualizza indirizzi",
+      "return": "Torna all'Account",
+      "orders": "I tuoi ordini",
+      "addresses": "Indirizzi",
+      "logout": "Esci",
+      "welcome": "Benvenuto, {{ name }}"
+    },
+    "login": {
+      "title": "Accedi",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Password dimenticata?",
+      "create_account": "Crea un account",
+      "submit": "Accedi",
+      "subtitle": "Bentornato nel mondo dell'esclusività olfattiva.",
+      "email_placeholder": "nome@esempio.com",
+      "no_account": "Non hai ancora un account?"
+    },
+    "register": {
+      "title": "Crea account",
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Crea",
+      "subtitle": "Entra nel mondo dell'esclusività olfattiva.",
+      "phone_placeholder": "+39 123 456 7890",
+      "have_account": "Hai già un account?"
+    },
+    "orders": {
+      "title": "Cronologia ordini",
+      "order_number": "Ordine",
+      "date": "Data",
+      "payment_status": "Stato pagamento",
+      "fulfillment_status": "Stato spedizione",
+      "total": "Totale",
+      "none": "Non hai ancora effettuato ordini."
+    },
+    "addresses": {
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "company": "Azienda",
+      "address1": "Indirizzo",
+      "address2": "Appartamento, scala, interno",
+      "city": "Città",
+      "zip": "CAP",
+      "country": "Paese",
+      "province": "Provincia",
+      "phone": "Telefono",
+      "set_default": "Imposta come indirizzo predefinito",
+      "default": "Indirizzo predefinito",
+      "add": "Aggiungi nuovo indirizzo",
+      "new": "Nuovo indirizzo",
+      "save": "Salva",
+      "edit": "Modifica",
+      "update": "Aggiorna",
+      "delete": "Elimina",
+      "delete_confirm": "Vuoi davvero eliminare questo indirizzo?"
+    },
+    "order": {
+      "title": "Ordine {{ name }}",
+      "date": "Effettuato il {{ date }}",
+      "processing": "In elaborazione",
+      "shipping_address": "Indirizzo di spedizione",
+      "billing_address": "Indirizzo di fatturazione"
+    },
+    "activate": {
+      "title": "Attiva il tuo account",
+      "subtext": "Crea la tua password per attivare l'account.",
+      "password_confirm": "Conferma password",
+      "submit": "Attiva account"
+    },
+    "reset": {
+      "title": "Imposta una nuova password",
+      "subtext": "Scegli la nuova password per il tuo account.",
+      "submit": "Salva password"
+    },
+    "recover": {
+      "title": "Recupera password",
+      "subtext": "Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la password.",
+      "success": "Ti abbiamo inviato un'email con le istruzioni per reimpostare la password.",
+      "submit": "Invia",
+      "back": "Torna al login"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Aggiungi al carrello",
+      "sold_out": "Esaurito",
+      "unavailable": "Non disponibile",
+      "quantity": "Quantità",
+      "price": "Prezzo",
+      "vendor": "Venditore",
+      "buy_now": "Acquista ora",
+      "available": "Disponibile",
+      "story_label": "La Storia",
+      "story_title": "L'Essenza",
+      "related_title": "Potrebbe piacerti anche",
+      "discover": "Scopri",
+      "cart_error": "Non è stato possibile aggiungere il prodotto al carrello. Riprova.",
+      "zoom": "Apri l'immagine a piena risoluzione",
+      "show_image": "Visualizza immagine {{ number }}",
+      "description": "Descrizione",
+      "quantity_decrease": "Diminuisci quantità",
+      "quantity_increase": "Aumenta quantità",
+      "more_from_brand": "Altri prodotti {{ brand }}",
+      "discover_collection_html": "Scopri la<br>Collezione"
+    },
+    "details": {
+      "olfactory_family": "Famiglia Olfattiva:",
+      "concentration": "Concentrazione:",
+      "gender": "Genere:",
+      "format": "Formato:",
+      "gender_default": "Unisex"
+    },
+    "trust": {
+      "free_shipping": "Spedizione Gratuita",
+      "authenticity": "Autenticità Garantita",
+      "secure_payments": "Pagamenti Sicuri"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Carrello",
+      "empty": "Il tuo carrello è vuoto",
+      "continue_shopping": "Continua lo shopping",
+      "subtotal": "Subtotale",
+      "checkout": "Procedi al Checkout",
+      "remove": "Rimuovi",
+      "note": "Note ordine",
+      "taxes_and_shipping": "Tasse e spedizione calcolate al checkout",
+      "product": "Prodotto",
+      "total": "Totale",
+      "note_optional": "Note sull'ordine (Opzionale)",
+      "note_placeholder": "Istruzioni speciali per il tuo ordine...",
+      "update": "Aggiorna Carrello",
+      "summary": "Riepilogo Ordine",
+      "discount": "Sconto",
+      "shipping": "Spedizione",
+      "shipping_at_checkout": "Calcolata al checkout",
+      "taxes_included": "IVA inclusa",
+      "taxes_at_checkout": "Tasse calcolate al checkout",
+      "secure_payments": "Accettiamo pagamenti sicuri con"
+    },
+    "related": {
+      "title": "Potrebbe Piacerti Anche"
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Buono Regalo",
+      "subtext": "Ecco il tuo buono regalo!",
+      "gift_card_code": "Codice buono regalo",
+      "shop_link": "Inizia lo shopping",
+      "remaining_html": "Saldo rimanente: {{ balance }}",
+      "add_to_apple_wallet": "Aggiungi a Apple Wallet",
+      "qr_image_alt": "Codice QR",
+      "copy_code": "Copia codice",
+      "expired": "Scaduto",
+      "expires_on": "Valido fino al {{ expires_on }}",
+      "instructions": "Usa questo codice al checkout o mostra il QR code in negozio.",
+      "print": "Stampa"
+    }
+  },
+  "collections": {
+    "general": {
+      "all_products": "Tutti i prodotti",
+      "no_matches": "Nessun prodotto corrisponde alla tua ricerca"
+    },
+    "filters": {
+      "title": "Filtri",
+      "open_filters": "Filtri",
+      "close": "Chiudi",
+      "reset": "Azzera",
+      "apply": "Applica",
+      "filter_by": "Filtra per:",
+      "all_brands": "Tutti i Brand",
+      "showing_results": "Mostrando {{ from }}-{{ to }} di {{ total }} risultati",
+      "no_results": "Nessun prodotto trovato con i filtri selezionati.",
+      "active_filters": "Filtri attivi",
+      "clear_all": "Rimuovi tutti",
+      "remove": "Rimuovi filtro",
+      "price_min": "Prezzo minimo",
+      "price_max": "Prezzo massimo"
+    },
+    "product_card": {
+      "view": "Visualizza",
+      "new": "Nuovo",
+      "sold_out": "Esaurito"
+    },
+    "sorting": {
+      "title": "Ordina per",
+      "featured": "In evidenza",
+      "best_selling": "Più venduti",
+      "price_ascending": "Prezzo: dal più basso",
+      "price_descending": "Prezzo: dal più alto",
+      "title_ascending": "Nome: A-Z",
+      "title_descending": "Nome: Z-A",
+      "date_ascending": "Data: dal meno recente",
+      "date_descending": "Data: dal più recente"
+    }
+  },
+  "legal": {
+    "policies_heading": "Informative e condizioni"
+  },
+  "wishlist": {
+    "add": "Aggiungi ai preferiti",
+    "remove": "Rimuovi dai preferiti",
+    "title": "Preferiti",
+    "count": "{{ quantity }} prodotti salvati",
+    "empty": "Non hai ancora aggiunto prodotti ai preferiti",
+    "discover_catalog": "Scopri il Catalogo",
+    "loading": "Caricamento preferiti...",
+    "error": "Errore nel caricamento dei prodotti. Riprova più tardi.",
+    "removed_missing": "{{ quantity }} prodotti non sono più disponibili e sono stati rimossi dai preferiti.",
+    "requires_js": "Per vedere i preferiti è necessario JavaScript."
+  },
+  "home": {
+    "consulenza": {
+      "discover_selection": "Scopri la selezione"
+    }
+  },
+  "footer": {
+    "visit_us": "Vieni a trovarci",
+    "newsletter": {
+      "title": "Iscriviti alla nostra newsletter:",
+      "placeholder": "Inserisci la tua email",
+      "submit": "Conferma",
+      "success": "Grazie per esserti iscritto!",
+      "terms": "Inserendo la tua mail, accetti la nostra Informativa Clienti",
+      "terms_html": "Inserendo la tua mail, accetti la nostra <a class=\"newsletter-terms-link\" href=\"{{ url }}\">Informativa Clienti</a>"
+    },
+    "map_link": "Apri la mappa su Google Maps",
+    "contacts": "Contatti",
+    "legal_title": "Informativa clienti",
+    "privacy": "Informativa Sulla Privacy",
+    "terms": "Termini & Condizioni",
+    "shipping": "Informazioni Spedizioni",
+    "refunds": "Rimborsi & Resi"
+  },
+  "blogs": {
+    "general": {
+      "empty": "Nessun articolo pubblicato."
+    },
+    "article": {
+      "back": "Torna al blog"
+    }
+  },
+  "giftcard_form": {
+    "amount": "Importo",
+    "recipient_first_name": "Nome destinatario",
+    "recipient_last_name": "Cognome destinatario",
+    "recipient_email": "Email destinatario",
+    "sender": "Il tuo nome (mittente)",
+    "message": "Messaggio (opzionale)",
+    "message_hint": "Massimo 200 caratteri. Il messaggio sarà incluso nel buono regalo.",
+    "submit": "Aggiungi il buono al carrello",
+    "no_product": "Seleziona un prodotto buono regalo nelle impostazioni della sezione."
+  }
+}

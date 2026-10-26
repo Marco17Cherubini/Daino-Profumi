@@ -1,0 +1,101 @@
+{{ 'section-customer-login.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Customer login + password recovery.
+  The "forgot password" link points to /account/login#recover; CSS :target swaps the
+  login panel for the recovery panel (no JavaScript). The recovery form was missing
+  before, so the forgot-password flow could not be started.
+{% endcomment %}
+
+{% section 'header' %}
+
+<div class="login-section">
+  <div class="login-glow login-glow--top"></div>
+  <div class="login-glow login-glow--bottom"></div>
+
+  <div class="login-container">
+    {%- comment -%} Recovery panel: shown when the URL hash is #recover, or after a recovery submit (success or errors, via :has). {%- endcomment -%}
+    <div id="recover" class="login-recover" tabindex="-1">
+      <div class="login-header fade-in-up" style="animation-delay: 0.1s;">
+        <h1 class="login-title">{{ 'customer.recover.title' | t }}</h1>
+        <p class="login-subtitle">{{ 'customer.recover.subtext' | t }}</p>
+      </div>
+
+      {%- form 'recover_customer_password', class: 'login-form fade-in-up' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="login-success" role="status">{{ 'customer.recover.success' | t }}</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <div class="login-errors" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+
+        <div class="login-field">
+          <label for="RecoverEmail" class="login-label">{{ 'customer.login.email' | t }}</label>
+          <input type="email" id="RecoverEmail" name="email" autocomplete="email" required class="login-input">
+        </div>
+
+        <div class="login-submit">
+          <button type="submit" class="login-btn">{{ 'customer.recover.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+
+      <div class="login-register">
+        <a href="{{ routes.account_login_url }}" class="login-register-link">{{ 'customer.recover.back' | t }}</a>
+      </div>
+    </div>
+
+    <div class="login-main">
+      <div class="login-header fade-in-up" style="animation-delay: 0.1s;">
+        <h1 class="login-title">{{ 'customer.login.title' | t }}</h1>
+        <p class="login-subtitle">{{ 'customer.login.subtitle' | t }}</p>
+      </div>
+
+      {%- form 'customer_login', class: 'login-form fade-in-up', style: 'animation-delay: 0.2s;' -%}
+        {%- if form.errors -%}
+          <div class="login-errors" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+
+        <div class="login-field">
+          <label for="customer-email" class="login-label">{{ 'customer.login.email' | t }}</label>
+          <input
+            type="email"
+            id="customer-email"
+            name="customer[email]"
+            autocomplete="email"
+            required
+            class="login-input"
+            placeholder="{{ 'customer.login.email_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="login-field">
+          <div class="login-label-row">
+            <label for="customer-password" class="login-label">{{ 'customer.login.password' | t }}</label>
+            <a href="#recover" class="login-forgot">{{ 'customer.login.forgot_password' | t }}</a>
+          </div>
+          <input
+            type="password"
+            id="customer-password"
+            name="customer[password]"
+            autocomplete="current-password"
+            required
+            class="login-input"
+            placeholder="••••••••"
+          >
+        </div>
+
+        <div class="login-submit">
+          <button type="submit" class="login-btn">{{ 'customer.login.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+
+      <div class="login-register fade-in-up" style="animation-delay: 0.4s;">
+        <p class="login-register-text">{{ 'customer.login.no_account' | t }}</p>
+        <a href="{{ routes.account_register_url }}" class="login-register-link">
+          {{- 'customer.login.create_account' | t -}}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% section 'footer' %}

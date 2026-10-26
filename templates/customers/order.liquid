@@ -1,0 +1,94 @@
+{% comment %}
+  Customer order detail.
+{% endcomment %}
+
+{% section 'header' %}
+
+<div class="customer-section customer-section--wide">
+  <div class="fade-in-up">
+    <h1 class="customer-title">{{ 'customer.order.title' | t: name: order.name }}</h1>
+    {%- assign order_date = order.created_at | date: format: 'date' -%}
+    <p class="customer-subtitle">{{ 'customer.order.date' | t: date: order_date }}</p>
+
+    <p class="customer-order-status">
+      <span>{{ 'customer.orders.payment_status' | t }}: {{ order.financial_status_label }}</span>
+      <span>
+        {{- 'customer.orders.fulfillment_status' | t }}:
+        {% if order.fulfillment_status_label != blank -%}
+          {{ order.fulfillment_status_label }}
+        {%- else -%}
+          {{ 'customer.order.processing' | t }}
+        {%- endif -%}
+      </span>
+    </p>
+
+    <table class="customer-table">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'cart.general.product' | t }}</th>
+          <th scope="col">{{ 'products.product.quantity' | t }}</th>
+          <th scope="col">{{ 'customer.orders.total' | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for line_item in order.line_items -%}
+          <tr>
+            <td>
+              {{ line_item.title }}
+              {%- unless line_item.product.has_only_default_variant or line_item.variant.title == blank -%}
+                <br>
+                <small>{{ line_item.variant.title }}</small>
+              {%- endunless -%}
+            </td>
+            <td>{{ line_item.quantity }}</td>
+            <td>{{ line_item.final_line_price | money }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="2">{{ 'cart.general.subtotal' | t }}</th>
+          <td>{{ order.line_items_subtotal_price | money }}</td>
+        </tr>
+        {%- for discount in order.cart_level_discount_applications -%}
+          <tr>
+            <th scope="row" colspan="2">{{ 'cart.general.discount' | t }} ({{ discount.title }})</th>
+            <td>-{{ discount.total_allocated_amount | money }}</td>
+          </tr>
+        {%- endfor -%}
+        {%- for shipping_method in order.shipping_methods -%}
+          <tr>
+            <th scope="row" colspan="2">{{ 'cart.general.shipping' | t }} ({{ shipping_method.title }})</th>
+            <td>{{ shipping_method.price | money }}</td>
+          </tr>
+        {%- endfor -%}
+        <tr class="customer-table__total">
+          <th scope="row" colspan="2">{{ 'cart.general.total' | t }}</th>
+          <td>{{ order.total_price | money }}</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="customer-account-grid">
+      {%- if order.shipping_address -%}
+        <section class="customer-panel">
+          <h2 class="customer-panel__title">{{ 'customer.order.shipping_address' | t }}</h2>
+          <address class="customer-address">{{ order.shipping_address | format_address }}</address>
+        </section>
+      {%- endif -%}
+      {%- if order.billing_address -%}
+        <section class="customer-panel">
+          <h2 class="customer-panel__title">{{ 'customer.order.billing_address' | t }}</h2>
+          <address class="customer-address">{{ order.billing_address | format_address }}</address>
+        </section>
+      {%- endif -%}
+    </div>
+
+    <p class="customer-link">
+      <a href="{{ routes.account_url }}">← {{ 'customer.account.return' | t }}</a>
+    </p>
+  </div>
+</div>
+
+{% section 'footer' %}
+{% render 'customer-styles' %}

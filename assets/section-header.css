@@ -1,0 +1,99 @@
+/* ============================================
+   HEADER STYLES - Identico a hero-menu
+   ============================================ */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(60px, 12vw, 85px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background-color: var(--daino-color-black);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.header-inner {
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo - identico a hero-menu */
+.header-logo {
+  flex-shrink: 0;
+}
+
+.menu-logo {
+  height: clamp(40px, 8vw, 60px);
+  width: auto;
+}
+
+/* Icons - identico a hero-menu */
+.menu-icons {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.menu-icon {
+  width: clamp(18px, 4vw, 24px);
+  height: clamp(18px, 4vw, 24px);
+  color: var(--daino-color-white);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-icon:hover {
+  color: var(--daino-color-gold);
+}
+
+.menu-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Cart count badge */
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--daino-color-gold);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Wishlist count badge */
+.wishlist-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--daino-color-gold);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

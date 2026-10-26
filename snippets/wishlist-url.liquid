@@ -1,0 +1,18 @@
+{%- comment -%}
+  Outputs the URL of the wishlist page (no whitespace), honouring the shop locale.
+  The wishlist is the page chosen in Theme settings › Wishlist, rendered with the
+  `page.preferiti` template (?view=preferiti). Falls back to the historical
+  /pages/collezioni page when no page is selected.
+  Usage: <a href="{% render 'wishlist-url' %}">
+{%- endcomment -%}
+{%- liquid
+  assign wishlist_page = settings.wishlist_page
+  if wishlist_page == blank
+    assign wishlist_page = pages.collezioni
+  endif
+  if wishlist_page != blank
+    echo wishlist_page.url | append: '?view=preferiti'
+  else
+    echo routes.root_url | append: 'pages/collezioni?view=preferiti' | replace: '//', '/'
+  endif
+-%}

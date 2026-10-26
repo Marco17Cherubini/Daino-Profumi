@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Fixture: markup produced by sections/wishlist.liquid + snippets/header-icons.liquid (badge only). -->
+<html lang="it" class="js">
+  <head>
+    <meta charset="utf-8" />
+    <script type="application/json" id="DainoConfig">
+      {
+        "routes": { "root": "/it" },
+        "moneyFormat": "€{{amount_with_comma_separator}}",
+        "strings": { "wishlistAdd": "Aggiungi ai preferiti", "wishlistRemove": "Rimuovi dai preferiti" }
+      }
+    </script>
+    <script src="/assets/daino-core.js" defer></script>
+    <script src="/assets/wishlist.js" defer></script>
+    <script src="/assets/wishlist-page.js" defer></script>
+  </head>
+  <body>
+    <a href="#" data-wishlist-link><span class="wishlist-count" data-wishlist-count hidden>0</span></a>
+    <daino-wishlist-page>
+      <script type="application/json" data-wishlist-strings>
+        {
+          "count": "__QUANTITY__ prodotti salvati",
+          "removedMissing": "__QUANTITY__ prodotti non sono più disponibili e sono stati rimossi dai preferiti.",
+          "error": "Errore nel caricamento dei prodotti."
+        }
+      </script>
+      <p data-wishlist-count-text></p>
+      <p data-wishlist-notice role="status" hidden></p>
+      <div data-wishlist-empty hidden>
+        <p>Vuota</p>
+        <a href="/c">Catalogo</a>
+      </div>
+      <p data-wishlist-error role="alert" hidden></p>
+      <div data-wishlist-grid></div>
+      <div data-wishlist-loading hidden>Caricamento</div>
+      <template data-wishlist-card-template>
+        <article class="product-card product-card--wishlist" data-card>
+          <a href="#" class="product-card__link" data-card-link>
+            <div class="product-card__media">
+              <img class="product-card__image" src="" alt="" loading="lazy" data-card-image hidden />
+              <span class="product-card__badge product-card__badge--soldout" data-card-soldout hidden>Esaurito</span>
+            </div>
+            <div class="product-card__info">
+              <span class="product-card__vendor" data-card-vendor></span>
+              <h3 class="product-card__title" data-card-title></h3>
+              <span class="product-card__price" data-card-price></span>
+            </div>
+          </a>
+          <button type="button" class="product-card__remove" data-card-remove aria-label="Rimuovi">x</button>
+        </article>
+      </template>
+    </daino-wishlist-page>
+  </body>
+</html>

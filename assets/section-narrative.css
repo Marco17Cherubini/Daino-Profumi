@@ -1,0 +1,91 @@
+/* ============================================
+   [CSS: CONTENT SECTIONS]
+   ============================================ */
+
+/* NARRATIVE SECTION */
+.narrative-section {
+  padding: var(--space-3xl) var(--container-padding);
+  background-color: var(--daino-color-gray-dark);
+  min-height: clamp(300px, 50vh, 500px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.narrative-text {
+  max-width: min(900px, 90vw);
+}
+
+/* ✅ Narrative Section - Typography Fix */
+.reveal-text {
+  font-family: var(--font-heading);
+  /* Cormorant Garamond */
+  font-size: clamp(1rem, 3.5vw, 1.8rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.6;
+  margin: var(--space-sm) 0;
+  opacity: 0;
+  transform: translateY(30px);
+  /* ✅ FIX: Previeni overflow su mobile */
+  padding: 0 var(--space-md);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.reveal-text.highlight {
+  color: var(--daino-color-gold);
+}
+
+/* ✅ Mobile: font più piccolo, più padding */
+@media (max-width: 480px) {
+  .reveal-text {
+    font-size: clamp(0.95rem, 5vw, 1.3rem);
+    padding: 0 var(--space-sm);
+    line-height: 1.5;
+  }
+}
+
+/* CONSULENZA QUOTE SECTION */
+.consulenza-quote-section {
+  padding: var(--space-3xl) var(--container-padding-desktop);
+  background-color: #050507;
+  text-align: center;
+}
+
+.quote-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.quote-container .reveal-text {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.6;
+  margin: var(--space-sm) 0;
+  /* Impedisci spezzatura parole - vai a capo automaticamente */
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+/* Gold Pynion style */
+.quote-container .reveal-text.gold-pynion {
+  font-family: 'Pinyon Script', var(--font-script), cursive;
+  color: var(--daino-color-gold, #d4af37);
+}
+
+/* Bodoni Moda SC style - CAMBIATO IN CORMORANT GARAMOND */
+.quote-container .reveal-text.bodoni-sc {
+  font-family: 'Cormorant Garamond', var(--font-heading), serif;
+  color: var(--daino-color-white);
+}
+
+/* Bodoni Moda SC Gold style - CAMBIATO IN CORMORANT GARAMOND */
+.quote-container .reveal-text.bodoni-sc-gold {
+  font-family: 'Cormorant Garamond', var(--font-heading), serif;
+  color: var(--daino-color-gold, #d4af37);
+}

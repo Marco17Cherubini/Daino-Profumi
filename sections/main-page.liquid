@@ -1,0 +1,22 @@
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  MAIN PAGE - Pagine generiche
+{% endcomment %}
+
+<div class="page-section">
+  <div class="page-content-wrapper">
+    <h1 class="page-title">{{ page.title }}</h1>
+    {% if page.content != blank %}
+      <div class="page-content rte">
+        {{ page.content }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page Content",
+  "settings": []
+}
+{% endschema %}

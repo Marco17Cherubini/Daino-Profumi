@@ -1,0 +1,39 @@
+{{ 'section-main-article.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  MAIN ARTICLE — single blog article.
+{% endcomment %}
+
+<article class="article-section">
+  <header class="article-header">
+    <h1 class="article-title">{{ article.title }}</h1>
+    <p class="article-meta">
+      <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+        {{- article.published_at | date: format: 'date' -}}
+      </time>
+      {%- if article.author != blank -%}
+        <span> • {{ article.author }}</span>
+      {%- endif -%}
+    </p>
+  </header>
+
+  {%- if article.image -%}
+    <div class="article-featured-image">
+      {{ article.image | image_url: width: 1200 | image_tag: alt: article.title }}
+    </div>
+  {%- endif -%}
+
+  <div class="article-content rte">
+    {{ article.content }}
+  </div>
+
+  <footer class="article-footer">
+    <a href="{{ blog.url }}" class="action-btn">← {{ 'blogs.article.back' | t }}</a>
+  </footer>
+</article>
+
+{% schema %}
+{
+  "name": "Article Page",
+  "settings": []
+}
+{% endschema %}

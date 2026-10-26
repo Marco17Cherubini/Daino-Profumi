@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {}
+    },
+    "legal-hub": {
+      "type": "legal-hub",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["header", "legal-hub", "footer"]
+}

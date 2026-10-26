@@ -1,0 +1,93 @@
+<!doctype html>
+<!--
+  Fixture: homepage markup — critical CSS from layout/theme.liquid, the entrance gate
+  (sections/daino-entrance-gate.liquid), the hero elements it reveals
+  (sections/daino-hero-video.liquid) and the 3D carousel (sections/daino-carousel-3d.liquid).
+  ?design adds data-design-mode to the gate, as request.design_mode would.
+-->
+<html lang="it" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      document.documentElement.classList.replace('no-js', 'js');
+    </script>
+    <style>
+      .hero-entrance-gate {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .no-js .hero-entrance-gate,
+      .no-js .gate-scroll-spacer {
+        display: none;
+      }
+    </style>
+    <link rel="stylesheet" href="/assets/daino-base.css" />
+    <link rel="stylesheet" href="/assets/section-entrance-gate.css" />
+    <link rel="stylesheet" href="/assets/section-hero-video.css" />
+    <link rel="stylesheet" href="/assets/section-carousel-3d.css" />
+    <script type="application/json" id="DainoConfig">
+      { "routes": {}, "moneyFormat": "€{{amount}}", "strings": {} }
+    </script>
+    <script src="/assets/vendor-gsap.min.js" defer></script>
+    <script src="/assets/vendor-scrolltrigger.min.js" defer></script>
+    <script src="/assets/daino-core.js" defer></script>
+    <script src="/assets/daino-animations.js" defer></script>
+    <script src="/assets/entrance-gate.js" defer></script>
+    <script src="/assets/vendor-draggable.min.js" defer></script>
+    <script src="/assets/carousel-3d.js" defer></script>
+    <script>
+      if (location.search.includes('design')) {
+        document.addEventListener('readystatechange', () => {
+          const gate = document.querySelector('daino-entrance-gate');
+          if (gate && document.readyState === 'interactive') gate.setAttribute('data-design-mode', '');
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <main id="MainContent" tabindex="-1">
+      <daino-entrance-gate class="hero-entrance-gate">
+        <img src="/tests/dom/fixtures/img/a.png" alt="Daino" class="logo-entrance" width="888" height="281" />
+        <button type="button" class="entrance-scroll-indicator" data-gate-enter>Scorri per entrare</button>
+      </daino-entrance-gate>
+      <div class="gate-scroll-spacer" data-gate-spacer aria-hidden="true"></div>
+
+      <div class="hero-video-container" data-hero-container>
+        <video muted loop playsinline class="hero-video" data-hero-video></video>
+        <nav class="hero-menu" data-gate-reveal><a href="/" id="home-link">Daino</a></nav>
+        <div class="hero-content-banner" data-gate-reveal><h1 class="hero-title">Titolo</h1></div>
+        <div class="hero-brands-banner hero-brands-banner--top" data-gate-reveal data-brands-banner>
+          <div class="brands-track"><a class="brand-item" href="#">Kajal</a></div>
+        </div>
+      </div>
+
+      <daino-carousel class="carousel-view">
+        <div class="track" data-carousel-track>
+          <div class="card">
+            <div class="glow"></div>
+            <a href="/p/1" class="card-link"
+              ><img src="/tests/dom/fixtures/img/a.png" alt="Uno" width="432" height="578"
+            /></a>
+          </div>
+          <div class="card">
+            <div class="glow"></div>
+            <a href="/p/2" class="card-link"
+              ><img src="/tests/dom/fixtures/img/b.png" alt="Due" width="432" height="578"
+            /></a>
+          </div>
+          <div class="card">
+            <div class="glow"></div>
+            <a href="/p/3" class="card-link"
+              ><img src="/tests/dom/fixtures/img/c.png" alt="Tre" width="432" height="578"
+            /></a>
+          </div>
+        </div>
+      </daino-carousel>
+    </main>
+  </body>
+</html>

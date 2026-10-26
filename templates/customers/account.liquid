@@ -1,0 +1,63 @@
+{% comment %}
+  Customer account — orders and default address.
+{% endcomment %}
+
+{% section 'header' %}
+
+<div class="customer-section customer-section--wide">
+  <div class="fade-in-up">
+    <header class="customer-account-header">
+      <h1 class="customer-title">{{ 'customer.account.title' | t }}</h1>
+      <p class="customer-subtitle">{{ 'customer.account.welcome' | t: name: customer.first_name }}</p>
+      <a href="{{ routes.account_logout_url }}" class="customer-btn customer-btn--secondary customer-btn--inline">
+        {{- 'customer.account.logout' | t -}}
+      </a>
+    </header>
+
+    <div class="customer-account-grid">
+      <section class="customer-panel" aria-labelledby="AccountOrders">
+        <h2 class="customer-panel__title" id="AccountOrders">{{ 'customer.account.orders' | t }}</h2>
+        {%- if customer.orders.size > 0 -%}
+          <table class="customer-table">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'customer.orders.order_number' | t }}</th>
+                <th scope="col">{{ 'customer.orders.date' | t }}</th>
+                <th scope="col">{{ 'customer.orders.payment_status' | t }}</th>
+                <th scope="col">{{ 'customer.orders.total' | t }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr>
+                  <td>
+                    <a href="{{ order.customer_url }}">{{ order.name }}</a>
+                  </td>
+                  <td>{{ order.created_at | date: format: 'date' }}</td>
+                  <td>{{ order.financial_status_label }}</td>
+                  <td>{{ order.total_price | money }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        {%- else -%}
+          <p class="customer-muted">{{ 'customer.orders.none' | t }}</p>
+        {%- endif -%}
+      </section>
+
+      <section class="customer-panel" aria-labelledby="AccountAddresses">
+        <h2 class="customer-panel__title" id="AccountAddresses">{{ 'customer.account.addresses' | t }}</h2>
+        {%- if customer.default_address -%}
+          <p class="customer-muted">{{ 'customer.addresses.default' | t }}</p>
+          <address class="customer-address">{{ customer.default_address | format_address }}</address>
+        {%- endif -%}
+        <a href="{{ routes.account_addresses_url }}" class="customer-btn customer-btn--secondary customer-btn--inline">
+          {{- 'customer.account.view_addresses' | t -}}
+        </a>
+      </section>
+    </div>
+  </div>
+</div>
+
+{% section 'footer' %}
+{% render 'customer-styles' %}

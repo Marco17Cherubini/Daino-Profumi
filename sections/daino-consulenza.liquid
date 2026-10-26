@@ -1,0 +1,115 @@
+{% schema %}
+{
+  "name": "Consulenza Olfattiva",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "L'angolo della consulenza olfattiva"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "staff",
+      "name": "Staff Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "photo",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Nome"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "brands",
+          "label": "Favorite Brands"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "\"Discover the selection\" link",
+          "info": "Leave empty to keep the built-in brand selection for Davide, Daniele and Robert."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Consulenza Olfattiva"
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'section-consulenza.css' | asset_url | stylesheet_tag }}
+
+<section class="consulenza-section">
+  <h2 class="consulenza-title scroll-reveal">{{ section.settings.title }}</h2>
+
+  {%- liquid
+    assign catalog = collections.catalogo
+    if catalog != blank
+      assign catalog_url = catalog.url
+    else
+      assign catalog_url = routes.all_products_collection_url
+    endif
+  -%}
+
+  {% for block in section.blocks %}
+    {%- comment -%} Zig-zag: every second row is reversed. {%- endcomment -%}
+    <div class="staff-row {% cycle 'normal', 'reverse' %} scroll-reveal" {{ block.shopify_attributes }}>
+      <div class="staff-photo">
+        {%- if block.settings.photo -%}
+          {{ block.settings.photo | image_url: width: 600 | image_tag: alt: block.settings.name, loading: 'lazy' }}
+        {%- else -%}
+          {%- comment -%} Fallback photos shipped with the theme, matched by name. {%- endcomment -%}
+          {%- case block.settings.name -%}
+            {%- when 'Davide' -%}
+              <img src="{{ 'davide_bw.jpeg' | asset_url }}" alt="Davide" width="1279" height="1600" loading="lazy">
+            {%- when 'Daniele' -%}
+              <img src="{{ 'daniele_bw.jpeg' | asset_url }}" alt="Daniele" width="1280" height="1600" loading="lazy">
+            {%- when 'Robert' -%}
+              <img src="{{ 'robert.jpeg' | asset_url }}" alt="Robert" width="1179" height="1443" loading="lazy">
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endcase -%}
+        {%- endif -%}
+      </div>
+      <div class="staff-info">
+        <h3 class="staff-name">{{ block.settings.name }}</h3>
+        <p class="staff-description">{{ block.settings.description }}</p>
+        <p class="staff-fragrances">{{ block.settings.brands }}</p>
+
+        {%- liquid
+          if block.settings.link != blank
+            assign staff_url = block.settings.link
+          else
+            # Built-in selections (unchanged): brand filters on the catalogue collection.
+            case block.settings.name
+              when 'Davide'
+                assign staff_url = catalog_url | append: '?filter.p.m.custom.brand=Oman+Luxury&filter.p.m.custom.brand=Jeroboam&filter.p.m.custom.brand=Orto+Parisi'
+              when 'Daniele'
+                assign staff_url = catalog_url | append: '?filter.p.m.custom.brand=Spirit+of+Kings&filter.p.m.custom.brand=Spirit+of+Dubai&filter.p.m.custom.brand=Kajal'
+              when 'Robert'
+                assign staff_url = catalog_url | append: '?filter.p.m.custom.brand=Naso+Matto&filter.p.m.custom.brand=Bois+1920&filter.p.m.custom.brand=New+Notes'
+              else
+                assign staff_url = catalog_url
+            endcase
+          endif
+        -%}
+        <a href="{{ staff_url }}" class="staff-btn">{{ 'home.consulenza.discover_selection' | t }}</a>
+      </div>
+    </div>
+  {% endfor %}
+</section>

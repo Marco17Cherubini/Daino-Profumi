@@ -1,0 +1,14 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "daino_color_black": "#000000",
+      "daino_color_gold": "#d4af37",
+      "daino_color_gray_dark": "#0a0a0a",
+      "daino_color_white": "#ffffff",
+      "daino_color_gray_light": "#cccccc",
+      "font_size_scale": 100,
+      "enter_message": "Scorri per entrare"
+    }
+  }
+}

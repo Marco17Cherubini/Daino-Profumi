@@ -1,0 +1,203 @@
+/* ============================================
+   GIFT CARD DESIGN SYSTEM - FORM
+   ============================================ */
+.giftcard-section {
+  padding: 4rem 1.5rem 6rem;
+  display: flex;
+  justify-content: center;
+  background: #050507;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+.giftcard-wrapper {
+  perspective: 1200px;
+  max-width: 960px;
+  width: 100%;
+}
+
+.giftcard-plaque {
+  background: radial-gradient(circle at top, #181824, #040408);
+  border: 1px solid rgba(212, 175, 55, 0.7);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  border-radius: 22px;
+  padding: 2.6rem 2.4rem;
+  color: #f7f5f0;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg) translateZ(0);
+  transition:
+    transform 0.25s ease-out,
+    box-shadow 0.25s ease-out;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.giftcard-plaque::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+}
+
+.giftcard-plaque-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.giftcard-header {
+  margin-bottom: 1.75rem;
+  text-align: left;
+}
+
+.giftcard-title {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: 1.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+  color: #f7f5f0;
+}
+
+.giftcard-subtitle {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    sans-serif;
+  font-size: 0.98rem;
+  color: rgba(247, 245, 240, 0.8);
+  margin: 0;
+}
+
+/* Form */
+.giftcard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.giftcard-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.giftcard-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.giftcard-field label {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(247, 245, 240, 0.8);
+}
+
+.giftcard-field input,
+.giftcard-field select,
+.giftcard-field textarea {
+  background: rgba(5, 5, 10, 0.9);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f7f5f0;
+  font-size: 0.9rem;
+  padding: 0.7rem 1rem;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.giftcard-field textarea {
+  border-radius: 16px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.giftcard-field input:focus,
+.giftcard-field select:focus,
+.giftcard-field textarea:focus {
+  border-color: rgba(212, 175, 55, 0.9);
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
+  background: rgba(8, 8, 14, 1);
+}
+
+.giftcard-hint {
+  font-size: 0.75rem;
+  color: rgba(247, 245, 240, 0.6);
+}
+
+/* Actions */
+.giftcard-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.giftcard-button {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.9rem 1.6rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, #d4af37, #f6e27a);
+  color: #1b1408;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    filter 0.15s ease-out;
+}
+
+.giftcard-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+  filter: brightness(1.05);
+}
+
+.giftcard-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+.giftcard-status {
+  font-size: 0.8rem;
+  min-height: 1.2em;
+  color: rgba(247, 245, 240, 0.8);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .giftcard-section {
+    padding: 3.5rem 1.25rem 4.5rem;
+  }
+
+  .giftcard-plaque {
+    padding: 1.9rem 1.5rem;
+  }
+
+  .giftcard-title {
+    font-size: 1.4rem;
+  }
+
+  .giftcard-row {
+    flex-direction: column;
+  }
+}

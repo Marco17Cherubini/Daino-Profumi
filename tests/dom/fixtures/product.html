@@ -1,0 +1,123 @@
+<!doctype html>
+<!--
+  Fixture: markup produced by sections/main-product.liquid for a product with two
+  options (Formato × Concentrazione) and three variants, the second sold out.
+  The initial variant is resolved by Liquid; here variant 1 is pre-selected unless the
+  test loads ?variant=2 (see product.spec.js).
+-->
+<html lang="it" class="js">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/assets/daino-base.css" />
+    <script type="application/json" id="DainoConfig">
+      {
+        "routes": { "root": "/it/", "cart": "/it/cart", "cartAdd": "/it/cart/add" },
+        "moneyFormat": "€{{amount_with_comma_separator}}",
+        "strings": {}
+      }
+    </script>
+    <script src="/assets/daino-core.js" defer></script>
+    <script src="/assets/product-form.js" defer></script>
+  </head>
+  <body>
+    <daino-product class="product-main" data-section-id="main">
+      <script type="application/json" data-product-variants>
+        [
+          {
+            "id": 1,
+            "options": ["50 ml", "Eau de Parfum"],
+            "available": true,
+            "price": 9900,
+            "compare_at_price": null,
+            "featured_image": null
+          },
+          {
+            "id": 2,
+            "options": ["100 ml", "Eau de Parfum"],
+            "available": false,
+            "price": 14900,
+            "compare_at_price": 16900,
+            "featured_image": { "src": "/tests/dom/fixtures/img/b.png", "alt": "100 ml" }
+          },
+          {
+            "id": 3,
+            "options": ["50 ml", "Extrait"],
+            "available": true,
+            "price": 12900,
+            "compare_at_price": null,
+            "featured_image": null
+          }
+        ]
+      </script>
+      <script type="application/json" data-product-strings>
+        {
+          "available": "Disponibile",
+          "soldOut": "Esaurito",
+          "unavailable": "Non disponibile",
+          "cartError": "Errore carrello"
+        }
+      </script>
+
+      <div class="product-gallery">
+        <img src="/tests/dom/fixtures/img/a.png" alt="Oud" data-gallery-main />
+        <a href="/tests/dom/fixtures/img/a.png" data-gallery-zoom>zoom</a>
+        <button
+          type="button"
+          data-gallery-thumb
+          data-image-url="/tests/dom/fixtures/img/a.png"
+          data-zoom-url="/a-big.png"
+          data-image-alt="A"
+          aria-pressed="true"
+        >
+          1
+        </button>
+        <button
+          type="button"
+          data-gallery-thumb
+          data-image-url="/tests/dom/fixtures/img/c.png"
+          data-zoom-url="/c-big.png"
+          data-image-alt="C"
+          aria-pressed="false"
+        >
+          2
+        </button>
+      </div>
+
+      <span data-product-price><span data-product-amount>€99,00</span></span>
+      <span class="product-badge product-badge--available" data-product-badge>Disponibile</span>
+
+      <form method="post" action="/it/cart/add" data-product-form>
+        <input type="hidden" name="id" value="1" data-variant-id />
+        <fieldset data-option-group>
+          <legend>Formato</legend>
+          <input type="radio" id="o00" name="option-0" value="50 ml" class="visually-hidden" checked /><label for="o00"
+            >50 ml</label
+          >
+          <input type="radio" id="o01" name="option-0" value="100 ml" class="visually-hidden" /><label for="o01"
+            >100 ml</label
+          >
+        </fieldset>
+        <fieldset data-option-group>
+          <legend>Concentrazione</legend>
+          <input type="radio" id="o10" name="option-1" value="Eau de Parfum" class="visually-hidden" checked /><label
+            for="o10"
+            >Eau de Parfum</label
+          >
+          <input type="radio" id="o11" name="option-1" value="Extrait" class="visually-hidden" /><label for="o11"
+            >Extrait</label
+          >
+        </fieldset>
+        <button type="button" data-quantity-step="-1">−</button>
+        <input type="number" name="quantity" value="1" min="1" data-quantity-input />
+        <button type="button" data-quantity-step="1">+</button>
+        <button type="submit" name="add" data-add-to-cart>Aggiungi al carrello</button>
+        <button type="button" data-buy-now hidden>Acquista ora</button>
+        <p role="alert" data-form-error hidden></p>
+        <p class="visually-hidden" aria-live="polite" data-variant-status></p>
+      </form>
+      <form action="/it/cart" method="post" data-checkout-form hidden>
+        <input type="hidden" name="checkout" value="" />
+      </form>
+    </daino-product>
+  </body>
+</html>

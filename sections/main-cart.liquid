@@ -1,0 +1,260 @@
+{{ 'section-main-cart.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cart.js' | asset_url }}" defer></script>
+
+{% comment %}
+  MAIN CART — native cart form: quantities, removal (item.url_to_remove), order note
+  and checkout all post to /cart, so every path works without JavaScript.
+  assets/cart.js only adds the +/− quantity buttons.
+{% endcomment %}
+
+<div class="cart-section">
+  <nav class="cart-breadcrumb" aria-label="{{ 'general.breadcrumb.label' | t }}">
+    <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+    <span class="cart-breadcrumb__separator" aria-hidden="true">/</span>
+    <span class="cart-breadcrumb__current" aria-current="page">{{ 'cart.general.title' | t }}</span>
+  </nav>
+
+  <h1 class="cart-title fade-in-up">{{ 'cart.general.title' | t }}</h1>
+
+  {% if cart.item_count > 0 %}
+    <daino-cart class="cart-layout">
+      <div class="cart-items-column fade-in-up" style="animation-delay: 0.1s;">
+        <div class="cart-header" aria-hidden="true">
+          <div class="cart-header__product">{{ 'cart.general.product' | t }}</div>
+          <div class="cart-header__price">{{ 'products.product.price' | t }}</div>
+          <div class="cart-header__quantity">{{ 'products.product.quantity' | t }}</div>
+          <div class="cart-header__total">{{ 'cart.general.total' | t }}</div>
+        </div>
+
+        <form action="{{ routes.cart_url }}" method="post" id="cart-form" novalidate>
+          {% for item in cart.items %}
+            <div class="cart-item">
+              <div class="cart-item__product">
+                <div class="cart-item__image">
+                  {% if item.image %}
+                    {{ item.image | image_url: width: 200 | image_tag: alt: item.title, loading: 'lazy' }}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'cart-item__placeholder' }}
+                  {% endif %}
+                </div>
+                <div class="cart-item__info">
+                  <span class="cart-item__vendor">{{ item.vendor }}</span>
+                  <a href="{{ item.url }}" class="cart-item__title">{{ item.product.title }}</a>
+                  {% unless item.product.has_only_default_variant %}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {% endunless %}
+                  {%- comment -%} Line item properties, e.g. gift card recipient details (keys starting with "_" are private). {%- endcomment -%}
+                  {%- for property in item.properties -%}
+                    {%- assign property_first_char = property.first | slice: 0 -%}
+                    {%- if property.last != blank and property_first_char != '_' -%}
+                      <p class="cart-item__variant">{{ property.first }}: {{ property.last }}</p>
+                    {%- endif -%}
+                  {%- endfor -%}
+                  <a href="{{ item.url_to_remove }}" class="cart-item__remove-mobile">
+                    {{- 'cart.general.remove' | t -}}
+                    <span class="visually-hidden">{{ item.product.title }}</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="cart-item__price">
+                <span class="cart-item__label" aria-hidden="true">{{ 'products.product.price' | t }}:</span>
+                <span class="cart-item__value">
+                  {%- if item.original_price > item.final_price -%}
+                    <s class="cart-item__value--compare">{{ item.original_price | money }}</s>
+                  {%- endif -%}
+                  {{ item.final_price | money }}
+                </span>
+              </div>
+
+              <div class="cart-item__quantity">
+                <label class="cart-item__label" for="CartQuantity-{{ forloop.index }}">
+                  {{- 'products.product.quantity' | t }}:</label
+                >
+                <div class="cart-quantity">
+                  <button
+                    type="button"
+                    class="cart-quantity__btn"
+                    data-quantity-step="-1"
+                    aria-label="{{ 'products.product.quantity_decrease' | t }}: {{ item.product.title | escape }}"
+                    hidden
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    name="updates[]"
+                    id="CartQuantity-{{ forloop.index }}"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    step="1"
+                    inputmode="numeric"
+                    class="cart-quantity__input"
+                    data-quantity-input
+                  >
+                  <button
+                    type="button"
+                    class="cart-quantity__btn"
+                    data-quantity-step="1"
+                    aria-label="{{ 'products.product.quantity_increase' | t }}: {{ item.product.title | escape }}"
+                    hidden
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div class="cart-item__total">
+                <span class="cart-item__label" aria-hidden="true">{{ 'cart.general.total' | t }}:</span>
+                <span class="cart-item__value cart-item__value--total">{{ item.final_line_price | money }}</span>
+                <a href="{{ item.url_to_remove }}" class="cart-item__remove-desktop">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                  <span class="visually-hidden">{{ 'cart.general.remove' | t }}: {{ item.product.title }}</span>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+
+          <div class="cart-notes">
+            <label for="cart-note" class="cart-notes__label">{{ 'cart.general.note_optional' | t }}</label>
+            <textarea
+              id="cart-note"
+              name="note"
+              class="cart-notes__input"
+              rows="3"
+              placeholder="{{ 'cart.general.note_placeholder' | t }}"
+            >{{ cart.note }}</textarea>
+          </div>
+
+          <button type="submit" name="update" class="cart-update-btn">
+            {{- 'cart.general.update' | t -}}
+          </button>
+        </form>
+      </div>
+
+      <div class="cart-summary-column fade-in-up" style="animation-delay: 0.2s;">
+        <div class="cart-summary">
+          <h2 class="cart-summary__title">{{ 'cart.general.summary' | t }}</h2>
+
+          <div class="cart-summary__rows">
+            <div class="cart-summary__row">
+              <span>{{ 'cart.general.subtotal' | t }}</span>
+              <span>{{ cart.items_subtotal_price | money }}</span>
+            </div>
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <div class="cart-summary__row cart-summary__row--discount">
+                <span>{{ 'cart.general.discount' | t }} ({{ discount.title }})</span>
+                <span>-{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {%- endfor -%}
+            <div class="cart-summary__row">
+              <span>{{ 'cart.general.shipping' | t }}</span>
+              <span class="cart-summary__shipping">{{ 'cart.general.shipping_at_checkout' | t }}</span>
+            </div>
+          </div>
+
+          <div class="cart-summary__total">
+            <span>{{ 'cart.general.total' | t }}</span>
+            <span class="cart-summary__total-value">{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-summary__tax-note">
+            {%- if cart.taxes_included -%}
+              {{ 'cart.general.taxes_included' | t }}
+            {%- else -%}
+              {{ 'cart.general.taxes_at_checkout' | t }}
+            {%- endif -%}
+          </p>
+
+          {%- comment -%}
+            Part of #cart-form, so the order note and edited quantities are submitted
+            together with the checkout request (they were lost before).
+          {%- endcomment -%}
+          <button type="submit" name="checkout" form="cart-form" class="btn btn--primary cart-checkout-btn">
+            {{- 'cart.general.checkout' | t -}}
+          </button>
+
+          <div class="cart-summary__payment">
+            <p>{{ 'cart.general.secure_payments' | t }}</p>
+            <div class="cart-summary__payment-icons">
+              {{ 'visa' | payment_type_svg_tag }}
+              {{ 'mastercard' | payment_type_svg_tag }}
+              {{ 'american_express' | payment_type_svg_tag }}
+              {{ 'paypal' | payment_type_svg_tag }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </daino-cart>
+
+    <div class="cart-continue">
+      <a href="{{ routes.all_products_collection_url }}" class="cart-continue__link">
+        ← {{ 'cart.general.continue_shopping' | t }}
+      </a>
+    </div>
+  {% else %}
+    <div class="cart-empty">
+      <div class="cart-empty__icon">
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 0 1-8 0" />
+        </svg>
+      </div>
+      <p class="cart-empty__text">{{ 'cart.general.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="cart-empty__btn cart-empty__btn--gold">
+        {{ 'cart.general.continue_shopping' | t }}
+      </a>
+    </div>
+  {% endif %}
+
+  {%- comment -%} Recommendations: up to 4 products of the first item's collection that are not in the cart. {%- endcomment -%}
+  {%- if cart.item_count > 0 -%}
+    {%- assign related_collection = cart.items.first.product.collections.first -%}
+    {%- if related_collection -%}
+      {%- assign cart_product_ids = cart.items | map: 'product_id' -%}
+      {%- capture related_cards -%}
+        {%- assign shown = 0 -%}
+        {%- for product in related_collection.products limit: 12 -%}
+          {%- unless cart_product_ids contains product.id or shown >= 4 -%}
+            {%- assign shown = shown | plus: 1 -%}
+            {% render 'product-card', product: product, layout: 'cart' %}
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+      {%- if related_cards != blank -%}
+        <section class="cart-related fade-in-up">
+          <h2 class="cart-related__title">{{ 'cart.related.title' | t }}</h2>
+          <div class="cart-related__grid">{{ related_cards }}</div>
+        </section>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart Page",
+  "settings": []
+}
+{% endschema %}

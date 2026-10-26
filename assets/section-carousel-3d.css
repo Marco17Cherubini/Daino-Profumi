@@ -1,0 +1,89 @@
+/* ============================================
+   DARK LUXURY CAROUSEL
+   ============================================ */
+.carousel-view {
+  width: 100%;
+  height: clamp(350px, 60vh, 600px);
+  position: relative;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000 70%);
+  overflow: hidden;
+}
+
+.track {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  cursor: grab;
+}
+
+.track:active {
+  cursor: grabbing;
+}
+
+.card {
+  width: clamp(140px, 28vw, 400px);
+  height: 80%;
+  top: 10%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  will-change: transform, opacity, filter;
+}
+
+.card img,
+.card svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.9));
+  padding: clamp(5px, 1vw, 10px);
+  box-sizing: border-box;
+}
+
+.glow {
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  /* ✅ FIX MOBILE: Blur per sfumare il bordo del glow */
+  filter: blur(20px);
+  will-change: opacity, filter;
+}
+
+/* ✅ FIX MOBILE: Glow più sfumato su schermi piccoli */
+@media (max-width: 768px) {
+  .glow {
+    filter: blur(30px);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 75%);
+  }
+}
+
+.instruction {
+  position: absolute;
+  bottom: clamp(15px, 4vw, 30px);
+  width: 100%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+  letter-spacing: clamp(1px, 0.3vw, 2px);
+  pointer-events: none;
+}
+
+.card-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

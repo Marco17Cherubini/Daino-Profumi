@@ -1,0 +1,93 @@
+{{ 'section-main-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-search.css' | asset_url | stylesheet_tag }}
+
+{% comment %}
+  SEARCH RESULTS — full results page (/search?q=…), reached from the predictive
+  search with Enter or "View all results". Reuses the collection grid styles and the
+  shared product card.
+{% endcomment %}
+
+<div class="collection-section search-section">
+  <div class="collection-header">
+    <h1 class="collection-title">{{ 'general.search.title' | t }}</h1>
+    <div class="collection-title-bar"></div>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-page-form">
+      <label class="visually-hidden" for="SearchPageInput-{{ section.id }}">
+        {{- 'general.search.placeholder' | t -}}
+      </label>
+      <input
+        type="search"
+        id="SearchPageInput-{{ section.id }}"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        class="search-page-form__input"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="btn-gold search-page-form__submit">{{ 'general.search.submit' | t }}</button>
+    </form>
+  </div>
+
+  {%- if search.performed -%}
+    {% paginate search.results by section.settings.results_per_page %}
+      <p class="collection-count search-count" role="status">
+        {{ 'general.search.results_for' | t: count: search.results_count, terms: search.terms }}
+      </p>
+
+      {%- if search.results_count > 0 -%}
+        <div class="collection-grid">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'product-card', product: item, eager: forloop.first %}
+            {%- else -%}
+              <article class="search-result-card">
+                <a href="{{ item.url }}" class="search-result-card__link">
+                  <span class="search-result-card__type">
+                    {%- if item.object_type == 'article' -%}
+                      {{ 'general.search.type_article' | t }}
+                    {%- else -%}
+                      {{ 'general.search.type_page' | t }}
+                    {%- endif -%}
+                  </span>
+                  <h2 class="search-result-card__title">{{ item.title }}</h2>
+                  {%- assign excerpt = item.content | strip_html | truncatewords: 24 -%}
+                  {%- if excerpt != blank -%}
+                    <p class="search-result-card__excerpt">{{ excerpt }}</p>
+                  {%- endif -%}
+                </a>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="collection-empty">
+          <p>{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn-gold">{{ 'general.continue_shopping' | t }}</a>
+        </div>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endif -%}
+    {% endpaginate %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Search results",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "label": "Results per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

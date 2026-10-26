@@ -1,2 +1,13 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Normalise text files to LF in the repository
+* text=auto eol=lf
+
+# Binary theme assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.mp4 binary
+*.ttf binary
+*.woff binary
+*.woff2 binary

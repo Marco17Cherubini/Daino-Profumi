@@ -1,0 +1,207 @@
+<!doctype html>
+<!--
+  Fixture: markup produced by snippets/header-icons.liquid (trigger) and
+  snippets/predictive-search.liquid, with translations filled in.
+  API responses are mocked in predictive-search.spec.js.
+-->
+<html lang="it" class="js">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/assets/daino-base.css" />
+    <link rel="stylesheet" href="/assets/component-predictive-search.css" />
+    <script type="application/json" id="DainoConfig">
+      {
+        "routes": {
+          "root": "/it/",
+          "predictiveSearch": "/it/search/suggest",
+          "search": "/it/search",
+          "allProducts": "/it/collections/all"
+        },
+        "moneyFormat": "€{{amount_with_comma_separator}}",
+        "strings": {}
+      }
+    </script>
+    <script src="/assets/daino-core.js" defer></script>
+    <script src="/assets/predictive-search.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <button
+        type="button"
+        id="trigger"
+        aria-label="Cerca prodotti"
+        aria-haspopup="dialog"
+        data-predictive-search-trigger
+      >
+        Cerca
+      </button>
+      <a href="/" id="outside-link">Home</a>
+    </header>
+    <main id="MainContent"><p>Contenuto</p></main>
+    <daino-predictive-search
+      class="predictive-search-overlay"
+      data-brands-url="/it/collections/all?view=brands"
+      aria-hidden="true"
+    >
+      <script type="application/json" data-search-strings>
+        {
+          "noResults": "Nessun risultato trovato per \"__TERMS__\"",
+          "error": "La ricerca non è disponibile in questo momento.",
+          "viewAll": "Vedi tutti i risultati per \"__TERMS__\"",
+          "brandAction": "Vedi tutti i prodotti →",
+          "resultsCount": "__QUANTITY__ suggerimenti disponibili"
+        }
+      </script>
+
+      <div
+        class="predictive-search-container"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Risultati di ricerca"
+        data-search-panel
+        data-lenis-prevent
+      >
+        <form action="/it/search" method="get" role="search" class="predictive-search-form" data-search-form>
+          <div class="predictive-search-input-wrapper">
+            <svg
+              class="predictive-search-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+
+            <input
+              type="search"
+              name="q"
+              class="predictive-search-input"
+              placeholder="Cerca prodotti..."
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-label="Cerca prodotti..."
+              aria-controls="PredictiveSearchResults"
+              aria-expanded="false"
+              data-search-input
+            />
+            <input type="hidden" name="options[prefix]" value="last" />
+
+            <div class="predictive-search-spinner" aria-hidden="true" data-search-spinner>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                focusable="false"
+              >
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round" />
+              </svg>
+            </div>
+
+            <button type="button" class="predictive-search-close" aria-label="Chiudi" data-search-close>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <p class="visually-hidden" role="status" aria-live="polite" data-search-status></p>
+
+        <div
+          class="predictive-search-results"
+          id="PredictiveSearchResults"
+          role="listbox"
+          aria-label="Risultati ricerca"
+          data-search-results
+          data-lenis-prevent
+        >
+          <div class="predictive-search-empty" data-search-empty hidden>
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+              <path d="M8 11h6" />
+            </svg>
+            <p class="predictive-search-empty__text" data-search-empty-text></p>
+          </div>
+
+          <p class="predictive-search-error" data-search-error hidden></p>
+
+          <div
+            class="predictive-search-section"
+            role="group"
+            aria-labelledby="PredictiveSearchHeading-brands"
+            data-search-group="brands"
+            hidden
+          >
+            <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-brands">Brand</h3>
+            <ul class="predictive-search-section__list" role="presentation"></ul>
+          </div>
+          <div
+            class="predictive-search-section"
+            role="group"
+            aria-labelledby="PredictiveSearchHeading-products"
+            data-search-group="products"
+            hidden
+          >
+            <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-products">Prodotti</h3>
+            <ul class="predictive-search-section__list" role="presentation"></ul>
+          </div>
+          <div
+            class="predictive-search-section"
+            role="group"
+            aria-labelledby="PredictiveSearchHeading-collections"
+            data-search-group="collections"
+            hidden
+          >
+            <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-collections">Collezioni</h3>
+            <ul class="predictive-search-section__list" role="presentation"></ul>
+          </div>
+          <div
+            class="predictive-search-section"
+            role="group"
+            aria-labelledby="PredictiveSearchHeading-pages"
+            data-search-group="pages"
+            hidden
+          >
+            <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-pages">Pagine</h3>
+            <ul class="predictive-search-section__list" role="presentation"></ul>
+          </div>
+
+          <a class="predictive-search-view-all" href="/it/search" data-search-view-all hidden></a>
+        </div>
+      </div>
+    </daino-predictive-search>
+  </body>
+</html>

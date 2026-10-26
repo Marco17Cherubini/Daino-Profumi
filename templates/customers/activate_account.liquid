@@ -1,0 +1,49 @@
+{% comment %}
+  Activate account — choose a password.
+{% endcomment %}
+
+{% section 'header' %}
+
+<div class="customer-section">
+  <div class="fade-in-up">
+    <h1 class="customer-title">{{ 'customer.activate.title' | t }}</h1>
+    <p class="customer-subtitle">{{ 'customer.activate.subtext' | t }}</p>
+
+    {%- form 'activate_customer_password', class: 'customer-form' -%}
+      {%- if form.errors -%}
+        <div class="customer-errors" role="alert">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+
+      <div class="customer-field">
+        <label class="customer-label" for="ActivatePassword">{{ 'customer.login.password' | t }}</label>
+        <input
+          class="customer-input"
+          type="password"
+          id="ActivatePassword"
+          name="customer[password]"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <div class="customer-field">
+        <label class="customer-label" for="ActivatePasswordConfirm">
+          {{- 'customer.activate.password_confirm' | t -}}
+        </label>
+        <input
+          class="customer-input"
+          type="password"
+          id="ActivatePasswordConfirm"
+          name="customer[password_confirmation]"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="customer-btn">{{ 'customer.activate.submit' | t }}</button>
+    {%- endform -%}
+  </div>
+</div>
+
+{% section 'footer' %}
+{% render 'customer-styles' %}

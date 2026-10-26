@@ -1,0 +1,80 @@
+{% schema %}
+{
+  "name": "Dark Luxury Carousel",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dark Luxury Carousel"
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'section-carousel-3d.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'vendor-draggable.min.js' | asset_url }}" defer></script>
+<script src="{{ 'carousel-3d.js' | asset_url }}" defer></script>
+
+{%- comment -%}
+  The first three images load eagerly: the carousel sits above the fold on most screens.
+{%- endcomment -%}
+<daino-carousel class="carousel-view scroll-reveal">
+  <div class="track" data-carousel-track>
+    {%- assign collection = section.settings.collection -%}
+    {%- if collection != blank and collection.products_count > 0 -%}
+      {%- for product in collection.products limit: section.settings.products_to_show -%}
+        <div class="card">
+          <div class="glow"></div>
+          <a href="{{ product.url }}" class="card-link">
+            {%- if product.featured_image -%}
+              {%- if forloop.index <= 3 -%}
+                {{
+                  product.featured_image
+                  | image_url: width: 600
+                  | image_tag: alt: product.title, loading: 'eager', fetchpriority: 'high'
+                }}
+              {%- else -%}
+                {{ product.featured_image | image_url: width: 600 | image_tag: alt: product.title, loading: 'lazy' }}
+              {%- endif -%}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag }}
+              <span class="visually-hidden">{{ product.title }}</span>
+            {%- endif -%}
+          </a>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- comment -%} Static fallback shipped with the theme (no collection selected). {%- endcomment -%}
+      {%- for i in (1..6) -%}
+        <div class="card">
+          <div class="glow"></div>
+          <img
+            src="{{ 'daino-perfume-0' | append: i | append: '.png' | asset_url }}"
+            alt=""
+            width="432"
+            height="578"
+            {% if forloop.index <= 3 %}
+              loading="eager" fetchpriority="high"
+            {% else %}
+              loading="lazy"
+            {% endif %}
+          >
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</daino-carousel>

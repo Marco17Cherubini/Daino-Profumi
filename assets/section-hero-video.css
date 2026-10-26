@@ -1,0 +1,289 @@
+/* ============================================
+   [CSS: HERO VIDEO CONTAINER START]
+   ============================================ */
+.hero-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--daino-color-black);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-video-container.scrollable {
+  position: relative;
+}
+
+.cinematic-frame {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Mobile: mostra più contenuto verticale */
+@media (max-width: 768px) {
+  .hero-video {
+    object-fit: cover;
+    object-position: center 30%;
+    /* Sposta focus più in alto */
+    height: 100vh;
+    height: 100dvh;
+    /* Dynamic viewport height - iOS fix */
+  }
+
+  /* Alternativa: contieni tutto il video con barre */
+  .hero-video-container--contain .hero-video {
+    object-fit: contain;
+    background: #000;
+  }
+}
+
+/* ============================================
+   [CSS: HERO BRANDS BANNER START]
+   ============================================ */
+.hero-brands-banner {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 15;
+  overflow: hidden;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Banner SUPERIORE - sotto header, movimento DX → SX */
+.hero-brands-banner--top {
+  top: clamp(60px, 12vw, 85px);
+  background: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.9) 40%, #000 100%);
+  padding: clamp(8px, 2vw, 15px) 0 clamp(15px, 4vw, 30px);
+  transform: translateY(-20px);
+}
+
+/* Banner INFERIORE - sopra bordo basso video, movimento SX → DX */
+.hero-brands-banner--bottom {
+  bottom: 0;
+  top: auto;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.9) 40%, #000 100%);
+  padding: clamp(15px, 4vw, 30px) 0 clamp(8px, 2vw, 15px);
+  transform: translateY(20px);
+}
+
+.brands-track {
+  display: flex;
+  align-items: center;
+  gap: clamp(15px, 4vw, 50px);
+  white-space: nowrap;
+  animation: brandsScroll 40s linear infinite;
+}
+
+/* Track INVERSA per banner inferiore */
+.brands-track--reverse {
+  animation-name: brandsScrollReverse;
+}
+
+.brands-track:hover {
+  animation-play-state: paused;
+}
+
+.brand-item {
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: clamp(0.75rem, 2.2vw, 1.1rem);
+  /* ✅ Aumentato minimo da 0.65 a 0.75 */
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: clamp(0.12em, 0.5vw, 0.2em);
+  /* ✅ Aumentato minimo */
+  font-weight: 400;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.brand-item:hover {
+  color: var(--daino-color-gold);
+  transform: scale(1.05);
+}
+
+/* ✅ MOBILE: Rimuovi transition durante scroll */
+@media (max-width: 768px) {
+  .brand-item {
+    transition: none;
+    /* ✅ No hover transition su mobile */
+  }
+
+  /* Riattiva solo su tap */
+  .brand-item:active {
+    color: var(--daino-color-gold);
+    transform: scale(1.05);
+  }
+}
+
+.brand-separator {
+  width: clamp(3px, 0.5vw, 4px);
+  height: clamp(3px, 0.5vw, 4px);
+  background-color: var(--daino-color-gold);
+  border-radius: 50%;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* Animazione DX → SX (banner superiore) */
+@keyframes brandsScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Animazione SX → DX (banner inferiore) */
+@keyframes brandsScrollReverse {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ✅ FIX: Rispetta preferenze utente */
+@media (prefers-reduced-motion: reduce) {
+  .brands-track {
+    animation: none;
+  }
+}
+
+/* ✅ FIX: Banner brands dopo reveal - stato permanente */
+.hero-brands-banner.is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  will-change: auto !important;
+}
+
+/* Pausa animazione quando fuori viewport */
+.hero-brands-banner:not(.is-revealed) .brands-track {
+  animation-play-state: paused;
+}
+
+/* ============================================
+   [CSS: HERO MENU START]
+   ============================================ */
+.hero-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(60px, 12vw, 85px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+  /* ✅ MOBILE-FIRST FIX: iPhone X+ notch support */
+  padding-top: max(0px, env(safe-area-inset-top));
+  z-index: 100;
+  background-color: #000;
+  opacity: 0;
+  transform: translateY(-20px);
+  will-change: opacity, transform;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   [CSS: HERO CONTENT BANNER START]
+   ============================================ */
+.hero-content-banner {
+  position: absolute;
+  bottom: clamp(80px, 18vh, 150px);
+  /* ✅ Alzato per fare spazio al banner inferiore */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+  opacity: 0;
+  width: clamp(280px, 90vw, 800px);
+  padding: 0 var(--space-md);
+  will-change: opacity, transform;
+}
+
+/* ✅ FIX: Mobile - alza contenuto hero per banner inferiore */
+@media (max-width: 768px) {
+  .hero-content-banner {
+    bottom: clamp(70px, 15vh, 120px);
+  }
+}
+
+.hero-title {
+  font-family: Futura, 'Century Gothic', sans-serif;
+  font-size: var(--font-size-h1);
+  color: var(--daino-color-white);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+  letter-spacing: clamp(1px, 0.3vw, 2px);
+}
+
+.hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  color: var(--daino-color-gray-light);
+  margin-bottom: var(--space-lg);
+  font-weight: 300;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: clamp(10px, 2vw, 16px) clamp(24px, 5vw, 48px);
+  background-color: transparent;
+  border: 1px solid var(--daino-color-gold);
+  color: var(--daino-color-gold);
+  text-decoration: none;
+  font-family: Futura, 'Century Gothic', sans-serif;
+  font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+  letter-spacing: clamp(1px, 0.3vw, 2px);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.hero-cta:hover {
+  background-color: var(--daino-color-gold);
+  color: var(--daino-color-black);
+}
+
+/* ============================================
+   [CSS: NO-JS / REDUCED MOTION / NO GSAP]
+   The gate reveals [data-gate-reveal] elements; when it cannot run they must be
+   visible and the hero must scroll with the page (assets/entrance-gate.js).
+   ============================================ */
+.no-js .hero-video-container,
+.animations-off .hero-video-container {
+  position: relative;
+}
+
+.no-js [data-gate-reveal],
+.animations-off [data-gate-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+.no-js .hero-brands-banner .brands-track,
+.animations-off .hero-brands-banner .brands-track {
+  animation-play-state: running;
+}

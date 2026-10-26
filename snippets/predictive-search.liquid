@@ -1,0 +1,191 @@
+{{ 'component-predictive-search.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
+
+{% comment %}
+  PREDICTIVE SEARCH — overlay opened by any [data-predictive-search-trigger]
+  (header icon bar). Behaviour: assets/predictive-search.js (<daino-predictive-search>).
+
+  - Suggestions: Shopify Predictive Search API (routes.predictive_search_url).
+  - Brand shortcuts: brand filter values loaded on first open from the alternate
+    template templates/collection.brands.liquid (complete list, cached per session).
+  - Enter without a highlighted suggestion submits the form to the search page.
+{% endcomment %}
+
+<daino-predictive-search
+  class="predictive-search-overlay"
+  data-brands-url="{{ routes.all_products_collection_url }}?view=brands"
+  aria-hidden="true"
+>
+  <script type="application/json" data-search-strings>
+    {
+      "noResults": {{ 'general.search.no_results' | t: terms: '__TERMS__' | json }},
+      "error": {{ 'general.search.error' | t | json }},
+      "viewAll": {{ 'general.search.view_all' | t: terms: '__TERMS__' | json }},
+      "brandAction": {{ 'general.search.brand_action' | t | json }},
+      "resultsCount": {{ 'general.search.results_count' | t: quantity: '__QUANTITY__' | json }}
+    }
+  </script>
+
+  <div
+    class="predictive-search-container"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'general.search.title' | t }}"
+    data-search-panel
+    data-lenis-prevent
+  >
+    <form action="{{ routes.search_url }}" method="get" role="search" class="predictive-search-form" data-search-form>
+      <div class="predictive-search-input-wrapper">
+        <svg
+          class="predictive-search-icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+
+        <input
+          type="search"
+          name="q"
+          class="predictive-search-input"
+          placeholder="{{ 'general.search.placeholder' | t }}"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-label="{{ 'general.search.placeholder' | t }}"
+          aria-controls="PredictiveSearchResults"
+          aria-expanded="false"
+          data-search-input
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+
+        <div class="predictive-search-spinner" aria-hidden="true" data-search-spinner>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            focusable="false"
+          >
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <button
+          type="button"
+          class="predictive-search-close"
+          aria-label="{{ 'general.accessibility.close' | t }}"
+          data-search-close
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+
+    <p class="visually-hidden" role="status" aria-live="polite" data-search-status></p>
+
+    <div
+      class="predictive-search-results"
+      id="PredictiveSearchResults"
+      role="listbox"
+      aria-label="{{ 'general.search.results_label' | t }}"
+      data-search-results
+      data-lenis-prevent
+    >
+      <div class="predictive-search-empty" data-search-empty hidden>
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+          <path d="M8 11h6"/>
+        </svg>
+        <p class="predictive-search-empty__text" data-search-empty-text></p>
+      </div>
+
+      <p class="predictive-search-error" data-search-error hidden></p>
+
+      <div
+        class="predictive-search-section"
+        role="group"
+        aria-labelledby="PredictiveSearchHeading-brands"
+        data-search-group="brands"
+        hidden
+      >
+        <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-brands">
+          {{ 'general.search.group_brands' | t }}
+        </h3>
+        <ul class="predictive-search-section__list" role="presentation"></ul>
+      </div>
+      <div
+        class="predictive-search-section"
+        role="group"
+        aria-labelledby="PredictiveSearchHeading-products"
+        data-search-group="products"
+        hidden
+      >
+        <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-products">
+          {{ 'general.search.group_products' | t }}
+        </h3>
+        <ul class="predictive-search-section__list" role="presentation"></ul>
+      </div>
+      <div
+        class="predictive-search-section"
+        role="group"
+        aria-labelledby="PredictiveSearchHeading-collections"
+        data-search-group="collections"
+        hidden
+      >
+        <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-collections">
+          {{ 'general.search.group_collections' | t }}
+        </h3>
+        <ul class="predictive-search-section__list" role="presentation"></ul>
+      </div>
+      <div
+        class="predictive-search-section"
+        role="group"
+        aria-labelledby="PredictiveSearchHeading-pages"
+        data-search-group="pages"
+        hidden
+      >
+        <h3 class="predictive-search-section__title" id="PredictiveSearchHeading-pages">
+          {{ 'general.search.group_pages' | t }}
+        </h3>
+        <ul class="predictive-search-section__list" role="presentation"></ul>
+      </div>
+
+      <a class="predictive-search-view-all" href="{{ routes.search_url }}" data-search-view-all hidden></a>
+    </div>
+  </div>
+</daino-predictive-search>

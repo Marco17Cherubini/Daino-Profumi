@@ -1,0 +1,349 @@
+{
+  "general": {
+    "password_page": {
+      "login_form_heading": "Enter store",
+      "login_password_button": "Enter using password",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "Your password",
+      "login_form_error": "Wrong password",
+      "login_form_submit": "Enter",
+      "modal": "Modal",
+      "close": "Close",
+      "admin_link_html": "Are you the store owner? <a href=\"/admin\" class=\"text-link\">Log in here</a>"
+    },
+    "social": {
+      "alt_text": {
+        "share_on_facebook": "Share on Facebook",
+        "share_on_twitter": "Share on Twitter",
+        "share_on_pinterest": "Pin on Pinterest"
+      },
+      "links": {
+        "twitter": "Twitter",
+        "facebook": "Facebook",
+        "pinterest": "Pinterest",
+        "instagram": "Instagram",
+        "tumblr": "Tumblr",
+        "snapchat": "Snapchat",
+        "youtube": "YouTube",
+        "vimeo": "Vimeo",
+        "tiktok": "TikTok"
+      }
+    },
+    "continue_shopping": "Continue shopping",
+    "pagination": {
+      "label": "Pagination",
+      "page": "Page {{ number }}",
+      "next": "Next page",
+      "previous": "Previous page"
+    },
+    "search": {
+      "title": "Search results",
+      "search": "Search",
+      "placeholder": "Search products...",
+      "submit": "Search",
+      "no_results": "No results found for \"{{ terms }}\"",
+      "error": "Search is unavailable right now. Try again, or press Enter for the full search.",
+      "view_all": "View all results for \"{{ terms }}\"",
+      "brand_action": "View all products →",
+      "results_count": "{{ quantity }} suggestions available",
+      "results_label": "Search results",
+      "group_brands": "Brands",
+      "group_products": "Products",
+      "group_collections": "Collections",
+      "group_pages": "Pages",
+      "results_for": "{{ count }} results for \"{{ terms }}\"",
+      "type_page": "Page",
+      "type_article": "Article"
+    },
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you're looking for cannot be found.",
+      "link": "Back to home",
+      "button": "Back to home"
+    },
+    "accessibility": {
+      "close": "Close",
+      "skip_to_content": "Skip to content"
+    },
+    "meta": {
+      "tagged": "tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "home": "Home"
+    },
+    "header": {
+      "search": "Search products",
+      "wishlist": "Your wishlist",
+      "account": "My account",
+      "cart": "Cart",
+      "cart_count": "{{ count }} items",
+      "wishlist_count": "{{ count }} saved",
+      "label": "Main navigation"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Account",
+      "details": "Account details",
+      "view_addresses": "View addresses",
+      "return": "Back to Account",
+      "orders": "Your orders",
+      "addresses": "Addresses",
+      "logout": "Log out",
+      "welcome": "Welcome, {{ name }}"
+    },
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Forgot your password?",
+      "create_account": "Create account",
+      "submit": "Sign in",
+      "subtitle": "Welcome back to the world of exclusive fragrances.",
+      "email_placeholder": "name@example.com",
+      "no_account": "Don't have an account yet?"
+    },
+    "register": {
+      "title": "Create account",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create",
+      "subtitle": "Enter the world of exclusive fragrances.",
+      "phone_placeholder": "+39 123 456 7890",
+      "have_account": "Already have an account?"
+    },
+    "orders": {
+      "title": "Order history",
+      "order_number": "Order",
+      "date": "Date",
+      "payment_status": "Payment status",
+      "fulfillment_status": "Fulfillment status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    },
+    "addresses": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "address1": "Address",
+      "address2": "Apartment, suite, etc.",
+      "city": "City",
+      "zip": "Postal code",
+      "country": "Country",
+      "province": "Province",
+      "phone": "Phone",
+      "set_default": "Set as default address",
+      "default": "Default address",
+      "add": "Add a new address",
+      "new": "New address",
+      "save": "Save",
+      "edit": "Edit",
+      "update": "Update",
+      "delete": "Delete",
+      "delete_confirm": "Do you really want to delete this address?"
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "date": "Placed on {{ date }}",
+      "processing": "Processing",
+      "shipping_address": "Shipping address",
+      "billing_address": "Billing address"
+    },
+    "activate": {
+      "title": "Activate your account",
+      "subtext": "Create your password to activate your account.",
+      "password_confirm": "Confirm password",
+      "submit": "Activate account"
+    },
+    "reset": {
+      "title": "Set a new password",
+      "subtext": "Choose a new password for your account.",
+      "submit": "Save password"
+    },
+    "recover": {
+      "title": "Reset your password",
+      "subtext": "Enter your email and we will send you a link to reset your password.",
+      "success": "We have sent you an email with instructions to reset your password.",
+      "submit": "Send",
+      "back": "Back to login"
+    }
+  },
+  "collections": {
+    "general": {
+      "all_products": "All products",
+      "no_matches": "No products match your search"
+    },
+    "filters": {
+      "title": "Filters",
+      "open_filters": "Filters",
+      "close": "Close",
+      "reset": "Reset",
+      "apply": "Apply",
+      "filter_by": "Filter by:",
+      "all_brands": "All Brands",
+      "showing_results": "Showing {{ from }}-{{ to }} of {{ total }} results",
+      "no_results": "No products found with the selected filters.",
+      "active_filters": "Active filters",
+      "clear_all": "Clear all",
+      "remove": "Remove filter",
+      "price_min": "Minimum price",
+      "price_max": "Maximum price"
+    },
+    "product_card": {
+      "view": "View",
+      "new": "New",
+      "sold_out": "Sold Out"
+    },
+    "sorting": {
+      "title": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best selling",
+      "price_ascending": "Price: Low to High",
+      "price_descending": "Price: High to Low",
+      "title_ascending": "Name: A-Z",
+      "title_descending": "Name: Z-A",
+      "date_ascending": "Date: Old to New",
+      "date_descending": "Date: New to Old"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "price": "Price",
+      "vendor": "Vendor",
+      "buy_now": "Buy now",
+      "available": "Available",
+      "story_label": "The Story",
+      "story_title": "The Essence",
+      "related_title": "You might also like",
+      "discover": "Discover",
+      "cart_error": "The product could not be added to the cart. Please try again.",
+      "zoom": "Open the full-size image",
+      "show_image": "Show image {{ number }}",
+      "description": "Description",
+      "quantity_decrease": "Decrease quantity",
+      "quantity_increase": "Increase quantity",
+      "more_from_brand": "More from {{ brand }}",
+      "discover_collection_html": "Discover the<br>Collection"
+    },
+    "details": {
+      "olfactory_family": "Olfactory Family:",
+      "concentration": "Concentration:",
+      "gender": "Gender:",
+      "format": "Format:",
+      "gender_default": "Unisex"
+    },
+    "trust": {
+      "free_shipping": "Free Shipping",
+      "authenticity": "Authenticity Guaranteed",
+      "secure_payments": "Secure Payments"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Your cart",
+      "empty": "Your cart is empty",
+      "continue_shopping": "Continue shopping",
+      "subtotal": "Subtotal",
+      "checkout": "Proceed to checkout",
+      "remove": "Remove",
+      "note": "Order notes",
+      "taxes_and_shipping": "Taxes and shipping calculated at checkout",
+      "product": "Product",
+      "total": "Total",
+      "note_optional": "Order notes (optional)",
+      "note_placeholder": "Special instructions for your order...",
+      "update": "Update cart",
+      "summary": "Order summary",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "shipping_at_checkout": "Calculated at checkout",
+      "taxes_included": "Taxes included",
+      "taxes_at_checkout": "Taxes calculated at checkout",
+      "secure_payments": "We accept secure payments with"
+    },
+    "related": {
+      "title": "You might also like"
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Gift Card",
+      "subtext": "Here's your gift card!",
+      "gift_card_code": "Gift card code",
+      "shop_link": "Start shopping",
+      "remaining_html": "Remaining: {{ balance }}",
+      "add_to_apple_wallet": "Add to Apple Wallet",
+      "qr_image_alt": "QR Code",
+      "copy_code": "Copy code",
+      "expired": "Expired",
+      "expires_on": "Valid until {{ expires_on }}",
+      "instructions": "Use this code at checkout or show the QR code in store.",
+      "print": "Print"
+    }
+  },
+  "legal": {
+    "policies_heading": "Policies"
+  },
+  "wishlist": {
+    "add": "Add to wishlist",
+    "remove": "Remove from wishlist",
+    "title": "Wishlist",
+    "count": "{{ quantity }} saved products",
+    "empty": "You have not saved any products yet",
+    "discover_catalog": "Discover the catalogue",
+    "loading": "Loading your wishlist...",
+    "error": "The products could not be loaded. Please try again later.",
+    "removed_missing": "{{ quantity }} products are no longer available and were removed from your wishlist.",
+    "requires_js": "JavaScript is required to show your wishlist."
+  },
+  "home": {
+    "consulenza": {
+      "discover_selection": "Discover the selection"
+    }
+  },
+  "footer": {
+    "visit_us": "Visit us",
+    "newsletter": {
+      "title": "Subscribe to our newsletter:",
+      "placeholder": "Enter your email",
+      "submit": "Subscribe",
+      "success": "Thanks for subscribing!",
+      "terms": "By entering your email you accept our Privacy Policy",
+      "terms_html": "By entering your email you accept our <a class=\"newsletter-terms-link\" href=\"{{ url }}\">Privacy Policy</a>"
+    },
+    "map_link": "Open the map on Google Maps",
+    "contacts": "Contacts",
+    "legal_title": "Customer information",
+    "privacy": "Privacy policy",
+    "terms": "Terms & conditions",
+    "shipping": "Shipping information",
+    "refunds": "Refunds & returns"
+  },
+  "blogs": {
+    "general": {
+      "empty": "No articles published yet."
+    },
+    "article": {
+      "back": "Back to the blog"
+    }
+  },
+  "giftcard_form": {
+    "amount": "Amount",
+    "recipient_first_name": "Recipient first name",
+    "recipient_last_name": "Recipient last name",
+    "recipient_email": "Recipient email",
+    "sender": "Your name (sender)",
+    "message": "Message (optional)",
+    "message_hint": "Up to 200 characters. The message will be included with the gift card.",
+    "submit": "Add the gift card to the cart",
+    "no_product": "Select a gift card product in the section settings."
+  }
+}

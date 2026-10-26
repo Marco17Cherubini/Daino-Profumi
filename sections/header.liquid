@@ -1,0 +1,34 @@
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  HEADER — logo and icon bar on every page except the homepage, where the hero
+  menu (daino-hero-video) plays the same role.
+{% endcomment %}
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{{ routes.root_url }}" class="header-logo">
+      {%- if settings.logo_main -%}
+        {{ settings.logo_main | image_url: height: 60 | image_tag: class: 'menu-logo', alt: shop.name }}
+      {%- else -%}
+        <img
+          src="{{ 'logo_finito.png' | asset_url }}"
+          alt="{{ shop.name | escape }}"
+          class="menu-logo"
+          width="888"
+          height="281"
+        >
+      {%- endif -%}
+    </a>
+
+    {% render 'header-icons' %}
+  </div>
+</header>
+
+{% render 'predictive-search' %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}

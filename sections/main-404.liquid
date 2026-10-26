@@ -1,0 +1,19 @@
+{{ 'section-main-404.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  MAIN 404 - Pagina errore
+{% endcomment %}
+
+<div class="error-404-section">
+  <div class="error-404-content">
+    <h1>{{ 'general.404.title' | t }}</h1>
+    <p>{{ 'general.404.subtext' | t }}</p>
+    <a href="{{ routes.root_url }}" class="action-btn">{{ 'general.404.button' | t }}</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "settings": []
+}
+{% endschema %}

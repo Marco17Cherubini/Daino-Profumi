@@ -1,0 +1,153 @@
+{{ 'section-giftcard-form.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'giftcard-form.js' | asset_url }}" defer></script>
+
+{% comment %}
+  GIFT CARD FORM — purchase form for a gift card product, shown on a 3D "plaque".
+  Uses the product picked in the section settings, or the current product on a
+  product template. Recipient details are sent as line item properties (their keys
+  are kept unchanged because orders and fulfilment rely on them).
+{% endcomment %}
+
+{%- assign gift_product = section.settings.product | default: product -%}
+
+<section class="giftcard-section">
+  <div class="giftcard-wrapper">
+    <daino-giftcard-plaque class="giftcard-plaque">
+      <div class="giftcard-plaque-inner">
+        <header class="giftcard-header">
+          <h2 class="giftcard-title">{{ section.settings.title }}</h2>
+          <p class="giftcard-subtitle">{{ section.settings.subtitle }}</p>
+        </header>
+
+        {%- if gift_product != blank -%}
+          {%- form 'product', gift_product, id: 'GiftcardForm', class: 'giftcard-form' -%}
+            <div class="giftcard-field">
+              <label for="GiftcardVariant-{{ section.id }}">{{ 'giftcard_form.amount' | t }}</label>
+              <select id="GiftcardVariant-{{ section.id }}" name="id">
+                {%- for variant in gift_product.variants -%}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == gift_product.selected_or_first_available_variant %}
+                      selected
+                    {% endif %}
+                    {% unless variant.available %}
+                      disabled
+                    {% endunless %}
+                  >
+                    {{ variant.title }} — {{ variant.price | money }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+
+            <div class="giftcard-row">
+              <div class="giftcard-field">
+                <label for="GiftcardFirst-{{ section.id }}">{{ 'giftcard_form.recipient_first_name' | t }} *</label>
+                <input
+                  id="GiftcardFirst-{{ section.id }}"
+                  type="text"
+                  required
+                  name="properties[Nome destinatario]"
+                  autocomplete="off"
+                >
+              </div>
+              <div class="giftcard-field">
+                <label for="GiftcardLast-{{ section.id }}">{{ 'giftcard_form.recipient_last_name' | t }} *</label>
+                <input
+                  id="GiftcardLast-{{ section.id }}"
+                  type="text"
+                  required
+                  name="properties[Cognome destinatario]"
+                  autocomplete="off"
+                >
+              </div>
+            </div>
+
+            <div class="giftcard-field">
+              <label for="GiftcardEmail-{{ section.id }}">{{ 'giftcard_form.recipient_email' | t }} *</label>
+              <input
+                id="GiftcardEmail-{{ section.id }}"
+                type="email"
+                required
+                name="properties[Email destinatario]"
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="giftcard-field">
+              <label for="GiftcardSender-{{ section.id }}">{{ 'giftcard_form.sender' | t }} *</label>
+              <input
+                id="GiftcardSender-{{ section.id }}"
+                type="text"
+                required
+                name="properties[Mittente]"
+                autocomplete="name"
+              >
+            </div>
+
+            <div class="giftcard-field">
+              <label for="GiftcardMessage-{{ section.id }}">{{ 'giftcard_form.message' | t }}</label>
+              <textarea
+                id="GiftcardMessage-{{ section.id }}"
+                name="properties[Messaggio]"
+                maxlength="200"
+                rows="3"
+                aria-describedby="GiftcardHint-{{ section.id }}"
+              ></textarea>
+              <small class="giftcard-hint" id="GiftcardHint-{{ section.id }}">
+                {{- 'giftcard_form.message_hint' | t -}}
+              </small>
+            </div>
+
+            <div class="giftcard-actions">
+              <button
+                type="submit"
+                class="giftcard-button"
+                {% unless gift_product.available %}
+                  disabled
+                {% endunless %}
+              >
+                {{- 'giftcard_form.submit' | t -}}
+              </button>
+            </div>
+          {%- endform -%}
+        {%- elsif request.design_mode -%}
+          <p class="giftcard-hint">{{ 'giftcard_form.no_product' | t }}</p>
+        {%- endif -%}
+      </div>
+    </daino-giftcard-plaque>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Gift Card Form",
+  "tag": "section",
+  "class": "daino-giftcard-form",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Gift card product",
+      "info": "Required when the section is used outside the product page."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titolo",
+      "default": "Crea il tuo Buono Regalo"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Sottotitolo",
+      "default": "Un gesto su misura per chi ami. Compila i dettagli, il resto lo facciamo noi."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift Card Form"
+    }
+  ]
+}
+{% endschema %}

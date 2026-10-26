@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Fixture: markup produced by sections/main-cart.liquid for a cart with two lines. -->
+<html lang="it" class="js">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/assets/daino-base.css" />
+    <script type="application/json" id="DainoConfig">
+      { "routes": {}, "moneyFormat": "€{{amount_with_comma_separator}}", "strings": {} }
+    </script>
+    <script src="/assets/daino-core.js" defer></script>
+    <script src="/assets/cart.js" defer></script>
+  </head>
+  <body>
+    <daino-cart class="cart-layout">
+      <form action="/it/cart" method="post" id="cart-form" novalidate>
+        <div class="cart-item">
+          <a href="/it/cart/change?line=1&amp;quantity=0" class="cart-item__remove-mobile">Rimuovi</a>
+          <div class="cart-quantity">
+            <button type="button" class="cart-quantity__btn" data-quantity-step="-1" hidden>−</button>
+            <input type="number" name="updates[]" value="2" min="0" data-quantity-input />
+            <button type="button" class="cart-quantity__btn" data-quantity-step="1" hidden>+</button>
+          </div>
+        </div>
+        <div class="cart-item">
+          <div class="cart-quantity">
+            <button type="button" class="cart-quantity__btn" data-quantity-step="-1" hidden>−</button>
+            <input type="number" name="updates[]" value="1" min="0" data-quantity-input />
+            <button type="button" class="cart-quantity__btn" data-quantity-step="1" hidden>+</button>
+          </div>
+        </div>
+        <textarea id="cart-note" name="note"></textarea>
+        <button type="submit" name="update">Aggiorna Carrello</button>
+      </form>
+      <div class="cart-summary">
+        <button type="submit" name="checkout" form="cart-form">Procedi al Checkout</button>
+      </div>
+    </daino-cart>
+  </body>
+</html>
