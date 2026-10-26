@@ -17,3 +17,4 @@ CLAUDE.md
 scripts/
 eslint.config.js
 .gitignore
+LICENSE

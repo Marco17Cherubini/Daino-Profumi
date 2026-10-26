@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Daino Profumi — custom Shopify Online Store 2.0 theme",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">=20"
   },

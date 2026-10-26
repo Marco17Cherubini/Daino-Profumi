@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/Marco17Cherubini/Daino-Profumi/actions/workflows/ci.yml/badge.svg)](https://github.com/Marco17Cherubini/Daino-Profumi/actions/workflows/ci.yml)
 ![Shopify](https://img.shields.io/badge/Shopify-Online%20Store%202.0-7AB55C)
+![License](https://img.shields.io/badge/license-MIT-blue)
 ![Liquid](https://img.shields.io/badge/Liquid-theme-004999)
 ![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E)
 
@@ -242,6 +243,11 @@ Designed and built by **Marco Cherubini**: visual identity, shopping experience,
 
 ## License
 
-No licence has been chosen yet: all rights reserved.
+[MIT](LICENSE) © Marco Cherubini
 
-The bundled fonts (Cormorant Garamond, Pinyon Script) are under the SIL Open Font License 1.1. GSAP is used under its standard licence. Lenis is MIT-licensed.
+Third-party assets keep their own licences, and the MIT licence does not cover them:
+
+- the bundled fonts Cormorant Garamond and Pinyon Script are under the SIL Open Font License 1.1;
+- GSAP is used under its standard licence;
+- Lenis is MIT-licensed;
+- brand names, product photos and staff photos belong to Daino Profumi and their respective owners.
