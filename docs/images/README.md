@@ -1,6 +1,6 @@
 # Screenshots
 
-Authentic screenshots of the theme running on a store go here, then into the main README. Nothing is included yet, so none have been invented.
+Screenshots used in the main README go here. Every one must come from the real store. Nothing is included yet, so none have been invented.
 
 Needed (desktop and mobile):
 

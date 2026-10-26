@@ -5,13 +5,13 @@
 
 ## Execution status
 
-| Item                   | Value                                                                                                                                                                                               |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Branch                 | Work done on `refactor/theme-architecture`, merged into `main` as a single squash commit. The theme has **not** been published to the Shopify store.                                                |
-| Starting point         | `main` @ `2930d82` ("Add files via upload")                                                                                                                                                         |
-| Store / preview access | **None** in this session. Every check marked **V** is still pending (see `docs/testing.md`)                                                                                                         |
-| Overall state          | **Partially validated.** Every automated check passes. Store-dependent checks are not verified.                                                                                                     |
-| Next step              | Run the manual checklist in `docs/testing.md` on a development store, starting with the configuration diff against the live theme. Add authentic screenshots to `docs/screenshots/` and the README. |
+| Item                   | Value                                                                                                                                                                                          |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Branch                 | Work done on `refactor/theme-architecture`, merged into `main` as a single squash commit. The theme has **not** been published to the Shopify store.                                           |
+| Starting point         | `main` @ `2930d82` ("Add files via upload")                                                                                                                                                    |
+| Store / preview access | **None** in this session. Every check marked **V** is still pending (see `docs/testing.md`)                                                                                                    |
+| Overall state          | **Partially validated.** Every automated check passes. Store-dependent checks are not verified.                                                                                                |
+| Next step              | Run the manual checklist in `docs/testing.md` on a development store, starting with the configuration diff against the live theme. Add authentic screenshots to `docs/images/` and the README. |
 
 ### Baseline vs current (static, comparable measurements)
 
